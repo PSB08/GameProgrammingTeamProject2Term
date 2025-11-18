@@ -24,5 +24,7 @@ private:
     //float m_dir;
     float m_angle;
     Vec2 m_dir;
+
+    float m_lifeTime = 0.f;
 };
 

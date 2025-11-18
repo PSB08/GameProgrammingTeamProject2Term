@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "SceneManager.h"
 #include "DevScene.h"
-#include "TestScene.h"
+#include "TestBossScene.h"
 #include "Object.h"
 #include "Collider.h"
+
 void SceneManager::PhysicsSyncColliders()
 {
 	for (UINT i = 0; i < (UINT)Layer::END; ++i)
@@ -33,11 +34,12 @@ void SceneManager::Init()
 	m_curScene = nullptr;
 	// ¾À µî·Ï
 	RegisterScene(L"DevScene",std::make_shared<DevScene>());
-	RegisterScene(L"TestScene",std::make_shared<TestScene>());
+	RegisterScene(L"TestBossScene",std::make_shared<TestBossScene>());
 	
 	// Ã¹ ¾À ·Îµå
 	LoadScene(L"DevScene");
 }
+
 void SceneManager::Update()
 {
 	if (m_curScene == nullptr)

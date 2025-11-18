@@ -47,6 +47,9 @@
     <Filter Include="Engine\02. Manager\Framework">
       <UniqueIdentifier>{ba46377c-5b24-444d-bb7f-74bf9c260e2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Object\Boss">
+      <UniqueIdentifier>{bb0ccf99-35bb-4b26-a58c-f2339ea7e0d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2025_winapi_framework_21.h">
@@ -97,9 +100,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>Engine\03. Object</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h">
-      <Filter>Engine\04. Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Engine\03. Object</Filter>
     </ClInclude>
@@ -141,6 +141,15 @@
     </ClInclude>
     <ClInclude Include="Floor.h">
       <Filter>Engine\03. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBase.h">
+      <Filter>Engine\03. Object\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss1.h">
+      <Filter>Engine\03. Object\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="TestBossScene.h">
+      <Filter>Engine\04. Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +193,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Engine\03. Object</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp">
-      <Filter>Engine\04. Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Engine\03. Object</Filter>
     </ClCompile>
@@ -228,6 +234,12 @@
     </ClCompile>
     <ClCompile Include="Floor.cpp">
       <Filter>Engine\03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss1.cpp">
+      <Filter>Engine\03. Object\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="TestBossScene.cpp">
+      <Filter>Engine\04. Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

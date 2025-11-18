@@ -5,7 +5,9 @@ enum class Layer
 	BACKGROUND,
 	PLAYER,
 	ENEMY,
+	BOSS,
 	PROJECTILE,
+	BOSSPROJECTILE,
 	END
 };
 
@@ -25,3 +27,12 @@ enum class FontType
 };
 
 enum class PlayMode { Once, Loop, Counted };
+
+enum class Boss1Pattern
+{
+	NONE,
+	PATTERN1,
+	PATTERN2,
+	PATTERN3,
+	END
+};

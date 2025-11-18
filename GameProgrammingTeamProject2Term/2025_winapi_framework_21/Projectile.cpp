@@ -21,7 +21,14 @@ Projectile::~Projectile()
 void Projectile::Update()
 {
 	//Translate({ cosf(m_angle)*500.f* fDT,  sinf(m_angle) * 500.f * fDT});
-	Translate({ m_dir.x*500.f* fDT,  m_dir.y * 500.f * fDT});
+	m_lifeTime += fDT;
+	if (m_lifeTime >= 1.5f)
+	{
+		SetDead();
+		return;
+	}
+
+	Translate({ m_dir.x * 500.f * fDT, m_dir.y * 500.f * fDT });
 }
 
 void Projectile::Render(HDC _hdc)
