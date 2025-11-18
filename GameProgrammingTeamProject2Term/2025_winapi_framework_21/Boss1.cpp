@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Boss1.h"
-#include "Projectile.h"
+#include "BossProjectile.h"
 #include "SceneManager.h"
 #include "Scene.h"
 
@@ -92,12 +92,12 @@ void Boss1::Pattern1()
     float rad = m_angle1 * (PI / 180.f);
     Vec2 dir = { cosf(rad), sinf(rad) };
 
-    auto* proj = new Projectile;
+    auto* proj = new BossProjectile;
     proj->SetPos(center);
     proj->SetSize({ 20.f, 20.f });
     proj->SetDir(dir);
 
-    GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::PROJECTILE);
+    GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
 
     m_angle1 += 25.f;
     if (m_angle1 >= 360.f) m_angle1 -= 360.f;
@@ -117,12 +117,12 @@ void Boss1::Pattern2()
         float ang = (m_angle2 * PI / 180.f) + (PI * 2.f) * ((float)i / count);
         Vec2 dir = { cosf(ang), sinf(ang) };
 
-        auto* proj = new Projectile;
+        auto* proj = new BossProjectile;
         proj->SetPos(center);
         proj->SetSize({ 20.f, 20.f });
         proj->SetDir(dir);
 
-        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::PROJECTILE);
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
     }
 
     m_angle2 += 10.f;
