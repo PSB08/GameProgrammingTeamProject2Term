@@ -10,8 +10,19 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "Rigidbody.h"
+
 Player::Player()
-	: m_pTexture(nullptr)
+	: m_pTexture(nullptr),
+	jumpPower(10.f),
+	dashPower(80.f),
+	playerCanDamaged(true),
+	dashCooltime(1.f),
+	shieldCooltime(5.f),
+	dashTime(0.f),
+	shieldTime(0.f),
+	InvincibleTime(0.f),
+	InvincibleHoldTime(0.4f),
+	playerIsInvincibility(false)
 {
 	//m_pTexture = new Texture;
 	//wstring path = GET_SINGLE(ResourceManager)->GetResPath();
@@ -42,6 +53,9 @@ void Player::Render(HDC _hdc)
 	Vec2 size = GetSize();
 	int width = m_pTexture->GetWidth();
 	int height = m_pTexture->GetHeight();
+
+	if (!playerCanDamaged)
+		ELLIPSE_RENDER(_hdc, pos.x, pos.y, width, height);
 
 	// blt Á¾·ù
 	// 1. bitblt - 1:1 ¸ÅÄª, °¡Àå ºü¸§
@@ -80,9 +94,24 @@ void Player::EnterCollision(Collider* _other)
 {
 	if (_other->GetName() == L"Floor")
 	{
+		cout << "¶¥ ´êÀ½";
 		Rigidbody* rb = GetComponent<Rigidbody>();
 		rb->SetGrounded(true);
 	}
+
+	if (_other->GetName() == L"Bullet" && playerCanDamaged)
+	{
+		cout << "´ÔÁê±Ý";
+	}
+	else if (_other->GetName() == L"Bullet" && !playerCanDamaged)
+	{
+		cout << "¹æ¾î ±úÁü";
+		playerCanDamaged = true;
+	}
+}
+
+void Player::ExitCollision(Collider* _other)
+{
 }
 
 void Player::Update()
@@ -98,25 +127,35 @@ void Player::Update()
 	//	pos.y += 300.f * fDT;
 	//SetPos(pos);
 	Vec2 dir = {};
-	if (GET_KEY(KEY_TYPE::A)) dir.x -= 1.f;
-	if (GET_KEY(KEY_TYPE::D)) dir.x += 1.f;
-	if (GET_KEY(KEY_TYPE::W)) dir.y -= 1.f;
-	if (GET_KEY(KEY_TYPE::S)) dir.y += 1.f;
+	if (GET_KEY(KEY_TYPE::LEFT)) dir.x -= 1.f;
+	
+	if (GET_KEY(KEY_TYPE::RIGHT)) dir.x += 1.f;
+
+	if (GET_KEY(KEY_TYPE::SPACE)) PlayerJump();
+	if (GET_KEY(KEY_TYPE::Z) &&
+		playerCanDamaged && shieldTime < shieldCooltime) PlayerShield();
+	if (GET_KEY(KEY_TYPE::X) && dashTime >= dashCooltime) PlayerDash();
+
+	if (playerCanDamaged && shieldTime < shieldCooltime)
+	{
+		shieldTime += fDT;
+	}
+	if (dashTime < dashCooltime)
+	{
+		dashTime += fDT;
+	}
+	if (InvincibleTime < InvincibleHoldTime)
+	{
+		InvincibleTime += fDT;
+	}
+	else
+	{
+		playerIsInvincibility = false;
+	}
 
 	Translate({ dir.x * 300.f * fDT, dir.y * 300.f * fDT });
 
-	// Å©±âº¯°æ
-	float scaleDelta = 0.f;
-	float scaleSpeed = 1.f;
-	if (GET_KEY(KEY_TYPE::Q))
-		scaleDelta += scaleSpeed * fDT;
-	if (GET_KEY(KEY_TYPE::E))
-		scaleDelta -= scaleSpeed * fDT;
-
-	float factor = 1.f + scaleDelta;
-	Scale({ factor, factor });
-
-	if (GET_KEYDOWN(KEY_TYPE::SPACE))
+	if (GET_KEYDOWN(KEY_TYPE::CTRL))
 		CreateProjectile();
 }
 
@@ -137,6 +176,41 @@ void Player::CreateProjectile()
 	GET_SINGLE(SceneManager)->GetCurScene()
 		->AddObject(proj, Layer::PROJECTILE);
 	//scene->addobjet();
+}
+
+void Player::PlayerJump()
+{
+	Rigidbody* rigid = GetComponent<Rigidbody>();
+	Vec2 jump = {0, -30};
+	if (rigid->IsGrounded())
+	{
+		rigid->AddImpulse(jump * jumpPower);
+		cout << "Jump";
+		rigid->SetGrounded(false); 
+	}
+}
+
+void Player::PlayerShield()
+{
+	cout << "Shield";
+	playerCanDamaged = false;
+	shieldTime = 0.f;
+}
+
+void Player::PlayerDash()
+{
+	Rigidbody* rigid = GetComponent<Rigidbody>();
+	Vec2 dash = { 10, 0 };
+
+	if (GET_KEY(KEY_TYPE::LEFT)) rigid->AddImpulse(dash * -dashPower);
+
+	if (GET_KEY(KEY_TYPE::RIGHT)) rigid->AddImpulse(dash * dashPower);
+
+
+	cout << "Dash";
+	playerIsInvincibility = true;
+	dashTime = 0.f;
+	InvincibleTime = 0.f;
 }
 
 // DevScene¿¡¼­ Enter¸¦ ´©¸£¸é TestSceneÀ¸·Î ³Ñ¾î°©´Ï´Ù.
