@@ -7,6 +7,7 @@
 Boss1Core::Boss1Core(Boss1* owner)
     : m_owner(owner)
 {
+    //Texture 있어야 함
     Collider* col = AddComponent<Collider>();
     col->SetTrigger(true);
     col->SetName(L"BossCore");

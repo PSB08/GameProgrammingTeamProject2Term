@@ -9,6 +9,7 @@ enum class Layer
 	BOSSCORE,
 	PROJECTILE,
 	BOSSPROJECTILE,
+	LASER,
 	END
 };
 
