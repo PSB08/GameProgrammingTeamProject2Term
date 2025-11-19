@@ -5,8 +5,11 @@
 #include "SceneManager.h"
 #include "ResourceManager.h"
 #include "CollisionManager.h"
+
 bool Core::Init(HWND _hWnd)
 {
+	srand((unsigned int)time(nullptr));
+
 	m_hWnd = _hWnd;
 	m_hDC = ::GetDC(m_hWnd);
 	

@@ -164,6 +164,7 @@
     <ClInclude Include="Animator.h" />
     <ClInclude Include="BaseWindow.h" />
     <ClInclude Include="Boss1.h" />
+    <ClInclude Include="Boss1Core.h" />
     <ClInclude Include="BossBase.h" />
     <ClInclude Include="BossProjectile.h" />
     <ClInclude Include="Collider.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BaseWindow.cpp" />
     <ClCompile Include="Boss1.cpp" />
+    <ClCompile Include="Boss1Core.cpp" />
     <ClCompile Include="BossProjectile.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionManager.cpp" />

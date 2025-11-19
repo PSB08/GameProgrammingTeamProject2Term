@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Boss1.h"
+#include "Boss1Core.h"
 #include "BossProjectile.h"
 #include "SceneManager.h"
 #include "Scene.h"
@@ -12,6 +13,7 @@ Boss1::Boss1()
     , m_laserLeftX(0.f)
     , m_laserRightX(WINDOW_WIDTH)
     , m_laserActive(false)
+    , m_isCorePhase(false)
 {
     StartRandomPattern();
 }
@@ -35,14 +37,16 @@ void Boss1::StartRandomPattern()
 
 void Boss1::UpdatePattern()
 {
+    if (m_isCorePhase)
+        return; // 코어가 나오면 패턴 완전 정지
+
     switch (m_curPattern)
     {
     case Boss1Pattern::PATTERN1:
         Pattern1();
         if (m_patternTimer > 5.f)
         {
-            m_isCooldown = true;
-            m_curPattern = Boss1Pattern::NONE;
+            EndPattern();
         }
         break;
 
@@ -50,8 +54,7 @@ void Boss1::UpdatePattern()
         Pattern2();
         if (m_patternTimer > 5.f)
         {
-            m_isCooldown = true;
-            m_curPattern = Boss1Pattern::NONE;
+            EndPattern();
         }
         break;
 
@@ -60,12 +63,12 @@ void Boss1::UpdatePattern()
         if (m_patternTimer > 3.f)
         {
             m_laserActive = false;
-            m_isCooldown = true;
-            m_curPattern = Boss1Pattern::NONE;
+            EndPattern();
         }
         break;
     }
 }
+
 
 void Boss1::RenderPattern(HDC _hdc)
 {
@@ -142,3 +145,24 @@ void Boss1::Pattern3()
     m_laserRightX -= 400.f * fDT;
 }
 
+void Boss1::EndPattern()
+{
+    m_patternCount++;
+    m_isCooldown = true;
+    m_curPattern = Boss1Pattern::NONE;
+
+    if (m_patternCount >= m_maxPatternCount)
+    {
+        SpawnCore();
+    }
+}
+
+void Boss1::SpawnCore()
+{
+    m_isCorePhase = true;
+
+    auto* core = new Boss1Core(this);
+    core->SetPos(GetPos());
+    core->SetSize({ 100.f, 100.f });
+    GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
+}

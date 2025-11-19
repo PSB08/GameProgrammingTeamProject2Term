@@ -19,14 +19,19 @@ private:
     // 필요하면 추가 렌더링
     void RenderPattern(HDC _hdc) override;
 
+    void EndPattern();
+
 private:
     // ===== 개별 패턴 =====
     void Pattern1();   // 360도 탄막
     void Pattern2();   // 6방향 탄막
     void Pattern3();   // 레이저 수축
+    void SpawnCore();  //패턴 다 쓰고 코어 소환하기
 
 private:
     // 패턴용 변수들
+    bool m_isCorePhase;
+
     float m_angle1;
     float m_fireTimer1;
 
