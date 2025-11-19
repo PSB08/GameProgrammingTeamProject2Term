@@ -6,6 +6,7 @@ enum class Layer
 	PLAYER,
 	ENEMY,
 	BOSS,
+	BOSSCORE,
 	PROJECTILE,
 	BOSSPROJECTILE,
 	END

@@ -56,4 +56,8 @@ protected:
 
     bool m_isCooldown;
     float m_cooldownDuration = 3.f;
+
+    //패턴 카운트
+    int m_patternCount = 0;
+    const int m_maxPatternCount = 10;
 };

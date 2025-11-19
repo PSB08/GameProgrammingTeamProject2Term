@@ -32,7 +32,7 @@ void DevScene::Init()
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PROJECTILE, Layer::ENEMY);
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PLAYER, Layer::ENEMY);
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PLAYER, Layer::DEFAULT);
-	GET_SINGLE(ResourceManager)->Play(L"BGM");
+	//GET_SINGLE(ResourceManager)->Play(L"BGM");
 }
 
 void DevScene::Update()

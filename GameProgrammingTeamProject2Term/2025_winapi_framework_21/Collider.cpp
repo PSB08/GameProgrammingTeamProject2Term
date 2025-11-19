@@ -31,11 +31,6 @@ void Collider::ExitCollision(Collider* _other)
 }
 void Collider::Render(HDC _hdc)
 {
-	::TextOut(_hdc, 0, 0, L"안녕", 2);
-	GDISelector font(_hdc, FontType::TITLE);
-
-	::TextOut(_hdc, 10, 10, L"하세요", 3);
-
 	//GET_SINGLE(ResourceManager)->GetPen();
 	//::SelectObject();
 	// 사각형을 하나 그리면
