@@ -128,14 +128,14 @@ void Player::Update()
 	//	pos.y += 300.f * fDT;
 	//SetPos(pos);
 	Vec2 dir = {};
-	if (GET_KEY(KEY_TYPE::LEFT)) dir.x -= 1.f;
+	if (GET_KEY(KEY_TYPE::A)) dir.x -= 1.f;
 	
-	if (GET_KEY(KEY_TYPE::RIGHT)) dir.x += 1.f;
+	if (GET_KEY(KEY_TYPE::D)) dir.x += 1.f;
 
 	if (GET_KEY(KEY_TYPE::SPACE)) PlayerJump();
-	if (GET_KEY(KEY_TYPE::Z) &&
+	if (GET_KEY(KEY_TYPE::L) &&
 		playerCanDamaged && shieldTime >= shieldCooltime) PlayerShield();
-	if (GET_KEY(KEY_TYPE::X) && dashTime >= dashCooltime) PlayerDash();
+	if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime) PlayerDash();
 
 	if (playerCanDamaged && shieldTime < shieldCooltime)
 	{
@@ -156,7 +156,7 @@ void Player::Update()
 
 	Translate({ dir.x * 300.f * fDT, dir.y * 300.f * fDT });
 
-	if (GET_KEYDOWN(KEY_TYPE::CTRL))
+	if (GET_KEYDOWN(KEY_TYPE::J))
 		CreateProjectile();
 }
 
@@ -199,11 +199,11 @@ void Player::PlayerShield()
 void Player::PlayerDash()
 {
 	Rigidbody* rigid = GetComponent<Rigidbody>();
-	Vec2 dash = { 10, 0 };
+	Vec2 dash = { 100, 0 };
 
-	if (GET_KEY(KEY_TYPE::LEFT)) rigid->AddImpulse(dash * -dashPower);
+	if (GET_KEY(KEY_TYPE::A)) rigid->AddImpulse(dash * -dashPower);
 
-	if (GET_KEY(KEY_TYPE::RIGHT)) rigid->AddImpulse(dash * dashPower);
+	if (GET_KEY(KEY_TYPE::D)) rigid->AddImpulse(dash * dashPower);
 
 
 	cout << "Dash";
