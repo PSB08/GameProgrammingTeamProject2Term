@@ -19,15 +19,6 @@ Object::~Object()
 
 void Object::Update()
 {
-	if(GET_KEY(KEY_TYPE::LEFT))
-		m_pos.x -= 300.f * fDT;
-	if (GET_KEY(KEY_TYPE::RIGHT))
-		m_pos.x += 300.f *fDT;
-	if (GET_KEY(KEY_TYPE::UP))
-		m_pos.y -= 300.f * fDT;
-	if (GET_KEY(KEY_TYPE::DOWN))
-		m_pos.y += 300.f * fDT;
-
 }
 
 void Object::LateUpdate()

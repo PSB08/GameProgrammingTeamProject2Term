@@ -21,7 +21,7 @@ Player::Player()
 	dashTime(0.f),
 	shieldTime(0.f),
 	InvincibleTime(0.f),
-	InvincibleHoldTime(0.4f),
+	InvincibleHoldTime(0.5f),
 	playerIsInvincibility(false)
 {
 	//m_pTexture = new Texture;
@@ -99,13 +99,14 @@ void Player::EnterCollision(Collider* _other)
 		rb->SetGrounded(true);
 	}
 
-	if (_other->GetName() == L"Bullet" && playerCanDamaged)
+	if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" || _other->GetName() == L"BossProjectile")
+		&& playerCanDamaged && !playerIsInvincibility)
 	{
 		cout << "´ÔÁê±Ý";
 	}
-	else if (_other->GetName() == L"Bullet" && !playerCanDamaged)
+	else if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" || _other->GetName() == L"BossProjectile")
+		&& !playerCanDamaged || playerIsInvincibility)
 	{
-		cout << "¹æ¾î ±úÁü";
 		playerCanDamaged = true;
 	}
 }
@@ -133,7 +134,7 @@ void Player::Update()
 
 	if (GET_KEY(KEY_TYPE::SPACE)) PlayerJump();
 	if (GET_KEY(KEY_TYPE::Z) &&
-		playerCanDamaged && shieldTime < shieldCooltime) PlayerShield();
+		playerCanDamaged && shieldTime >= shieldCooltime) PlayerShield();
 	if (GET_KEY(KEY_TYPE::X) && dashTime >= dashCooltime) PlayerDash();
 
 	if (playerCanDamaged && shieldTime < shieldCooltime)
