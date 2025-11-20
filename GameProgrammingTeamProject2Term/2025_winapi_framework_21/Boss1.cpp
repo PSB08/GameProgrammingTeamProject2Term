@@ -2,6 +2,7 @@
 #include "Boss1.h"
 #include "Boss1Core.h"
 #include "BossProjectile.h"
+#include "LaserObject.h"
 #include "SceneManager.h"
 #include "Scene.h"
 
@@ -15,6 +16,7 @@ Boss1::Boss1()
     , m_laserActive(false)
     , m_isCorePhase(false)
 {
+    //Texture 있어야 함
     StartRandomPattern();
 }
 
@@ -66,21 +68,6 @@ void Boss1::UpdatePattern()
             EndPattern();
         }
         break;
-    }
-}
-
-
-void Boss1::RenderPattern(HDC _hdc)
-{
-    if (m_laserActive)
-    {
-        RECT leftLaser = { (LONG)m_laserLeftX, 0, (LONG)(m_laserLeftX + 20), WINDOW_HEIGHT };
-        RECT rightLaser = { (LONG)(m_laserRightX - 20), 0, (LONG)m_laserRightX, WINDOW_HEIGHT };
-
-        HBRUSH b = CreateSolidBrush(RGB(255, 0, 0));
-        FillRect(_hdc, &leftLaser, b);
-        FillRect(_hdc, &rightLaser, b);
-        DeleteObject(b);
     }
 }
 
@@ -137,12 +124,18 @@ void Boss1::Pattern3()
     if (!m_laserActive)
     {
         m_laserActive = true;
-        m_laserLeftX = 0.f;
-        m_laserRightX = WINDOW_WIDTH;
-    }
 
-    m_laserLeftX += 400.f * fDT;
-    m_laserRightX -= 400.f * fDT;
+        auto* leftLaser = new LaserObject(true);
+        leftLaser->SetPos({ 0.f, WINDOW_HEIGHT / 2.f });  // 화면 중앙
+        leftLaser->SetDir(1);  // 오른쪽으로 이동
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(leftLaser, Layer::LASER);
+
+        // 오른쪽 레이저 생성
+        auto* rightLaser = new LaserObject(false);
+        rightLaser->SetPos({ (float)WINDOW_WIDTH - 20.f, WINDOW_HEIGHT / 2.f }); // 화면 중앙
+        rightLaser->SetDir(-1);  // 왼쪽으로 이동
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(rightLaser, Layer::LASER);
+    }
 }
 
 void Boss1::EndPattern()

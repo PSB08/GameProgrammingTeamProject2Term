@@ -16,9 +16,6 @@ private:
     // 패턴 실행
     void UpdatePattern() override;
 
-    // 필요하면 추가 렌더링
-    void RenderPattern(HDC _hdc) override;
-
     void EndPattern();
 
 private:
