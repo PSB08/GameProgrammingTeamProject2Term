@@ -125,17 +125,16 @@ void Boss1::Pattern3()
     {
         m_laserActive = true;
 
-        // 왼쪽 레이저 생성
         auto* leftLaser = new LaserObject(true);
-        leftLaser->SetPos({ 0.f, 0.f });
+        leftLaser->SetPos({ 0.f, WINDOW_HEIGHT / 2.f });  // 화면 중앙
         leftLaser->SetDir(1);  // 오른쪽으로 이동
-        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(leftLaser, Layer::BOSSPROJECTILE);
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(leftLaser, Layer::LASER);
 
         // 오른쪽 레이저 생성
         auto* rightLaser = new LaserObject(false);
-        rightLaser->SetPos({ (float)WINDOW_WIDTH - 20.f, 0.f });
+        rightLaser->SetPos({ (float)WINDOW_WIDTH - 20.f, WINDOW_HEIGHT / 2.f }); // 화면 중앙
         rightLaser->SetDir(-1);  // 왼쪽으로 이동
-        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(rightLaser, Layer::BOSSPROJECTILE);
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(rightLaser, Layer::LASER);
     }
 }
 

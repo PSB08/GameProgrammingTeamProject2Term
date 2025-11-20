@@ -20,6 +20,7 @@ Boss1Core::~Boss1Core()
 
 void Boss1Core::EnterCollision(Collider* _other)
 {
+    cout << "EnterCollision" << endl;
     if (_other->IsTrigger())
     {
         if (_other->GetName() == L"PlayerBullet")

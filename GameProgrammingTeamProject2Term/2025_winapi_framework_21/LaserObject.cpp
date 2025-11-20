@@ -7,10 +7,11 @@
 LaserObject::LaserObject(bool isLeftLaser)
     : m_isLeft(isLeftLaser)
 {
-    SetSize({ 20.f, (float)WINDOW_HEIGHT });
+    SetSize({ 50.f, (float)WINDOW_HEIGHT });
 
     Collider* col = AddComponent<Collider>();
     col->SetTrigger(true);
+    col->SetSize({ 50.f, (float)WINDOW_HEIGHT });
 
     if (isLeftLaser)
         col->SetName(L"LaserLeft");
@@ -53,4 +54,5 @@ void LaserObject::Render(HDC _hdc)
 
 void LaserObject::EnterCollision(Collider* _other)
 {
+    cout << "EnterCollision" << endl;
 }
