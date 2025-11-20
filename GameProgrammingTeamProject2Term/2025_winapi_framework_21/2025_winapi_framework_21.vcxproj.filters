@@ -151,10 +151,7 @@
     <ClInclude Include="TestBossScene.h">
       <Filter>Engine\04. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Boss1Core.h">
-      <Filter>Engine\03. Object\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="BossProjectile.h">
+    <ClInclude Include="Boss3.h">
       <Filter>Engine\03. Object\Boss</Filter>
     </ClInclude>
   </ItemGroup>
@@ -247,10 +244,7 @@
     <ClCompile Include="TestBossScene.cpp">
       <Filter>Engine\04. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="BossProjectile.cpp">
-      <Filter>Engine\03. Object\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Boss1Core.cpp">
+    <ClCompile Include="Boss3.cpp">
       <Filter>Engine\03. Object\Boss</Filter>
     </ClCompile>
   </ItemGroup>

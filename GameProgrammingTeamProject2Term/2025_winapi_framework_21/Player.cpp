@@ -55,7 +55,7 @@ void Player::Render(HDC _hdc)
 	int height = m_pTexture->GetHeight();
 
 	if (!playerCanDamaged)
-		ELLIPSE_RENDER(_hdc, pos.x, pos.y, width, height);
+		ELLIPSE_RENDER(_hdc, pos.x, pos.y, width / 3, height / 3);
 
 	// blt 종류
 	// 1. bitblt - 1:1 매칭, 가장 빠름
@@ -185,14 +185,12 @@ void Player::PlayerJump()
 	if (rigid->IsGrounded())
 	{
 		rigid->AddImpulse(jump * jumpPower);
-		cout << "Jump";
 		rigid->SetGrounded(false); 
 	}
 }
 
 void Player::PlayerShield()
 {
-	cout << "Shield";
 	playerCanDamaged = false;
 	shieldTime = 0.f;
 }
