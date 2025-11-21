@@ -154,12 +154,23 @@
     <ClInclude Include="Boss3.h">
       <Filter>Engine\03. Object\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="LaserObject.h" />
     <ClInclude Include="Boss1Core.h">
       <Filter>Engine\03. Object\Boss</Filter>
     </ClInclude>
     <ClInclude Include="BossProjectile.h">
       <Filter>Engine\03. Object\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Engine\04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LaserObject.h">
+      <Filter>Engine\03. Object\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObject.h">
+      <Filter>Engine\07. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Engine\07. UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,12 +265,20 @@
     <ClCompile Include="Boss3.cpp">
       <Filter>Engine\03. Object\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="LaserObject.cpp" />
     <ClCompile Include="Boss1Core.cpp">
       <Filter>Engine\03. Object\Boss</Filter>
     </ClCompile>
     <ClCompile Include="BossProjectile.cpp">
       <Filter>Engine\03. Object\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Engine\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LaserObject.cpp">
+      <Filter>Engine\03. Object\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>Engine\07. UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

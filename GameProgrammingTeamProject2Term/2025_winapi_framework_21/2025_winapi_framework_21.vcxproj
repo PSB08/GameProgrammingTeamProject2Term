@@ -195,6 +195,9 @@
     <ClInclude Include="TestBossScene.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIObject.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +230,8 @@
     <ClCompile Include="TestBossScene.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="UIButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc" />

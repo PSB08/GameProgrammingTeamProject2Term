@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "DevScene.h"
 #include "TestBossScene.h"
+#include "TitleScene.h"
 #include "Object.h"
 #include "Collider.h"
 
@@ -35,9 +36,10 @@ void SceneManager::Init()
 	// ¾À µî·Ï
 	RegisterScene(L"DevScene",std::make_shared<DevScene>());
 	RegisterScene(L"TestBossScene",std::make_shared<TestBossScene>());
+	RegisterScene(L"TitleScene",std::make_shared<TitleScene>());
 	
 	// Ã¹ ¾À ·Îµå
-	LoadScene(L"DevScene");
+	LoadScene(L"TitleScene");
 }
 
 void SceneManager::Update()

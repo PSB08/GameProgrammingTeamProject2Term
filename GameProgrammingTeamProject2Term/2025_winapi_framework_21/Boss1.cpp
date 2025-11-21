@@ -42,6 +42,12 @@ void Boss1::UpdatePattern()
     if (m_isCorePhase)
         return; // 코어가 나오면 패턴 완전 정지
 
+    if (m_startDelayTimer < m_startDelay)
+    {
+        m_startDelayTimer += fDT;
+        return; // 아직 대기 중이므로 패턴 실행 X
+    }
+
     switch (m_curPattern)
     {
     case Boss1Pattern::PATTERN1:
@@ -100,7 +106,7 @@ void Boss1::Pattern2()
     m_fireTimer2 = 0.f;
 
     Vec2 center = GetPos();
-    constexpr int count = 12;
+    int count = 12;
 
     for (int i = 0; i < count; i++)
     {

@@ -28,6 +28,9 @@ private:
 private:
     // 패턴용 변수들
     bool m_isCorePhase;
+    float m_startDelayTimer = 0.f;  // 시작 지연용 타이머
+    const float m_startDelay = 3.f;  //대기 타이머 - 3초 대기 후 패턴 시작함
+
 
     float m_angle1;
     float m_fireTimer1;

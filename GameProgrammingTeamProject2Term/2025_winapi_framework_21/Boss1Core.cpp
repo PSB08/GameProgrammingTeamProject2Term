@@ -18,16 +18,28 @@ Boss1Core::~Boss1Core()
 {
 }
 
+void Boss1Core::Update()
+{
+    if (!m_pendingSceneChange)
+        return;
+
+    m_delay -= GET_SINGLE(TimeManager)->GetDT();
+
+    if (m_delay <= 0.f)
+    {
+        GET_SINGLE(SceneManager)->LoadScene(L"TitleScene");
+
+        m_pendingSceneChange = false;
+    }
+}
+
 void Boss1Core::EnterCollision(Collider* _other)
 {
-    cout << "EnterCollision" << endl;
-    if (_other->IsTrigger())
+    if (_other->IsTrigger() && _other->GetName() == L"PlayerBullet")
     {
-        if (_other->GetName() == L"PlayerBullet")
-        {
-            GET_SINGLE(SceneManager)->RequestDestroy(m_owner);
-            GET_SINGLE(SceneManager)->RequestDestroy(this);
-            GET_SINGLE(SceneManager)->RequestDestroy(_other->GetOwner());
-        }
+        GET_SINGLE(SceneManager)->RequestDestroy(_other->GetOwner());
+
+        m_delay = 0.2f;
+        m_pendingSceneChange = true;
     }
 }

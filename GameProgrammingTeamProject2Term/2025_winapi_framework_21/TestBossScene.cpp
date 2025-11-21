@@ -20,7 +20,7 @@ void TestBossScene::Init()
 	Spawn<Player>
 		(
 			Layer::PLAYER
-			, { WINDOW_WIDTH / 2, 300 }
+			, { WINDOW_WIDTH / 2, 550 }
 	, { 100,100 });
 
 	Spawn<Floor>
