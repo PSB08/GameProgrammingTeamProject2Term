@@ -28,5 +28,7 @@ private:
 	float dashTime;
 	float InvincibleHoldTime;
 	float InvincibleTime;
+	float JumpDelayTime;
+	float JumpTime;
 };
 
