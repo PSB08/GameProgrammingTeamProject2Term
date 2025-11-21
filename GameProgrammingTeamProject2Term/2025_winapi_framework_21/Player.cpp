@@ -22,7 +22,9 @@ Player::Player()
 	shieldTime(0.f),
 	InvincibleTime(0.f),
 	InvincibleHoldTime(0.5f),
-	playerIsInvincibility(false)
+	playerIsInvincibility(false),
+	JumpDelayTime(0.02f),
+	JumpTime(0.f)
 {
 	//m_pTexture = new Texture;
 	//wstring path = GET_SINGLE(ResourceManager)->GetResPath();
@@ -97,6 +99,7 @@ void Player::EnterCollision(Collider* _other)
 		cout << "¶¥ ´êÀ½";
 		Rigidbody* rb = GetComponent<Rigidbody>();
 		rb->SetGrounded(true);
+		JumpTime = 0.f;
 	}
 
 	if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" || _other->GetName() == L"BossProjectile")
@@ -137,6 +140,7 @@ void Player::Update()
 		playerCanDamaged && shieldTime >= shieldCooltime) PlayerShield();
 	if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime) PlayerDash();
 
+	Rigidbody* rigid = GetComponent<Rigidbody>();
 	if (playerCanDamaged && shieldTime < shieldCooltime)
 	{
 		shieldTime += fDT;
@@ -144,6 +148,10 @@ void Player::Update()
 	if (dashTime < dashCooltime)
 	{
 		dashTime += fDT;
+	}
+	if (JumpTime < JumpDelayTime && rigid->IsGrounded())
+	{
+		JumpTime += fDT;
 	}
 	if (InvincibleTime < InvincibleHoldTime)
 	{
@@ -183,7 +191,7 @@ void Player::PlayerJump()
 {
 	Rigidbody* rigid = GetComponent<Rigidbody>();
 	Vec2 jump = {0, -30};
-	if (rigid->IsGrounded())
+	if (rigid->IsGrounded() && JumpTime > JumpDelayTime)
 	{
 		rigid->AddImpulse(jump * jumpPower);
 		rigid->SetGrounded(false); 
