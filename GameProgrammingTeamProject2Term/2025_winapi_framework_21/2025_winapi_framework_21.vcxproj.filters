@@ -50,6 +50,15 @@
     <Filter Include="Engine\03. Object\Boss">
       <UniqueIdentifier>{bb0ccf99-35bb-4b26-a58c-f2339ea7e0d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Object\Boss\Boss1">
+      <UniqueIdentifier>{f3e04f65-1481-4b14-8c11-8e92be7ccb9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Boss\Boss2">
+      <UniqueIdentifier>{c9223c1b-aafb-45e4-a665-e7a1f5fd4734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Boss\Boss3">
+      <UniqueIdentifier>{b88878a5-73cb-4c3e-a707-e2ed4297747a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2025_winapi_framework_21.h">
@@ -145,17 +154,8 @@
     <ClInclude Include="BossBase.h">
       <Filter>Engine\03. Object\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Boss1.h">
-      <Filter>Engine\03. Object\Boss</Filter>
-    </ClInclude>
     <ClInclude Include="TestBossScene.h">
       <Filter>Engine\04. Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Boss3.h">
-      <Filter>Engine\03. Object\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Boss1Core.h">
-      <Filter>Engine\03. Object\Boss</Filter>
     </ClInclude>
     <ClInclude Include="BossProjectile.h">
       <Filter>Engine\03. Object\Boss</Filter>
@@ -171,6 +171,18 @@
     </ClInclude>
     <ClInclude Include="UIButton.h">
       <Filter>Engine\07. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss1.h">
+      <Filter>Engine\03. Object\Boss\Boss1</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss1Core.h">
+      <Filter>Engine\03. Object\Boss\Boss1</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss3Core.h">
+      <Filter>Engine\03. Object\Boss\Boss3</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss3.h">
+      <Filter>Engine\03. Object\Boss\Boss3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -256,17 +268,8 @@
     <ClCompile Include="Floor.cpp">
       <Filter>Engine\03. Object</Filter>
     </ClCompile>
-    <ClCompile Include="Boss1.cpp">
-      <Filter>Engine\03. Object\Boss</Filter>
-    </ClCompile>
     <ClCompile Include="TestBossScene.cpp">
       <Filter>Engine\04. Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Boss3.cpp">
-      <Filter>Engine\03. Object\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Boss1Core.cpp">
-      <Filter>Engine\03. Object\Boss</Filter>
     </ClCompile>
     <ClCompile Include="BossProjectile.cpp">
       <Filter>Engine\03. Object\Boss</Filter>
@@ -279,6 +282,18 @@
     </ClCompile>
     <ClCompile Include="UIButton.cpp">
       <Filter>Engine\07. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss1.cpp">
+      <Filter>Engine\03. Object\Boss\Boss1</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss1Core.cpp">
+      <Filter>Engine\03. Object\Boss\Boss1</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss3.cpp">
+      <Filter>Engine\03. Object\Boss\Boss3</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss3Core.cpp">
+      <Filter>Engine\03. Object\Boss\Boss3</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
