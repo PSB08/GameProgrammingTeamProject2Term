@@ -166,6 +166,7 @@
     <ClInclude Include="Boss1.h" />
     <ClInclude Include="Boss1Core.h" />
     <ClInclude Include="Boss3.h" />
+    <ClInclude Include="Boss3Core.h" />
     <ClInclude Include="BossBase.h" />
     <ClInclude Include="BossProjectile.h" />
     <ClInclude Include="Collider.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="Boss1.cpp" />
     <ClCompile Include="Boss1Core.cpp" />
     <ClCompile Include="Boss3.cpp" />
+    <ClCompile Include="Boss3Core.cpp" />
     <ClCompile Include="BossProjectile.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
