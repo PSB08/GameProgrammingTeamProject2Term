@@ -18,12 +18,18 @@ public:
 	}
 	void RegisterScene(const wstring& _name, std::shared_ptr<Scene> _scene);
 	void LoadScene(const wstring& _name);
+	bool SetStop()
+	{
+		return m_curSceneStop = true; // 현재 씬을 멈추기 위한 호출용도
+	}
+	bool GetCurSceneState() { return m_curSceneStop; }
 public:
 	const std::shared_ptr<Scene>& GetCurScene() const
 	{
 		return m_curScene;
 	}
 private:
+	bool m_curSceneStop;
 	//Scene* m_scene;
 	std::shared_ptr<Scene> m_curScene;
 	std::unordered_map<wstring, std::shared_ptr<Scene>> m_mapScenes;

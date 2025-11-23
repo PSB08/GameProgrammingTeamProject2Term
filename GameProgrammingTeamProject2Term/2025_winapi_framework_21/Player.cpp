@@ -10,6 +10,7 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "Rigidbody.h"
+#include "SceneManager.h"
 
 Player::Player()
 	: m_pTexture(nullptr),
@@ -96,7 +97,6 @@ void Player::EnterCollision(Collider* _other)
 {
 	if (_other->GetName() == L"Floor")
 	{
-		cout << "¶¥ ´êÀ½";
 		Rigidbody* rb = GetComponent<Rigidbody>();
 		rb->SetGrounded(true);
 		JumpTime = 0.f;
@@ -105,7 +105,8 @@ void Player::EnterCollision(Collider* _other)
 	if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" || _other->GetName() == L"BossProjectile")
 		&& playerCanDamaged && !playerIsInvincibility)
 	{
-		cout << "´ÔÁê±Ý";
+		SetDead();
+		GET_SINGLE(SceneManager)->SetStop();
 	}
 	else if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" || _other->GetName() == L"BossProjectile")
 		&& !playerCanDamaged || playerIsInvincibility)
@@ -213,8 +214,6 @@ void Player::PlayerDash()
 
 	if (GET_KEY(KEY_TYPE::D)) rigid->AddImpulse(dash * dashPower);
 
-
-	cout << "Dash";
 	playerIsInvincibility = true;
 	dashTime = 0.f;
 	InvincibleTime = 0.f;
