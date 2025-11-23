@@ -24,7 +24,7 @@ void SceneManager::PhysicsSyncColliders()
 
 void SceneManager::FixedUpdate(float _fixedDT)
 {
-	if (m_curScene == nullptr)
+	if (m_curScene == nullptr || m_curSceneStop)
 		return;
 	m_curScene->FixedUpdate(_fixedDT);
 	PhysicsSyncColliders();
@@ -32,6 +32,8 @@ void SceneManager::FixedUpdate(float _fixedDT)
 
 void SceneManager::Init()
 {
+
+	m_curSceneStop = false;
 	m_curScene = nullptr;
 	// ¾À µî·Ï
 	RegisterScene(L"DevScene",std::make_shared<DevScene>());
@@ -44,7 +46,7 @@ void SceneManager::Init()
 
 void SceneManager::Update()
 {
-	if (m_curScene == nullptr)
+	if (m_curScene == nullptr || m_curSceneStop)
 		return;
 	m_curScene->Update();
 	m_curScene->LateUpdate();
@@ -53,7 +55,7 @@ void SceneManager::Update()
 
 void SceneManager::Render(HDC _hdc)
 {
-	if (m_curScene == nullptr)
+	if (m_curScene == nullptr) // Render´Â ¸ØÃç¹ö¸®¸é ±×¸®Áö ¸øÇÏ±â¿¡ ³ÀµÒ
 		return;
 	m_curScene->Render(_hdc);
 }

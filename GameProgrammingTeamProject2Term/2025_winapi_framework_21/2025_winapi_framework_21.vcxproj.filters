@@ -184,6 +184,9 @@
     <ClInclude Include="Boss3.h">
       <Filter>Engine\03. Object\Boss\Boss3</Filter>
     </ClInclude>
+    <ClInclude Include="ExploseProjectile.h">
+      <Filter>Engine\03. Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -294,6 +297,9 @@
     </ClCompile>
     <ClCompile Include="Boss3Core.cpp">
       <Filter>Engine\03. Object\Boss\Boss3</Filter>
+    </ClCompile>
+    <ClCompile Include="ExploseProjectile.cpp">
+      <Filter>Engine\03. Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
