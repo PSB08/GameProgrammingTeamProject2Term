@@ -27,7 +27,7 @@ void UIButton::Update()
     if (!nowDown && m_prevDown && m_hover)
     {
         if (m_onClick)
-            m_onClick();
+            m_onClick();  // 전달된 함수 실행
     }
 
     m_prevDown = nowDown;

@@ -4,11 +4,11 @@
 #include <memory>
 #include <iostream>
 
-class TitleScene : public Scene
+class BossSelectScene : public Scene
 {
 public:
-    TitleScene();
-    virtual ~TitleScene() = default;
+	BossSelectScene();
+	~BossSelectScene();
 
     virtual void Init() override;
     virtual void Update() override;
@@ -19,7 +19,9 @@ public:
 
 private:
     UIObject m_titleLabel;
-    UIButton m_btnStart;
-    UIButton m_btnSettings;
-    UIButton m_btnExit;
+    UIButton m_btnBoss1;
+    UIButton m_btnBoss2;
+    UIButton m_btnBoss3;
+    UIButton m_btnTitle;
 };
+
