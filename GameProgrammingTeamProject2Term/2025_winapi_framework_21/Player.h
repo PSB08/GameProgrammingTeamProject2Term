@@ -30,5 +30,10 @@ private:
 	float InvincibleTime;
 	float JumpDelayTime;
 	float JumpTime;
+
+private:
+	bool m_pendingSceneChange = false;
+	float m_delay = 0.f;
+
 };
 

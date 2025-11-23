@@ -22,8 +22,7 @@ public:
 private:
 private:
     UIObject m_titleLabel;
-    UIButton m_btnReStart;
-    UIButton m_btnSettings;
     UIButton m_btnTitle;
+    UIButton m_btnQuit;
 };
 

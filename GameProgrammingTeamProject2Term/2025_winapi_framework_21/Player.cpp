@@ -25,12 +25,10 @@ Player::Player()
 	InvincibleHoldTime(0.5f),
 	playerIsInvincibility(false),
 	JumpDelayTime(0.02f),
-	JumpTime(0.f)
+	JumpTime(0.f),
+	m_pendingSceneChange(false),
+	m_delay(0.f)
 {
-	//m_pTexture = new Texture;
-	//wstring path = GET_SINGLE(ResourceManager)->GetResPath();
-	//path += L"Texture\\plane.bmp";
-	//m_pTexture->Load(path);
 	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"jiwoo");
 	AddComponent<Collider>();
 	auto* animator = AddComponent<Animator>();
@@ -47,7 +45,6 @@ Player::Player()
 
 Player::~Player()
 {
-	//SAFE_DELETE(m_pTexture);
 }
 
 void Player::Render(HDC _hdc)
@@ -60,36 +57,6 @@ void Player::Render(HDC _hdc)
 	if (!playerCanDamaged)
 		ELLIPSE_RENDER(_hdc, pos.x, pos.y, width / 3, height / 3);
 
-	// blt 종류
-	// 1. bitblt - 1:1 매칭, 가장 빠름
-	//::BitBlt(_hdc
-	//	, (int)(pos.x - size.x / 2)
-	//	, (int)(pos.y - size.y / 2)
-	//	, width, height,
-	//	m_pTexture->GetTextureDC(),
-	//	0, 0, SRCCOPY);
-	
-	////// 2. TransparentBlt - 색상 빼기, 느림 
-	//::TransparentBlt(_hdc
-	//	, (int)(pos.x - size.x / 2)
-	//	, (int)(pos.y - size.y / 2)
-	//	, width * 2, height,
-	//	m_pTexture->GetTextureDC(),
-	//	0, 0, width, height, RGB(255,0,255));
-	
-	////// 3. StretchBlt - 크기조절, 반전, 빠름
-	//::StretchBlt(_hdc
-	//	, (int)(pos.x - size.x / 2)
-	//	, (int)(pos.y - size.y / 2)
-	//	, size.x, size.y,
-	//	m_pTexture->GetTextureDC(),
-	//	0, 0, width, height, SRCCOPY);
-
-	// 4. 회전 
-	//::PlgBlt()
-
-	// 5. alpha 값 조절
-	//::AlphaBlend()
 	ComponentRender(_hdc);
 }
 
@@ -105,8 +72,8 @@ void Player::EnterCollision(Collider* _other)
 	if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" || _other->GetName() == L"BossProjectile")
 		&& playerCanDamaged && !playerIsInvincibility)
 	{
-		SetDead();
-		GET_SINGLE(SceneManager)->SetStop();
+		m_delay = 0.2f;
+		m_pendingSceneChange = true;
 	}
 	else if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" || _other->GetName() == L"BossProjectile")
 		&& !playerCanDamaged || playerIsInvincibility)
@@ -121,16 +88,6 @@ void Player::ExitCollision(Collider* _other)
 
 void Player::Update()
 {
-	//Vec2 pos = GetPos();
-	//if (GET_KEY(KEY_TYPE::A))
-	//	pos.x -= 300.f * fDT;
-	//if (GET_KEY(KEY_TYPE::D))
-	//	pos.x += 300.f * fDT;
-	//if (GET_KEY(KEY_TYPE::W))
-	//	pos.y -= 300.f * fDT;
-	//if (GET_KEY(KEY_TYPE::S))
-	//	pos.y += 300.f * fDT;
-	//SetPos(pos);
 	Vec2 dir = {};
 	if (GET_KEY(KEY_TYPE::A)) dir.x -= 1.f;
 	
@@ -167,6 +124,19 @@ void Player::Update()
 
 	if (GET_KEYDOWN(KEY_TYPE::J))
 		CreateProjectile();
+
+	if (m_pendingSceneChange)
+	{
+		m_delay -= fDT;
+
+		if (m_delay <= 0.f)
+		{
+			GET_SINGLE(SceneManager)->LoadScene(L"DeadScene");
+			m_pendingSceneChange = false;
+			SetDead();
+		}
+		return;
+	}
 }
 
 
@@ -219,5 +189,3 @@ void Player::PlayerDash()
 	InvincibleTime = 0.f;
 }
 
-// DevScene에서 Enter를 누르면 TestScene으로 넘어갑니다.
-// TestScene에는 Enemy가 사각형으로 랜덤 위치에 랜덤색깔로 깜빡입니다.
