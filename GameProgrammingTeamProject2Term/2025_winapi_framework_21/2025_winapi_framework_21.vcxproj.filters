@@ -187,7 +187,15 @@
     <ClInclude Include="UISlider.h">
       <Filter>Engine\07. UI</Filter>
     </ClInclude>
-    <ClInclude Include="SettingScene.h" />
+    <ClInclude Include="DeadScene.h">
+      <Filter>Engine\04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ExploseProjectile.h">
+      <Filter>Engine\04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingScene.h">
+      <Filter>Engine\04. Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -302,6 +310,14 @@
     <ClCompile Include="UISlider.cpp">
       <Filter>Engine\07. UI</Filter>
     </ClCompile>
-    <ClCompile Include="SettingScene.cpp" />
+    <ClCompile Include="DeadScene.cpp">
+      <Filter>Engine\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ExploseProjectile.cpp">
+      <Filter>Engine\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingScene.cpp">
+      <Filter>Engine\04. Scene</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
