@@ -56,6 +56,7 @@ public:
 	{
 		return m_resourcePath.native();
 	}
+	FMOD::Channel* m_pChannel[(UINT)SOUND_CHANNEL::END]; // 오디오 채널
 private:
 	//std::filesystem::path m_resourcePath;
 	fs::path m_resourcePath;
@@ -66,6 +67,6 @@ private:
 	vector<wstring> m_vecFontFiles;
 	std::unordered_map<wstring, SoundInfo*> m_mapSounds;
 	FMOD::System* m_pSoundSystem; // 사운드 시스템
-	FMOD::Channel* m_pChannel[(UINT)SOUND_CHANNEL::END]; // 오디오 채널
+	
 };
 

@@ -184,6 +184,10 @@
     <ClInclude Include="Boss3.h">
       <Filter>Engine\03. Object\Boss\Boss3</Filter>
     </ClInclude>
+    <ClInclude Include="UISlider.h">
+      <Filter>Engine\07. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -295,5 +299,9 @@
     <ClCompile Include="Boss3Core.cpp">
       <Filter>Engine\03. Object\Boss\Boss3</Filter>
     </ClCompile>
+    <ClCompile Include="UISlider.cpp">
+      <Filter>Engine\07. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingScene.cpp" />
   </ItemGroup>
 </Project>

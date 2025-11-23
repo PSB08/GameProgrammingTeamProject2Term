@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TitleScene.h"
 #include "SceneManager.h"
+#include "ResourceManager.h"
 #include <iostream>
 
 TitleScene::TitleScene()
@@ -8,6 +9,7 @@ TitleScene::TitleScene()
     , m_btnSettings(L"", nullptr)
     , m_btnExit(L"", nullptr)
 {
+    GET_SINGLE(ResourceManager)->Play(L"BGM");
 }
 
 void TitleScene::Init()
@@ -31,7 +33,7 @@ void TitleScene::Init()
 
     m_btnSettings = UIButton(L"설정", []()
         {
-            std::cout << "설정\n";
+            GET_SINGLE(SceneManager)->LoadScene(L"SettingScene");
         });
     m_btnSettings.SetSize({ btnW, btnH });
     m_btnSettings.SetPos({ WINDOW_WIDTH / 2.f, startY + (btnH + gap) });
