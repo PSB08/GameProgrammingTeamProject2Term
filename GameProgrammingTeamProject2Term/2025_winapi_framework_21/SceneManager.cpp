@@ -6,6 +6,7 @@
 #include "SettingScene.h"
 #include "Object.h"
 #include "Collider.h"
+#include "DeadScene.h"
 
 void SceneManager::PhysicsSyncColliders()
 {
@@ -41,7 +42,7 @@ void SceneManager::Init()
 	RegisterScene(L"TestBossScene",std::make_shared<TestBossScene>());
 	RegisterScene(L"TitleScene",std::make_shared<TitleScene>());
 	RegisterScene(L"SettingScene",std::make_shared<SettingScene>());
-	RegisterScene(L"DeadScene",std::make_shared<SettingScene>());
+	RegisterScene(L"DeadScene",std::make_shared<DeadScene>());
 	
 	// Ã¹ ¾À ·Îµå
 	LoadScene(L"TitleScene");
