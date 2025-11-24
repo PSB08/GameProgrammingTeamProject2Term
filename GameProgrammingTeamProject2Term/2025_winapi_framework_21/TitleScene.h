@@ -1,5 +1,4 @@
 #pragma once
-#include "pch.h"
 #include "Scene.h"
 #include "UIButton.h"
 #include <memory>
@@ -18,7 +17,6 @@ public:
     virtual void Render(HDC hdc) override;
     virtual void Release() override {}
 
-private:
 private:
     UIObject m_titleLabel;
     UIButton m_btnStart;

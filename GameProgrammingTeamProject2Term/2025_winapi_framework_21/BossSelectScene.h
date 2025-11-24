@@ -1,16 +1,14 @@
 #pragma once
 #include "Scene.h"
 #include "UIButton.h"
-#include "pch.h"
 #include <memory>
 #include <iostream>
 
-class DeadScene :
-    public Scene
+class BossSelectScene : public Scene
 {
 public:
-    DeadScene();
-    virtual ~DeadScene() = default;
+	BossSelectScene();
+	~BossSelectScene();
 
     virtual void Init() override;
     virtual void Update() override;
@@ -20,9 +18,10 @@ public:
     virtual void Release() override {}
 
 private:
-private:
     UIObject m_titleLabel;
+    UIButton m_btnBoss1;
+    UIButton m_btnBoss2;
+    UIButton m_btnBoss3;
     UIButton m_btnTitle;
-    UIButton m_btnQuit;
 };
 

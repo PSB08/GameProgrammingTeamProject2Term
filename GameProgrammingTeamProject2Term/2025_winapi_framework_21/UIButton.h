@@ -8,7 +8,8 @@ using std::function;  //functionÀº È£ÃâÇÒ ¼ö ÀÖ´Â °´Ã¼¸¦ º¸°ü°¡´ÉÇÏ°í È£Ãâ °¡´ÉÇ
 class UIButton : public UIObject
 {
 private:
-    function<void()> m_onClick = nullptr;
+    function<void()> m_onClick = nullptr; //¹öÆ°ÀÌ Å¬¸¯µÇ¸é ½ÇÇàÇÒ ÇÔ¼ö¸¦ ÀúÀåÇØ µÎ´Â Äİ¹é ¿ªÇÒ
+    //¶÷´Ù¶û ÇÔ¼ö Æ÷ÀÎÅÍ¸¦ ¾µ ¼ö ÀÖÀ½
 
     bool m_prevDown = false;
     bool m_hover = false;
@@ -19,7 +20,7 @@ public:
     UIButton(const wstring& text, function<void()> cb)
         : m_onClick(cb)
     {
-        m_text = text;
+        m_text = text;  //¹öÆ°À» »ı¼ºÇÒ ¶§ ´­·¶À» ¶§ ½ÇÇàµÉ ÇÔ¼ö¸¦ Àü´Ş
     }
 
     virtual void Update() override;

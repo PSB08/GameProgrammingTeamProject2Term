@@ -26,7 +26,7 @@ void TitleScene::Init()
 
     m_btnStart = UIButton(L"½ÃÀÛ", []()
         {
-            GET_SINGLE(SceneManager)->LoadScene(L"TestBossScene");
+            GET_SINGLE(SceneManager)->LoadScene(L"BossSelectScene");
         });
     m_btnStart.SetSize({ btnW, btnH });
     m_btnStart.SetPos({ WINDOW_WIDTH / 2.f, startY });
