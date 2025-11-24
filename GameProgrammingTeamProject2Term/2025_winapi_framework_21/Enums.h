@@ -39,7 +39,7 @@ enum class Boss1Pattern
 	END
 };
 
-enum class Boss2Pattern
+enum class Boss3Pattern
 {
 	NONE,
 	STARTPATTERN,

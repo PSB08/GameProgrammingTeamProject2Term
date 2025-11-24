@@ -4,6 +4,8 @@
 #include "ResourceManager.h"
 #include "Collider.h"
 #include "Rigidbody.h"
+#include "SceneManager.h"
+#include "BossProjectile.h"
 
 ExploseProjectile::ExploseProjectile()
 	: m_angle(0.f),
@@ -12,8 +14,8 @@ ExploseProjectile::ExploseProjectile()
 	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");  //¹Ù²ã¾ßÇÔ
 	auto* com = AddComponent<Collider>();
 	AddComponent<Rigidbody>();
-	com->SetSize({ 20.f,20.f });
-	com->SetName(L"BossProjectile");
+	com->SetSize({ 30.f,30.f });
+	com->SetName(L"ExploseProjectile");
 	com->SetTrigger(true);
 }
 
@@ -52,20 +54,29 @@ void ExploseProjectile::Render(HDC _hdc)
 
 void ExploseProjectile::Explose(int _value)
 {
+	Vec2 center = GetPos();
+
 	for (int i = 0; i < _value; i++)
 	{
+		float ang = (m_angle * PI / 180.f) + (PI * 2.f) * ((float)i / _value);
+		Vec2 dir = { cosf(ang), sinf(ang) };
 
+		auto* proj = new BossProjectile;
+		proj->SetPos(center);
+		proj->SetSize({ 20.f, 20.f });
+		proj->SetDir(dir);
+
+		GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
 	}
 }
 
 
 void ExploseProjectile::EnterCollision(Collider* _other)
 {
-	Rigidbody* rig = GetComponent<Rigidbody>();
-	if(_other->GetName() == L"Floor")
+	if(_other->GetName() == L"Floor" || _other->GetName() == L"Player")
 	{
+		Explose(12);
 		SetDead();
-		
 		return;
 	}
 }
