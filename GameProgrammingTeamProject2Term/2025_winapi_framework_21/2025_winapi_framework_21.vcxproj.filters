@@ -196,6 +196,15 @@
     <ClInclude Include="SettingScene.h">
       <Filter>Engine\04. Scene</Filter>
     </ClInclude>
+    <ClInclude Include="EventBus.h">
+      <Filter>Engine\08. Module</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSelectScene.h">
+      <Filter>Engine\04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>Engine\08. Module</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -317,6 +326,12 @@
       <Filter>Engine\04. Scene</Filter>
     </ClCompile>
     <ClCompile Include="SettingScene.cpp">
+      <Filter>Engine\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EventBus.cpp">
+      <Filter>Engine\08. Module</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSelectScene.cpp">
       <Filter>Engine\04. Scene</Filter>
     </ClCompile>
   </ItemGroup>

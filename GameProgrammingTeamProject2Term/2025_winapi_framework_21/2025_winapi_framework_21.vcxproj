@@ -179,9 +179,11 @@
     <ClInclude Include="DevScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="EventBus.h" />
     <ClInclude Include="ExploseProjectile.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameData.h" />
     <ClInclude Include="GDISelector.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LaserObject.h" />
@@ -223,6 +225,7 @@
     <ClCompile Include="DeadScene.cpp" />
     <ClCompile Include="DevScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EventBus.cpp" />
     <ClCompile Include="ExploseProjectile.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="GDISelector.cpp" />

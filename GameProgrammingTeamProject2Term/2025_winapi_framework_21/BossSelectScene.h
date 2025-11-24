@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "UIButton.h"
+#include "EventBus.h"
 #include <memory>
 #include <iostream>
 
@@ -16,6 +17,8 @@ public:
     virtual void FixedUpdate(float) override {}
     virtual void Render(HDC hdc) override;
     virtual void Release() override {}
+    
+    void EventListener();
 
 private:
     UIObject m_titleLabel;
@@ -23,5 +26,10 @@ private:
     UIButton m_btnBoss2;
     UIButton m_btnBoss3;
     UIButton m_btnTitle;
+
+private:
+    EventBus::ListenerID m_boss1Listener;
+    EventBus::ListenerID m_boss2Listener;
+    EventBus::ListenerID m_boss3Listener;
 };
 

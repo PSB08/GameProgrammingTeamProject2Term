@@ -2,6 +2,7 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
+#include "GameData.h"
 #include <iostream>
 
 TitleScene::TitleScene()
@@ -26,6 +27,7 @@ void TitleScene::Init()
 
     m_btnStart = UIButton(L"½ÃÀÛ", []()
         {
+            GameData::GetInstance()->Clear();
             GET_SINGLE(SceneManager)->LoadScene(L"BossSelectScene");
         });
     m_btnStart.SetSize({ btnW, btnH });

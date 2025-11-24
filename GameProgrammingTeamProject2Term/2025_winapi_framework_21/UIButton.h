@@ -11,6 +11,7 @@ private:
     function<void()> m_onClick = nullptr; //버튼이 클릭되면 실행할 함수를 저장해 두는 콜백 역할
     //람다랑 함수 포인터를 쓸 수 있음
 
+    bool m_interactable = true;
     bool m_prevDown = false;
     bool m_hover = false;
 
@@ -25,4 +26,7 @@ public:
 
     virtual void Update() override;
     virtual void Render(HDC hdc) override;
+
+    virtual void Interactable(bool enable) { m_interactable = enable; }
+    bool IsInteract() const { return m_interactable; }
 };

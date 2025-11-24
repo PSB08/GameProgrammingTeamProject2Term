@@ -59,5 +59,5 @@ protected:
 
     //패턴 카운트
     int m_patternCount = 0;
-    const int m_maxPatternCount = 10;
+    const int m_maxPatternCount = 1;
 };

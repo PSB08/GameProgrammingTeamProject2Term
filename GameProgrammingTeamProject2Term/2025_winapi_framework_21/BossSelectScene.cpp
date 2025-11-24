@@ -2,6 +2,8 @@
 #include "BossSelectScene.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
+#include "EventBus.h"
+#include "GameData.h"
 #include <iostream>
 
 BossSelectScene::BossSelectScene()
@@ -15,10 +17,15 @@ BossSelectScene::BossSelectScene()
 
 BossSelectScene::~BossSelectScene()
 {
+    EventBus::RemoveListener(L"Boss1Killed", m_boss1Listener);
+    EventBus::RemoveListener(L"Boss2Killed", m_boss2Listener);
+    EventBus::RemoveListener(L"Boss3Killed", m_boss3Listener);
 }
 
 void BossSelectScene::Init()
 {
+    EventListener();
+
     m_titleLabel.SetFontType(FontType::TITLE_BIG);
     m_titleLabel.SetText(L"보스를 선택하세요");
     m_titleLabel.SetSize({ 800.f, 140.f });
@@ -59,6 +66,11 @@ void BossSelectScene::Init()
         });
     m_btnTitle.SetSize({ 800.f, 70.f });
     m_btnTitle.SetPos({ WINDOW_WIDTH / 2.f, startX + 50.f });
+
+    auto data = GameData::GetInstance();
+    m_btnBoss1.Interactable(!data->boss1Cleared);
+    m_btnBoss2.Interactable(!data->boss2Cleared);
+    m_btnBoss3.Interactable(!data->boss3Cleared);
 }
 
 void BossSelectScene::Update()
@@ -76,4 +88,28 @@ void BossSelectScene::Render(HDC hdc)
     m_btnBoss2.Render(hdc);
     m_btnBoss3.Render(hdc);
     m_btnTitle.Render(hdc);
+}
+
+void BossSelectScene::EventListener()
+{
+    m_boss1Listener = EventBus::AddListener(L"Boss1Killed", [this]()
+        {
+            GameData::GetInstance()->boss1Cleared = true;
+            GameData::GetInstance()->boss2Cleared = false;
+            GameData::GetInstance()->boss3Cleared = false;
+        });
+
+    m_boss2Listener = EventBus::AddListener(L"Boss2Killed", [this]()
+        {
+            GameData::GetInstance()->boss1Cleared = false;
+            GameData::GetInstance()->boss2Cleared = true;
+            GameData::GetInstance()->boss3Cleared = false;
+        });
+
+    m_boss3Listener = EventBus::AddListener(L"Boss3Killed", [this]()
+        {
+            GameData::GetInstance()->boss1Cleared = false;
+            GameData::GetInstance()->boss2Cleared = false;
+            GameData::GetInstance()->boss3Cleared = true;
+        });
 }

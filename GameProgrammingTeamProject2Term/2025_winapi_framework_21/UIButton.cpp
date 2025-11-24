@@ -11,6 +11,8 @@ static bool IsInside(const POINT& p, const RECT& r)
 
 void UIButton::Update()
 {
+    if (!m_interactable) return;
+
     RECT rect = GetRect();
 
     POINT pt;
@@ -37,15 +39,18 @@ void UIButton::Render(HDC hdc)
 {
     RECT r = GetRect();
 
+    HBRUSH brush = CreateSolidBrush(m_interactable ? RGB(255, 255, 255) : RGB(150, 150, 150));
+    HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, brush);
+
     HPEN hPen = ::CreatePen(PS_SOLID, 2, m_hover ? RGB(255, 0, 0) : RGB(0, 0, 0));
     HGDIOBJ oldPen = ::SelectObject(hdc, hPen);
-
-    HBRUSH oldBrush = (HBRUSH)::SelectObject(hdc, ::GetStockObject(NULL_BRUSH));
 
     ::Rectangle(hdc, r.left, r.top, r.right, r.bottom);
 
     ::SelectObject(hdc, oldBrush);
     ::SelectObject(hdc, oldPen);
+
+    ::DeleteObject(brush);
     ::DeleteObject(hPen);
 
     UIObject::Render(hdc);
