@@ -1,7 +1,8 @@
 #pragma once
 #include "BossBase.h"
-class Boss3 :
-    public BossBase<Boss2Pattern>
+#include "Enums.h"
+
+class Boss3 : public BossBase<Boss3Pattern>
 {
 public:
     //생성자, 소멸자
@@ -9,6 +10,7 @@ public:
     ~Boss3();
 
 private:
+    void StartRandomPattern() override;
     // 패턴 실행
     void UpdatePattern() override;
 
@@ -27,16 +29,14 @@ private:
 private:
     // 패턴용 변수들
     bool m_isCorePhase;
+    bool m_isStartPhase;
+    float m_startDelayTimer = 0.f;  // 시작 지연용 타이머
+    const float m_startDelay = 3.f;  //대기 타이머 - 3초 대기 후 패턴 시작함
 
     float m_angle1;
     float m_fireTimer1;
 
     float m_angle2;
     float m_fireTimer2;
-
-    // 레이저 패턴용
-    float m_laserLeftX;
-    float m_laserRightX;
-    bool  m_laserActive;
 };
 
