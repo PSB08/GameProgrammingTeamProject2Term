@@ -1,13 +1,13 @@
 #pragma once
 #include "BossBase.h"
-#include "Enums.h" // Boss1Pattern 포함
+#include "BossProjectile.h"
+#include "Enums.h"
 
-class Boss1 : public BossBase<Boss1Pattern>
+class Boss2 : public BossBase<Boss2Pattern>
 {
 public:
-    //생성자, 소멸자
-    Boss1();
-    ~Boss1();
+	Boss2();
+	~Boss2();
 
 private:
     // 패턴 선택
@@ -20,10 +20,14 @@ private:
 
 private:
     // ===== 개별 패턴 =====
-    void Pattern1();   // 360도 탄막
-    void Pattern2();   // 6방향 탄막
-    void Pattern3();   // 레이저 수축
-    void SpawnCore();  //패턴 다 쓰고 코어 소환하기
+    void Pattern1();   // 
+    void Pattern2();   // 
+    void Pattern3();   // 
+    void Pattern4();   // 
+    void Pattern5();   // 
+    void SpawnMainCore();  //패턴 다 쓰고 코어 소환하기
+    void InitSpawnCore();
+
 
 private:
     // 패턴용 변수들
@@ -42,3 +46,4 @@ private:
     float m_laserRightX;
     bool  m_laserActive;
 };
+

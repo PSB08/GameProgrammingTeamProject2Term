@@ -39,6 +39,17 @@ enum class Boss1Pattern
 	END
 };
 
+enum class Boss2Pattern
+{
+	NONE,
+	PATTERN1,
+	PATTERN2,
+	PATTERN3,
+	PATTERN4,
+	PATTERN5,
+	END
+};
+
 enum class Boss3Pattern
 {
 	NONE,

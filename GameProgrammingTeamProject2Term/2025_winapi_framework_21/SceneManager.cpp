@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "DevScene.h"
 #include "TestBossScene.h"
+#include "TestBoss2Scene.h"
 #include "TitleScene.h"
 #include "SettingScene.h"
 #include "DeadScene.h"
@@ -42,6 +43,7 @@ void SceneManager::Init()
 	// ¾À µî·Ï
 	RegisterScene(L"DevScene",std::make_shared<DevScene>());
 	RegisterScene(L"TestBossScene",std::make_shared<TestBossScene>());
+	RegisterScene(L"TestBoss2Scene",std::make_shared<TestBoss2Scene>());
 	RegisterScene(L"TitleScene",std::make_shared<TitleScene>());
 	RegisterScene(L"SettingScene",std::make_shared<SettingScene>());
 	RegisterScene(L"DeadScene",std::make_shared<DeadScene>());

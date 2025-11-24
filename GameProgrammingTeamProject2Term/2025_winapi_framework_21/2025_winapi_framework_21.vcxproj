@@ -165,6 +165,9 @@
     <ClInclude Include="BaseWindow.h" />
     <ClInclude Include="Boss1.h" />
     <ClInclude Include="Boss1Core.h" />
+    <ClInclude Include="Boss2.h" />
+    <ClInclude Include="Boss2Core.h" />
+    <ClInclude Include="Boss2MainCore.h" />
     <ClInclude Include="Boss3.h" />
     <ClInclude Include="Boss3Core.h" />
     <ClInclude Include="BossBase.h" />
@@ -199,6 +202,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SettingScene.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TestBoss2Scene.h" />
     <ClInclude Include="TestBossScene.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
@@ -214,6 +218,9 @@
     <ClCompile Include="BaseWindow.cpp" />
     <ClCompile Include="Boss1.cpp" />
     <ClCompile Include="Boss1Core.cpp" />
+    <ClCompile Include="Boss2.cpp" />
+    <ClCompile Include="Boss2Core.cpp" />
+    <ClCompile Include="Boss2MainCore.cpp" />
     <ClCompile Include="Boss3.cpp" />
     <ClCompile Include="Boss3Core.cpp" />
     <ClCompile Include="BossProjectile.cpp" />
@@ -241,6 +248,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SettingScene.cpp" />
+    <ClCompile Include="TestBoss2Scene.cpp" />
     <ClCompile Include="TestBossScene.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />

@@ -6,6 +6,10 @@
 
 BossProjectile::BossProjectile()
 	: m_angle(0.f)
+	, m_dir(0.f, 0.f)
+	, m_launched(false)
+	, m_speed(500.f)
+	, m_lifeTime(0.f)
 {
 	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");  //¹Ù²ã¾ßÇÔ
 	auto* com = AddComponent<Collider>();
@@ -20,6 +24,11 @@ BossProjectile::~BossProjectile()
 
 void BossProjectile::Update()
 {
+	if (!m_launched)
+	{
+		return;
+	}
+
 	m_lifeTime += fDT;
 	if (m_lifeTime >= 1.5f)
 	{

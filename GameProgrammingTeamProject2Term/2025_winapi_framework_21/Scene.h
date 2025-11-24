@@ -1,6 +1,7 @@
 #pragma once
-//#include "Object.h"
 class Object;
+class Player;
+
 struct SpawnObject
 {
 	Object* obj;
@@ -40,11 +41,17 @@ public:
 	void RequestDestroy(Object* obj);
 	void RequestSpawn(Object* obj, Layer _type);
 	void FlushEvent();
+
+	void SetPlayer(Player* player) { m_player = player; }
+	Player* GetPlayer() const { return m_player; }
+
 private:
 	void RemoveObject(Object* _obj);
 private:
 	vector<Object*> m_vecObj[(UINT)Layer::END];
 	vector<Object*> m_killObject;
 	vector<SpawnObject> m_spawnObject;
+
+	Player* m_player = nullptr;
 };
 

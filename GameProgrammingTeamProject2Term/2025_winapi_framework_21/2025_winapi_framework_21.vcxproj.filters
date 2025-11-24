@@ -205,6 +205,18 @@
     <ClInclude Include="GameData.h">
       <Filter>Engine\08. Module</Filter>
     </ClInclude>
+    <ClInclude Include="Boss2.h">
+      <Filter>Engine\03. Object\Boss\Boss2</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss2MainCore.h">
+      <Filter>Engine\03. Object\Boss\Boss2</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss2Core.h">
+      <Filter>Engine\03. Object\Boss\Boss2</Filter>
+    </ClInclude>
+    <ClInclude Include="TestBoss2Scene.h">
+      <Filter>Engine\04. Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -332,6 +344,18 @@
       <Filter>Engine\08. Module</Filter>
     </ClCompile>
     <ClCompile Include="BossSelectScene.cpp">
+      <Filter>Engine\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss2.cpp">
+      <Filter>Engine\03. Object\Boss\Boss2</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss2MainCore.cpp">
+      <Filter>Engine\03. Object\Boss\Boss2</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss2Core.cpp">
+      <Filter>Engine\03. Object\Boss\Boss2</Filter>
+    </ClCompile>
+    <ClCompile Include="TestBoss2Scene.cpp">
       <Filter>Engine\04. Scene</Filter>
     </ClCompile>
   </ItemGroup>
