@@ -10,14 +10,17 @@
 
 Boss2::Boss2()
     : m_isCorePhase(false)
+    , m_startDelayTimer(0.f)
+    , m_startDelay(3.f)
     , m_angle1(0.f)
     , m_fireTimer1(0.f)
     , m_angle2(0.f)
     , m_fireTimer2(0.f)
-    , m_laser(nullptr)
+    , m_patternInitialized(false)
+    , m_patternElapsed(0.f)
 {
     InitSpawnCore();
-    StartRandomPattern();
+    //StartRandomPattern();
 }
 
 Boss2::~Boss2()
@@ -65,7 +68,7 @@ void Boss2::SpawnCircleProjectiles(int count, float radius, float speed, const V
 
     for (int i = 0; i < count; ++i)
     {
-        float t = (2.f * 3.14159265f * i) / (float)count;
+        float t = (2.f * PI * i) / (float)count;
         float dx = std::cos(t);
         float dy = std::sin(t);
 
@@ -87,6 +90,11 @@ void Boss2::SpawnCircleProjectiles(int count, float radius, float speed, const V
 
 void Boss2::StartRandomPattern()
 {
+    if (m_isCoreExplosionPhase)
+        return;
+
+    ResetPatternState();
+
     int r = rand() % 4;
 
     switch (r)
@@ -98,7 +106,7 @@ void Boss2::StartRandomPattern()
     }
 
     m_patternTimer = 0.f;
-    ResetPatternState();
+    m_patternElapsed = 0.f;
 }
 
 void Boss2::UpdatePattern()
@@ -108,11 +116,26 @@ void Boss2::UpdatePattern()
 
     UpdateCorePositions();
 
+    if (m_firstPattern)
+    {
+        m_firstPattern = false;
+
+        m_startDelayTimer = 0.f;
+        m_patternTimer = 0.f;
+        m_patternElapsed = 0.f;
+
+        ResetPatternState();
+        StartRandomPattern();
+        return;
+    }
+
     if (m_startDelayTimer < m_startDelay)
     {
         m_startDelayTimer += fDT;
         return;
     }
+
+    m_patternElapsed += fDT;
 
     // 패턴 실행
     switch (m_curPattern)
@@ -134,25 +157,23 @@ void Boss2::UpdatePattern()
         break;
     }
 
-    m_patternTimer += fDT;
-
     // 패턴 종료 체크
     switch (m_curPattern)
     {
     case Boss2Pattern::PATTERN1:
-        if (m_patternTimer > 5.f) EndPattern();
+        if (m_patternElapsed > 5.f) EndPattern();
         break;
     case Boss2Pattern::PATTERN2:
-        if (m_patternTimer > 4.f) EndPattern();
+        if (m_patternElapsed > 4.f) EndPattern();
         break;
     case Boss2Pattern::PATTERN3:
-        if (m_patternTimer > 3.f) EndPattern();
+        if (m_patternElapsed > 3.f) EndPattern();
         break;
     case Boss2Pattern::PATTERN4:
-        if (m_patternTimer > 4.f) EndPattern();
+        if (m_patternElapsed > 4.f) EndPattern();
         break;
     case Boss2Pattern::PATTERN5:
-        if (m_patternTimer > 4.f) EndPattern();
+        if (m_patternElapsed > 4.f) EndPattern();
         break;
     }
 }
@@ -189,7 +210,7 @@ void Boss2::Pattern1()
         m_fireTimer1 = 0.f;
     }
 
-    if (m_patternTimer < m_pattern1PrepareTime)
+    if (m_patternElapsed < m_pattern1PrepareTime)
     {
         m_fireTimer1 += fDT;
 
@@ -197,7 +218,7 @@ void Boss2::Pattern1()
         {
             m_fireTimer1 = 0.f;
 
-            float angle = ((float)rand() / RAND_MAX) * 2.f * 3.14159265f;
+            float angle = ((float)rand() / RAND_MAX) * 2.f * PI;
             float radius = 50.f + ((float)rand() / RAND_MAX) * 250.f;
 
             float dx = std::cos(angle);
@@ -216,7 +237,7 @@ void Boss2::Pattern1()
         }
     }
 
-    if (!m_pattern1Launched && m_patternTimer > m_pattern1LaunchTime)
+    if (!m_pattern1Launched && m_patternElapsed > m_pattern1LaunchTime)
     {
         m_pattern1Launched = true;
 
@@ -247,7 +268,7 @@ void Boss2::Pattern2()
 
         m_laser = new Boss2Laser();
         m_laser->SetPos(center);
-        m_laser->SetArmLength(600.f);
+        m_laser->SetArmLength(500.f);
         m_laser->SetThickness(40.f);
         m_laser->SetRotateSpeed(m_pattern2RotateSpeed);
 
@@ -282,7 +303,7 @@ void Boss2::Pattern3()
         int count = 40;
         for (int i = 0; i < count; ++i)
         {
-            float t = (2.f * 3.14159265f * i) / (float)count;
+            float t = (2.f * PI * i) / (float)count;
             float dx = std::cos(t);
             float dy = std::sin(t);
 
@@ -299,7 +320,7 @@ void Boss2::Pattern3()
         }
     }
 
-    if (!m_areaLaunched && m_patternTimer > m_areaWarningDuration)
+    if (!m_areaLaunched && m_patternElapsed > m_areaWarningDuration)
     {
         m_areaLaunched = true;
 
@@ -334,7 +355,7 @@ void Boss2::Pattern4()
 
         for (int i = 0; i < count; ++i)
         {
-            float angle = (2.f * 3.14159265f * i) / (float)count;
+            float angle = (2.f * PI * i) / (float)count;
 
             float dx = std::cos(angle);
             float dy = std::sin(angle);
@@ -357,7 +378,7 @@ void Boss2::Pattern4()
         }
     }
 
-    if (!m_pattern4Launched && m_patternTimer < m_pattern4Duration)
+    if (!m_pattern4Launched && m_patternElapsed < m_pattern4Duration)
     {
         for (auto& rb : m_pattern4RingBullets)
         {
@@ -461,13 +482,24 @@ void Boss2::Pattern5()
 
 void Boss2::EndPattern()
 {
+    Boss2Pattern finished = m_curPattern;
+
     m_patternCount++;
     m_patternsSinceLastCore++;
 
     m_isCooldown = true;
     m_curPattern = Boss2Pattern::NONE;
 
-    // 패턴 3번 쓸 때마다 코어 하나 오픈
+    if (finished == Boss2Pattern::PATTERN3)
+    {
+        m_isCoreExplosionPhase = false;
+        ResetPatternState();
+        m_patternTimer = 0.f;
+        m_patternElapsed = 0.f;
+        StartRandomPattern();
+        return;
+    }
+
     if (m_patternsSinceLastCore >= 3 && m_nextCoreToOpen < (int)m_cores.size())
     {
         m_patternsSinceLastCore = 0;
@@ -487,6 +519,7 @@ void Boss2::EndPattern()
     {
         ResetPatternState();
         m_patternTimer = 0.f;
+        m_patternElapsed = 0.f;
         StartRandomPattern();
     }
 }
@@ -495,14 +528,19 @@ void Boss2::NotifyCoreDestroyed(Boss2Core* core)
 {
     m_totalCoresDestroyed++;
 
+    m_isCoreExplosionPhase = true;
     m_curPattern = Boss2Pattern::PATTERN3;
     m_patternTimer = 0.f;
-    ResetPatternState();
+    m_patternElapsed = 0.f;
+
+    //m_startDelayTimer = m_startDelay;
 
     if (core)
         m_areaCenter = core->GetPos();
     else
         m_areaCenter = GetPos();
+
+    ResetPatternState();
 }
 
 void Boss2::SpawnMainCore()
@@ -528,14 +566,15 @@ void Boss2::InitSpawnCore()
     m_patternsSinceLastCore = 0;
     m_totalCoresDestroyed = 0;
 
-    float offset = 150.f;
+    float offset = 450.f;
+    float yOffset = 100.f;
 
     Vec2 offsets[4] =
     {
-        { -offset, -offset }, // 좌상
-        { -offset,  offset }, // 좌하
-        {  offset, -offset }, // 우상
-        {  offset,  offset }  // 우하
+        { -offset, -yOffset }, // 좌상
+        { -offset,  yOffset }, // 좌하
+        {  offset, -yOffset }, // 우상
+        {  offset,  yOffset }  // 우하
     };
 
     Vec2 bossPos = GetPos();

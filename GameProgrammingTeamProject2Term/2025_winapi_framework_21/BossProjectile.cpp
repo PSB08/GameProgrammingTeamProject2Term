@@ -10,6 +10,7 @@ BossProjectile::BossProjectile()
 	, m_launched(false)
 	, m_speed(500.f)
 	, m_lifeTime(0.f)
+	, m_collider(nullptr)
 {
 	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");  //¹Ù²ã¾ßÇÔ
 	auto* com = AddComponent<Collider>();

@@ -5,7 +5,8 @@
 #include <iostream>
 
 DeadScene::DeadScene()
-    : m_btnTitle(L"", nullptr)
+    : m_btnRetry(L"", nullptr)
+    , m_btnTitle(L"", nullptr)
     , m_btnQuit(L"", nullptr)
 {
 }
@@ -21,6 +22,13 @@ void DeadScene::Init()
     float btnH = 70.f;
     float startY = 300.f;
     float gap = 50.f;
+
+    m_btnRetry = UIButton(L"다시 시작", []()
+        {
+            GET_SINGLE(SceneManager)->LoadScene(L"BossSelectScene");
+        });
+    m_btnRetry.SetSize({ btnW, btnH });
+    m_btnRetry.SetPos({ WINDOW_WIDTH / 2.f, startY });
 
     m_btnTitle = UIButton(L"타이틀로", []()
         {
@@ -39,6 +47,7 @@ void DeadScene::Init()
 
 void DeadScene::Update()
 {
+    m_btnRetry.Update();
     m_btnTitle.Update();
     m_btnQuit.Update();
 }
@@ -46,6 +55,7 @@ void DeadScene::Update()
 void DeadScene::Render(HDC hdc)
 {
     m_titleLabel.Render(hdc);
+    m_btnRetry.Render(hdc);
     m_btnTitle.Render(hdc);
     m_btnQuit.Render(hdc);
 }

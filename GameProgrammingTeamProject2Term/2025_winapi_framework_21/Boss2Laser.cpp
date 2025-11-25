@@ -6,7 +6,7 @@
 Boss2Laser::Boss2Laser()
     : m_collider(nullptr)
     , m_angle(0.f)
-    , m_rotateSpeed(PI)
+    , m_rotateSpeed(1)
     , m_armLength(400.f)
     , m_thickness(40.f)
 {
@@ -30,7 +30,7 @@ void Boss2Laser::Update()
 void Boss2Laser::Render(HDC _hdc)
 {
     DrawBeam(_hdc, m_angle);
-    DrawBeam(_hdc, m_angle + 3.14159265f * 0.5f);
+    DrawBeam(_hdc, m_angle + PI * 0.5f);
 
     ComponentRender(_hdc);
 }

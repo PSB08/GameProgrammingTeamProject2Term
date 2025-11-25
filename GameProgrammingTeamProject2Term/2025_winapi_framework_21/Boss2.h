@@ -61,7 +61,7 @@ private:
 
     // Pattern2 (레이저)
     Boss2Laser* m_laser = nullptr;
-    float       m_pattern2RotateSpeed = 3.14159265f; // Boss2Laser에 전달할 회전 속도
+    float       m_pattern2RotateSpeed = 2; // Boss2Laser에 전달할 회전 속도
 
     // Pattern4 (회전 후 발사)
     struct RingBullet
@@ -73,7 +73,7 @@ private:
     std::vector<RingBullet> m_pattern4RingBullets;
     bool  m_pattern4Launched = false;
     float m_pattern4Duration = 2.f;                // 2초 동안 회전 (2바퀴)
-    float m_pattern4AngularSpeed = 2.f * 3.14159265f;  // 초당 1바퀴
+    float m_pattern4AngularSpeed = 2.f * PI;  // 초당 1바퀴
     float m_pattern4Radius = 160.f;
 
     // Pattern5
@@ -94,5 +94,10 @@ private:
     float m_areaWarningDuration = 1.5f;
     bool  m_areaSpawned = false;
     bool  m_areaLaunched = false;
+    bool  m_isCoreExplosionPhase = false;
     std::vector<BossProjectile*> m_areaProjectiles;
+
+private:
+    bool m_firstPattern = true;
+    float m_patternElapsed = 0.f;
 };
