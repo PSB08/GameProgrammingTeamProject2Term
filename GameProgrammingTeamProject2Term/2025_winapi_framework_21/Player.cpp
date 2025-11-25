@@ -70,17 +70,22 @@ void Player::EnterCollision(Collider* _other)
 	}
 
 	if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" 
-		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"DeadFloor")
+		|| _other->GetName() == L"BossProjectile")
 		&& playerCanDamaged && !playerIsInvincibility)
 	{
 		m_delay = 0.2f;
 		m_pendingSceneChange = true;
 	}
 	else if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" 
-		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"DeadFloor")
+		|| _other->GetName() == L"BossProjectile")
 		&& !playerCanDamaged || playerIsInvincibility)
 	{
 		playerCanDamaged = true;
+	}
+	else if (_other->GetName() == L"DeadFloor")
+	{
+		m_delay = 0.2f;
+		m_pendingSceneChange = true;
 	}
 }
 
