@@ -171,6 +171,7 @@
     <ClInclude Include="Boss2MainCore.h" />
     <ClInclude Include="Boss3.h" />
     <ClInclude Include="Boss3Core.h" />
+    <ClInclude Include="Boss3Scene.h" />
     <ClInclude Include="BossBase.h" />
     <ClInclude Include="BossProjectile.h" />
     <ClInclude Include="BossSelectScene.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIObject.h" />
     <ClInclude Include="UISlider.h" />
+    <ClInclude Include="UpDownPlatform.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +228,7 @@
     <ClCompile Include="Boss2MainCore.cpp" />
     <ClCompile Include="Boss3.cpp" />
     <ClCompile Include="Boss3Core.cpp" />
+    <ClCompile Include="Boss3Scene.cpp" />
     <ClCompile Include="BossProjectile.cpp" />
     <ClCompile Include="BossSelectScene.cpp" />
     <ClCompile Include="Collider.cpp" />
@@ -259,6 +262,7 @@
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UISlider.cpp" />
+    <ClCompile Include="UpDownPlatform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc" />

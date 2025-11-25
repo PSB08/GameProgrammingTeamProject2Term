@@ -55,7 +55,7 @@ void BossSelectScene::Init()
     m_btnBoss3 = UIButton(L"Boss3", []()
         {
             //Boss3 ¾À
-            //GET_SINGLE(SceneManager)->LoadScene(L"");
+            GET_SINGLE(SceneManager)->LoadScene(L"Boss3Scene");
         });
     m_btnBoss3.SetSize({ btnW, btnH });
     m_btnBoss3.SetPos({ startX + 2 * (btnW + gap), WINDOW_HEIGHT / 2.f });

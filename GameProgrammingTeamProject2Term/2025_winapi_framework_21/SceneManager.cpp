@@ -7,6 +7,7 @@
 #include "SettingScene.h"
 #include "DeadScene.h"
 #include "BossSelectScene.h"
+#include "Boss3Scene.h"
 #include "Object.h"
 #include "Collider.h"
 
@@ -48,6 +49,7 @@ void SceneManager::Init()
 	RegisterScene(L"SettingScene",std::make_shared<SettingScene>());
 	RegisterScene(L"DeadScene",std::make_shared<DeadScene>());
 	RegisterScene(L"BossSelectScene",std::make_shared<BossSelectScene>());
+	RegisterScene(L"Boss3Scene",std::make_shared<Boss3Scene>());
 	
 	// Ã¹ ¾À ·Îµå
 	LoadScene(L"TitleScene");

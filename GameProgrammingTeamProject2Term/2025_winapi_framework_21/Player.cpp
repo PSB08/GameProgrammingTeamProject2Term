@@ -62,7 +62,7 @@ void Player::Render(HDC _hdc)
 
 void Player::EnterCollision(Collider* _other)
 {
-	if (_other->GetName() == L"Floor")
+	if (_other->GetName() == L"Floor" || _other->GetName() == L"Platform")
 	{
 		Rigidbody* rb = GetComponent<Rigidbody>();
 		rb->SetGrounded(true);
@@ -86,6 +86,12 @@ void Player::EnterCollision(Collider* _other)
 
 void Player::ExitCollision(Collider* _other)
 {
+	if (_other->GetName() == L"Floor" || _other->GetName() == L"Platform")
+	{
+		Rigidbody* rb = GetComponent<Rigidbody>();
+		rb->SetGrounded(false);
+		JumpTime = 0.f;
+	}
 }
 
 void Player::Update()
