@@ -32,6 +32,9 @@ public:
 
     void SetTrigger(bool t) { m_isTrigger = t; }
     bool IsTrigger() const { return m_isTrigger; }
+
+    void SetEnabled(bool e) { m_enabled = e; }
+    bool IsEnabled() const { return m_enabled; }
 private:
     wstring m_name;   // 콜라이더 식별용 이름
     bool m_isTrigger = false;
@@ -43,5 +46,7 @@ private:
     UINT m_ID; // 충돌체 고유 id 값
     static UINT m_nextID;
     bool m_showDebug;
+
+    bool m_enabled = true;
 };
 

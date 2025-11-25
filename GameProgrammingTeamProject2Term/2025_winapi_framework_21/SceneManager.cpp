@@ -95,3 +95,24 @@ void SceneManager::LoadScene(const wstring& _name)
 		m_curScene->Init();
 	}
 }
+
+void SceneManager::Release()
+{
+	// 현재 씬 정리
+	if (m_curScene)
+	{
+		m_curScene->Release();
+		m_curScene.reset();
+	}
+
+	// 등록된 모든 씬 정리
+	for (auto& kv : m_mapScenes)
+	{
+		const std::shared_ptr<Scene>& scene = kv.second;
+		if (scene)
+		{
+			scene->Release();
+		}
+	}
+	m_mapScenes.clear();
+}

@@ -217,6 +217,9 @@
     <ClInclude Include="TestBoss2Scene.h">
       <Filter>Engine\04. Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Boss2Laser.h">
+      <Filter>Engine\03. Object\Boss\Boss2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -357,6 +360,9 @@
     </ClCompile>
     <ClCompile Include="TestBoss2Scene.cpp">
       <Filter>Engine\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss2Laser.cpp">
+      <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

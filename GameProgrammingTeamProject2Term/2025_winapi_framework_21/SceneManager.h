@@ -10,6 +10,8 @@ public:
 	void FixedUpdate(float _fixedDT);
 	void PhysicsSyncColliders();
 	void Render(HDC _hdc);
+
+	void Release();
 public:
 	void RequestDestroy(Object* _obj)
 	{

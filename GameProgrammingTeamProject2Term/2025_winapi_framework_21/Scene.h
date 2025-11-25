@@ -1,5 +1,6 @@
 #pragma once
 class Object;
+class UIObject;
 class Player;
 
 struct SpawnObject
@@ -39,6 +40,7 @@ public:
 		AddObject(obj, _type);
 	}
 	void RequestDestroy(Object* obj);
+	void RequestDestroyUI(UIObject* obj);
 	void RequestSpawn(Object* obj, Layer _type);
 	void FlushEvent();
 
@@ -51,6 +53,9 @@ private:
 	vector<Object*> m_vecObj[(UINT)Layer::END];
 	vector<Object*> m_killObject;
 	vector<SpawnObject> m_spawnObject;
+
+	vector<UIObject*> m_vecUI;
+	vector<UIObject*> m_killUI;
 
 	Player* m_player = nullptr;
 };

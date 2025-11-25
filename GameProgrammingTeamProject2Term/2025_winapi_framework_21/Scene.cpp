@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "Scene.h"
 #include "Object.h"
+#include "UIObject.h"
 #include "CollisionManager.h"
 #include "Rigidbody.h"
+
 void Scene::FixedUpdate(float _fixedDT)
 {
 	for (UINT i = 0; i < (UINT)Layer::END; ++i)
@@ -58,6 +60,12 @@ void Scene::Render(HDC _hdc)
 			if (!obj->GetIsDead())
 				obj->Render(_hdc);
 	}
+
+	// 2) UI 렌더 (맨 위에)
+	for (auto* ui : m_vecUI)
+	{
+		ui->Render(_hdc);
+	}
 }
 
 void Scene::Release()
@@ -70,6 +78,15 @@ void Scene::Release()
 			SAFE_DELETE(obj);
 		vec.clear();
 	}
+
+	for (auto* ui : m_vecUI)
+		SAFE_DELETE(ui);
+	m_vecUI.clear();
+
+	for (auto* ui : m_killUI)
+		SAFE_DELETE(ui);
+	m_killUI.clear();
+
 	GET_SINGLE(CollisionManager)->CheckReset();
 }
 
@@ -86,6 +103,14 @@ void Scene::RequestDestroy(Object* obj)
 		m_killObject.push_back(obj);
 	}
 }
+void Scene::RequestDestroyUI(UIObject* obj)
+{
+	if (obj == nullptr)
+		return;
+
+	m_killUI.push_back(obj);
+}
+
 void Scene::FlushEvent()
 {
 	// 삭제
@@ -96,15 +121,26 @@ void Scene::FlushEvent()
 	}
 	m_killObject.clear();
 
-	// 생성
+	for (UIObject* u : m_killUI)
+	{
+		// m_vecUI에서 제거
+		m_vecUI.erase(std::remove(m_vecUI.begin(), m_vecUI.end(), u), m_vecUI.end());
+		SAFE_DELETE(u);
+	}
+	m_killUI.clear();
 
-	// 씬 변경
-
+	// 2) 생성 처리
+	for (auto& s : m_spawnObject)
+	{
+		AddObject(s.obj, s.type);
+	}
+	m_spawnObject.clear();
 }
 
 void Scene::RequestSpawn(Object* obj, Layer _type)
 {
-
+	if (!obj) return;
+	m_spawnObject.push_back({ obj, _type });
 }
 
 

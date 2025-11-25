@@ -1,21 +1,20 @@
 #include "pch.h"
 #include "Boss2.h"
+#include "Boss2Core.h"
 #include "Boss2MainCore.h"
-#include "BossProjectile.h"
-#include "LaserObject.h"
+#include "Boss2Laser.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Player.h"
+#include <cmath>
 
 Boss2::Boss2()
-    : m_angle1(0.f)
-    , m_angle2(0.f)
+    : m_isCorePhase(false)
+    , m_angle1(0.f)
     , m_fireTimer1(0.f)
+    , m_angle2(0.f)
     , m_fireTimer2(0.f)
-    , m_laserLeftX(0.f)
-    , m_laserRightX(WINDOW_WIDTH)
-    , m_laserActive(false)
-    , m_isCorePhase(false)
+    , m_laser(nullptr)
 {
     InitSpawnCore();
     StartRandomPattern();
@@ -25,19 +24,81 @@ Boss2::~Boss2()
 {
 }
 
+void Boss2::ResetPatternState()
+{
+    m_patternInitialized = false;
+    m_fireTimer1 = 0.f;
+    m_fireTimer2 = 0.f;
+
+    // Pattern1
+    m_pattern1Bullets.clear();
+    m_pattern1Launched = false;
+
+    // Pattern2
+    if (m_laser)
+    {
+        m_laser->SetDead();
+        m_laser = nullptr;
+    }
+
+    // Pattern3
+    m_areaSpawned = false;
+    m_areaLaunched = false;
+    m_areaProjectiles.clear();
+
+    // Pattern4
+    for (auto& rb : m_pattern4RingBullets)
+    {
+        if (rb.proj)
+            rb.proj->SetDead();
+    }
+    m_pattern4RingBullets.clear();
+    m_pattern4Launched = false;
+
+    // Pattern5
+    m_pattern5SpawnedCount = 0;
+}
+
+void Boss2::SpawnCircleProjectiles(int count, float radius, float speed, const Vec2& center)
+{
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+
+    for (int i = 0; i < count; ++i)
+    {
+        float t = (2.f * 3.14159265f * i) / (float)count;
+        float dx = std::cos(t);
+        float dy = std::sin(t);
+
+        Vec2 dir = { dx, dy };
+
+        Vec2 pos;
+        pos.x = center.x + dx * radius;
+        pos.y = center.y + dy * radius;
+
+        BossProjectile* proj = new BossProjectile();
+        proj->SetPos(pos);
+        proj->SetSize({ 16.f, 16.f });
+        proj->SetSpeed(speed);
+        proj->Launch(dir);
+
+        scene->AddObject(proj, Layer::BOSSPROJECTILE);
+    }
+}
+
 void Boss2::StartRandomPattern()
 {
-    int r = 0;//rand() % 5;  //이 랜덤 방식도 바뀌어야 함 -> 코어 파괴 때 3이 실행되어야 하기 때문.
+    int r = rand() % 4;
+
     switch (r)
     {
-        case 0: m_curPattern = Boss2Pattern::PATTERN1; break;
-        case 1: m_curPattern = Boss2Pattern::PATTERN2; break;
-        case 2: m_curPattern = Boss2Pattern::PATTERN3; break;
-        case 3: m_curPattern = Boss2Pattern::PATTERN4; break;
-        case 4: m_curPattern = Boss2Pattern::PATTERN5; break;
+    case 0: m_curPattern = Boss2Pattern::PATTERN1; break;
+    case 1: m_curPattern = Boss2Pattern::PATTERN2; break;
+    case 2: m_curPattern = Boss2Pattern::PATTERN4; break;
+    case 3: m_curPattern = Boss2Pattern::PATTERN5; break;
     }
 
     m_patternTimer = 0.f;
+    ResetPatternState();
 }
 
 void Boss2::UpdatePattern()
@@ -45,94 +106,403 @@ void Boss2::UpdatePattern()
     if (m_isCorePhase)
         return;
 
+    UpdateCorePositions();
+
     if (m_startDelayTimer < m_startDelay)
     {
         m_startDelayTimer += fDT;
         return;
     }
 
+    // 패턴 실행
     switch (m_curPattern)
     {
     case Boss2Pattern::PATTERN1:
         Pattern1();
-        if (m_patternTimer > 5.f)  //미정
-        {
-            EndPattern();
-        }
         break;
-
     case Boss2Pattern::PATTERN2:
         Pattern2();
-        if (m_patternTimer > 5.f)  //미정
-        {
-            EndPattern();
-        }
         break;
-
     case Boss2Pattern::PATTERN3:
         Pattern3();
-        if (m_patternTimer > 3.f)  //미정
-        {
-            m_laserActive = false;
-            EndPattern();
-        }
         break;
-
     case Boss2Pattern::PATTERN4:
         Pattern4();
-        if (m_patternTimer > 3.f)  //미정
-        {
-            m_laserActive = false;
-            EndPattern();
-        }
         break;
-
     case Boss2Pattern::PATTERN5:
         Pattern5();
-        if (m_patternTimer > 3.f)  //미정
-        {
-            m_laserActive = false;
-            EndPattern();
-        }
+        break;
+    }
+
+    m_patternTimer += fDT;
+
+    // 패턴 종료 체크
+    switch (m_curPattern)
+    {
+    case Boss2Pattern::PATTERN1:
+        if (m_patternTimer > 5.f) EndPattern();
+        break;
+    case Boss2Pattern::PATTERN2:
+        if (m_patternTimer > 4.f) EndPattern();
+        break;
+    case Boss2Pattern::PATTERN3:
+        if (m_patternTimer > 3.f) EndPattern();
+        break;
+    case Boss2Pattern::PATTERN4:
+        if (m_patternTimer > 4.f) EndPattern();
+        break;
+    case Boss2Pattern::PATTERN5:
+        if (m_patternTimer > 4.f) EndPattern();
         break;
     }
 }
 
+void Boss2::UpdateCorePositions()
+{
+    Vec2 bossPos = GetPos();
+
+    for (size_t i = 0; i < m_cores.size() && i < m_coreOffsets.size(); ++i)
+    {
+        Boss2Core* core = m_cores[i];
+        if (!core) continue;
+
+        Vec2 offset = m_coreOffsets[i];
+
+        Vec2 pos;
+        pos.x = bossPos.x + offset.x;
+        pos.y = bossPos.y + offset.y;
+
+        core->SetPos(pos);
+    }
+}
+
+// ======================= PATTERN 1 =======================
+
 void Boss2::Pattern1()
 {
-    //총알을 맵에 뿌린 뒤, 몇 초후에 플레이어 방향으로 총알이 날아옴
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+    Vec2 center = GetPos();
+
+    if (!m_patternInitialized)
+    {
+        m_patternInitialized = true;
+        m_fireTimer1 = 0.f;
+    }
+
+    if (m_patternTimer < m_pattern1PrepareTime)
+    {
+        m_fireTimer1 += fDT;
+
+        if (m_fireTimer1 >= m_pattern1SpawnInterval)
+        {
+            m_fireTimer1 = 0.f;
+
+            float angle = ((float)rand() / RAND_MAX) * 2.f * 3.14159265f;
+            float radius = 50.f + ((float)rand() / RAND_MAX) * 250.f;
+
+            float dx = std::cos(angle);
+            float dy = std::sin(angle);
+
+            Vec2 pos;
+            pos.x = center.x + dx * radius;
+            pos.y = center.y + dy * radius;
+
+            BossProjectile* proj = new BossProjectile();
+            proj->SetPos(pos);
+            proj->SetSize({ 14.f, 14.f });
+            proj->SetSpeed(380.f);
+            scene->AddObject(proj, Layer::BOSSPROJECTILE);
+            m_pattern1Bullets.push_back(proj);
+        }
+    }
+
+    if (!m_pattern1Launched && m_patternTimer > m_pattern1LaunchTime)
+    {
+        m_pattern1Launched = true;
+
+        for (BossProjectile* proj : m_pattern1Bullets)
+        {
+            if (!proj) continue;
+            Vec2 pos = proj->GetPos();
+            Vec2 dir;
+            dir.x = pos.x - center.x;
+            dir.y = pos.y - center.y;
+            proj->Launch(dir);
+        }
+
+        m_pattern1Bullets.clear();
+    }
 }
+
+// ======================= PATTERN 2 =======================
+// Boss2Laser 한 개만 사용, 내부에서 십자 레이저 회전
 
 void Boss2::Pattern2()
 {
-    //나태지옥 패턴 - 레이저를 4 방향 배치, 계속 돌아감
+    Vec2 center = GetPos();
+
+    if (!m_patternInitialized)
+    {
+        m_patternInitialized = true;
+
+        m_laser = new Boss2Laser();
+        m_laser->SetPos(center);
+        m_laser->SetArmLength(600.f);
+        m_laser->SetThickness(40.f);
+        m_laser->SetRotateSpeed(m_pattern2RotateSpeed);
+
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(m_laser, Layer::LASER);
+    }
+
+    if (m_laser)
+    {
+        m_laser->SetPos(center);
+    }
 }
+
+// ======================= PATTERN 3 =======================
 
 void Boss2::Pattern3()
 {
-    //코어 파괴 때 실행하는 패턴, 역장 생성(범위 표시) 후 자폭 패턴
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+    Vec2 center = m_areaCenter;
+
+    if (!m_patternInitialized)
+    {
+        m_patternInitialized = true;
+        m_areaSpawned = false;
+        m_areaLaunched = false;
+        m_areaProjectiles.clear();
+    }
+
+    if (!m_areaSpawned)
+    {
+        m_areaSpawned = true;
+
+        int count = 40;
+        for (int i = 0; i < count; ++i)
+        {
+            float t = (2.f * 3.14159265f * i) / (float)count;
+            float dx = std::cos(t);
+            float dy = std::sin(t);
+
+            Vec2 pos;
+            pos.x = center.x + dx * m_areaRadius;
+            pos.y = center.y + dy * m_areaRadius;
+
+            BossProjectile* proj = new BossProjectile();
+            proj->SetPos(pos);
+            proj->SetSize({ 12.f, 12.f });
+            proj->SetSpeed(400.f);
+            scene->AddObject(proj, Layer::BOSSPROJECTILE);
+            m_areaProjectiles.push_back(proj);
+        }
+    }
+
+    if (!m_areaLaunched && m_patternTimer > m_areaWarningDuration)
+    {
+        m_areaLaunched = true;
+
+        for (BossProjectile* proj : m_areaProjectiles)
+        {
+            if (!proj) continue;
+            Vec2 pos = proj->GetPos();
+            Vec2 dir;
+            dir.x = center.x - pos.x;
+            dir.y = center.y - pos.y;
+            proj->Launch(dir);
+        }
+    }
 }
+
+// ======================= PATTERN 4 =======================
+// 보스 주변 링 탄이 2초 동안 두 바퀴 회전한 뒤 그 방향으로 발사
 
 void Boss2::Pattern4()
 {
-    //맵 전체에 폭탄 대기 -> 코어 근처에 방어막 생성(범위 표시)되고 안에 들어가면 세이프
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+    Vec2 center = GetPos();
+
+    if (!m_patternInitialized)
+    {
+        m_patternInitialized = true;
+        m_pattern4RingBullets.clear();
+        m_pattern4Launched = false;
+
+        int   count = 40;
+        float radius = m_pattern4Radius;
+
+        for (int i = 0; i < count; ++i)
+        {
+            float angle = (2.f * 3.14159265f * i) / (float)count;
+
+            float dx = std::cos(angle);
+            float dy = std::sin(angle);
+
+            Vec2 pos;
+            pos.x = center.x + dx * radius;
+            pos.y = center.y + dy * radius;
+
+            BossProjectile* proj = new BossProjectile();
+            proj->SetPos(pos);
+            proj->SetSize({ 12.f, 12.f });
+            proj->SetSpeed(420.f);
+            scene->AddObject(proj, Layer::BOSSPROJECTILE);
+
+            RingBullet rb;
+            rb.proj = proj;
+            rb.angle = angle;
+            rb.radius = radius;
+            m_pattern4RingBullets.push_back(rb);
+        }
+    }
+
+    if (!m_pattern4Launched && m_patternTimer < m_pattern4Duration)
+    {
+        for (auto& rb : m_pattern4RingBullets)
+        {
+            if (!rb.proj) continue;
+
+            rb.angle += m_pattern4AngularSpeed * fDT;
+
+            float dx = std::cos(rb.angle);
+            float dy = std::sin(rb.angle);
+
+            Vec2 pos;
+            pos.x = center.x + dx * rb.radius;
+            pos.y = center.y + dy * rb.radius;
+
+            rb.proj->SetPos(pos);
+        }
+    }
+    else if (!m_pattern4Launched)
+    {
+        m_pattern4Launched = true;
+
+        for (auto& rb : m_pattern4RingBullets)
+        {
+            if (!rb.proj) continue;
+
+            Vec2 pos = rb.proj->GetPos();
+            Vec2 dir;
+            dir.x = pos.x - center.x;
+            dir.y = pos.y - center.y;
+            rb.proj->Launch(dir);
+        }
+    }
 }
+
+// ======================= PATTERN 5 =======================
+// 화면 모서리에서 직선 랜덤 탄막 (최대 탄 수 제한)
 
 void Boss2::Pattern5()
 {
-    //좌, 우에서 총알 y값 무작위로 발사 or 위, 아래에서 총알 x값 무작위로 발사 패턴
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+
+    if (!m_patternInitialized)
+    {
+        m_patternInitialized = true;
+        m_fireTimer1 = 0.f;
+        m_pattern5SpawnedCount = 0;
+    }
+
+    if (m_pattern5SpawnedCount >= m_pattern5MaxBullets)
+        return;
+
+    m_fireTimer1 += fDT;
+
+    if (m_fireTimer1 >= m_pattern5ShotInterval)
+    {
+        m_fireTimer1 = 0.f;
+
+        int dirType = rand() % 4;
+
+        // 한 번에 2발씩
+        for (int i = 0; i < 2 && m_pattern5SpawnedCount < m_pattern5MaxBullets; ++i)
+        {
+            Vec2 pos;
+            Vec2 dir;
+
+            switch (dirType)
+            {
+            case 0: // 좌 -> 우
+                pos = { 0.f, (float)(rand() % WINDOW_HEIGHT) };
+                dir = { 1.f, 0.f };
+                break;
+            case 1: // 우 -> 좌
+                pos = { (float)WINDOW_WIDTH, (float)(rand() % WINDOW_HEIGHT) };
+                dir = { -1.f, 0.f };
+                break;
+            case 2: // 위 -> 아래
+                pos = { (float)(rand() % WINDOW_WIDTH), 0.f };
+                dir = { 0.f, 1.f };
+                break;
+            case 3: // 아래 -> 위
+            default:
+                pos = { (float)(rand() % WINDOW_WIDTH), (float)WINDOW_HEIGHT };
+                dir = { 0.f, -1.f };
+                break;
+            }
+
+            BossProjectile* proj = new BossProjectile();
+            proj->SetPos(pos);
+            proj->SetSize({ 10.f, 10.f });
+            proj->SetSpeed(450.f);
+            proj->Launch(dir);
+
+            scene->AddObject(proj, Layer::BOSSPROJECTILE);
+
+            ++m_pattern5SpawnedCount;
+        }
+    }
 }
+
+// ======================= 패턴 종료 / 코어 연동 =======================
 
 void Boss2::EndPattern()
 {
     m_patternCount++;
+    m_patternsSinceLastCore++;
+
     m_isCooldown = true;
     m_curPattern = Boss2Pattern::NONE;
 
-    if (m_patternCount >= m_maxPatternCount)
+    // 패턴 3번 쓸 때마다 코어 하나 오픈
+    if (m_patternsSinceLastCore >= 3 && m_nextCoreToOpen < (int)m_cores.size())
+    {
+        m_patternsSinceLastCore = 0;
+
+        Boss2Core* core = m_cores[m_nextCoreToOpen];
+        if (core)
+            core->OpenCore();
+
+        ++m_nextCoreToOpen;
+    }
+
+    if (m_totalCoresDestroyed >= (int)m_cores.size())
     {
         SpawnMainCore();
     }
+    else
+    {
+        ResetPatternState();
+        m_patternTimer = 0.f;
+        StartRandomPattern();
+    }
+}
+
+void Boss2::NotifyCoreDestroyed(Boss2Core* core)
+{
+    m_totalCoresDestroyed++;
+
+    m_curPattern = Boss2Pattern::PATTERN3;
+    m_patternTimer = 0.f;
+    ResetPatternState();
+
+    if (core)
+        m_areaCenter = core->GetPos();
+    else
+        m_areaCenter = GetPos();
 }
 
 void Boss2::SpawnMainCore()
@@ -145,11 +515,46 @@ void Boss2::SpawnMainCore()
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
 }
 
+// 서브 코어 4개 생성
+
 void Boss2::InitSpawnCore()
 {
-    //Boss2MainCore 이런 느낌으로 Boss2Core를 만들고 보스 기준 좌상단, 좌하단, 우상단, 우하단에 배치
-    //이 코어는 보스가 패턴을 몇 번 쓰면 하나씩 열림 -> 3번에 코어 하나, 12번하면 코어 모두 파괴,
-    //라스트 보스 패턴 3가지 발생, Boss2MainCore가 다시 보스 위치에 생성, 파괴하면 끝 -> 이 코어는 Boss1Core랑 똑같이 작동
-    //m_patternCount랑 m_maxPatternCount는 BossBase에 존재, Boss2는 따로 만들 예정임 -> 작동 방식이 다르기 때문
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
 
+    m_cores.clear();
+    m_coreOffsets.clear();
+
+    m_nextCoreToOpen = 0;
+    m_patternsSinceLastCore = 0;
+    m_totalCoresDestroyed = 0;
+
+    float offset = 150.f;
+
+    Vec2 offsets[4] =
+    {
+        { -offset, -offset }, // 좌상
+        { -offset,  offset }, // 좌하
+        {  offset, -offset }, // 우상
+        {  offset,  offset }  // 우하
+    };
+
+    Vec2 bossPos = GetPos();
+
+    for (int i = 0; i < 4; ++i)
+    {
+        Boss2Core* core = new Boss2Core(this, i);
+
+        Vec2 pos;
+        pos.x = bossPos.x + offsets[i].x;
+        pos.y = bossPos.y + offsets[i].y;
+
+        core->SetPos(pos);
+        core->SetSize({ 60.f, 60.f });
+        core->SetHP(10);
+
+        scene->AddObject(core, Layer::BOSSCORE);
+
+        m_cores.push_back(core);
+        m_coreOffsets.push_back(offsets[i]);
+    }
 }

@@ -30,7 +30,7 @@ void BossProjectile::Update()
 	}
 
 	m_lifeTime += fDT;
-	if (m_lifeTime >= 1.5f)
+	if (m_lifeTime >= 3.f)
 	{
 		SetDead();
 		return;
@@ -55,3 +55,8 @@ void BossProjectile::Render(HDC _hdc)
 	ComponentRender(_hdc);
 }
 
+void BossProjectile::SetColliderName(const std::wstring& name)
+{
+	if (m_collider)
+		m_collider->SetName(name);
+}
