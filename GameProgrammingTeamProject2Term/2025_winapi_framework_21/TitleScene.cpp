@@ -10,7 +10,7 @@ TitleScene::TitleScene()
     , m_btnSettings(L"", nullptr)
     , m_btnExit(L"", nullptr)
 {
-    GET_SINGLE(ResourceManager)->Play(L"BGM");
+    //GET_SINGLE(ResourceManager)->Play(L"BGM");
 }
 
 void TitleScene::Init()

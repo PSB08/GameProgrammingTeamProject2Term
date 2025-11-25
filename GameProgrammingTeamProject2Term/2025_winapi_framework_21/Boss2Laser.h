@@ -3,9 +3,9 @@
 
 class Collider;
 
-// 보스 중심에서 십자(4방향) 레이저를 그리는 오브젝트.
-// - 내부에 각도(m_angle)를 가지고 계속 회전
-// - Boss2 쪽에서는 생성 + 위치 SetPos 만 해주면 됨.
+// Boss2 수평 레이저 오브젝트
+// - 화면 가로로 긴 막대 레이저
+// - Boss2에서 위/아래에서 생성해서 중앙을 향해 Translate()로 이동시킴
 class Boss2Laser : public Object
 {
 public:
@@ -16,19 +16,16 @@ public:
     virtual void Render(HDC _hdc) override;
     virtual void EnterCollision(Collider* other) override;
 
-    void SetRotateSpeed(float s) { m_rotateSpeed = s; }
-    void SetArmLength(float len) { m_armLength = len; UpdateColliderSize(); }
+    // half-length(가로 반 길이)로 사용
+    void SetArmLength(float len) { m_halfLength = len; UpdateColliderSize(); }
     void SetThickness(float t) { m_thickness = t;  UpdateColliderSize(); }
 
 private:
-    void DrawBeam(HDC _hdc, float baseAngle); // 한 방향(양쪽) 빔 그리기
     void UpdateColliderSize();
 
 private:
-    Collider* m_collider;
+    Collider* m_collider = nullptr;
 
-    float m_angle;        // 현재 회전 각도 (라디안)
-    float m_rotateSpeed;  // 회전 속도 (라디안/초)
-    float m_armLength;    // 각 빔의 반 길이
-    float m_thickness;    // 빔의 두께
+    float m_halfLength = 400.f; // 가로 반 길이
+    float m_thickness = 40.f;  // 세로 두께
 };

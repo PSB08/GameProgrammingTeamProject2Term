@@ -3,6 +3,7 @@
 #include "Boss2Core.h"
 #include "Boss2MainCore.h"
 #include "Boss2Laser.h"
+#include "LaserObject.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Player.h"
@@ -12,37 +13,36 @@ Boss2::Boss2()
     : m_isCorePhase(false)
     , m_startDelayTimer(0.f)
     , m_startDelay(3.f)
-    , m_angle1(0.f)
     , m_fireTimer1(0.f)
-    , m_angle2(0.f)
-    , m_fireTimer2(0.f)
     , m_patternInitialized(false)
     , m_patternElapsed(0.f)
 {
     InitSpawnCore();
-    //StartRandomPattern();
 }
 
 Boss2::~Boss2()
 {
 }
 
+//초기화
 void Boss2::ResetPatternState()
 {
     m_patternInitialized = false;
     m_fireTimer1 = 0.f;
-    m_fireTimer2 = 0.f;
 
     // Pattern1
     m_pattern1Bullets.clear();
     m_pattern1Launched = false;
 
     // Pattern2
-    if (m_laser)
+    for (auto& v : m_pattern2VerticalLasers)
     {
-        m_laser->SetDead();
-        m_laser = nullptr;
+        if (v.laser)
+            v.laser->SetDead();
     }
+    m_pattern2VerticalLasers.clear();
+    m_pattern2SideWaveCount = 0;
+    m_pattern2VerticalWaveCount = 0;
 
     // Pattern3
     m_areaSpawned = false;
@@ -62,32 +62,6 @@ void Boss2::ResetPatternState()
     m_pattern5SpawnedCount = 0;
 }
 
-void Boss2::SpawnCircleProjectiles(int count, float radius, float speed, const Vec2& center)
-{
-    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
-
-    for (int i = 0; i < count; ++i)
-    {
-        float t = (2.f * PI * i) / (float)count;
-        float dx = std::cos(t);
-        float dy = std::sin(t);
-
-        Vec2 dir = { dx, dy };
-
-        Vec2 pos;
-        pos.x = center.x + dx * radius;
-        pos.y = center.y + dy * radius;
-
-        BossProjectile* proj = new BossProjectile();
-        proj->SetPos(pos);
-        proj->SetSize({ 16.f, 16.f });
-        proj->SetSpeed(speed);
-        proj->Launch(dir);
-
-        scene->AddObject(proj, Layer::BOSSPROJECTILE);
-    }
-}
-
 void Boss2::StartRandomPattern()
 {
     if (m_isCoreExplosionPhase)
@@ -105,7 +79,6 @@ void Boss2::StartRandomPattern()
     case 3: m_curPattern = Boss2Pattern::PATTERN5; break;
     }
 
-    m_patternTimer = 0.f;
     m_patternElapsed = 0.f;
 }
 
@@ -121,7 +94,6 @@ void Boss2::UpdatePattern()
         m_firstPattern = false;
 
         m_startDelayTimer = 0.f;
-        m_patternTimer = 0.f;
         m_patternElapsed = 0.f;
 
         ResetPatternState();
@@ -178,27 +150,9 @@ void Boss2::UpdatePattern()
     }
 }
 
-void Boss2::UpdateCorePositions()
-{
-    Vec2 bossPos = GetPos();
+    #pragma region Patterns
 
-    for (size_t i = 0; i < m_cores.size() && i < m_coreOffsets.size(); ++i)
-    {
-        Boss2Core* core = m_cores[i];
-        if (!core) continue;
-
-        Vec2 offset = m_coreOffsets[i];
-
-        Vec2 pos;
-        pos.x = bossPos.x + offset.x;
-        pos.y = bossPos.y + offset.y;
-
-        core->SetPos(pos);
-    }
-}
-
-// ======================= PATTERN 1 =======================
-
+//PATTERN 1 총알 막 뿌리고 한 번에 발사
 void Boss2::Pattern1()
 {
     std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
@@ -210,23 +164,23 @@ void Boss2::Pattern1()
         m_fireTimer1 = 0.f;
     }
 
-    if (m_patternElapsed < m_pattern1PrepareTime)
+    if (m_patternElapsed < m_pattern1PrepareTime)  //1.5초 동안 생성하기
     {
         m_fireTimer1 += fDT;
 
-        if (m_fireTimer1 >= m_pattern1SpawnInterval)
+        if (m_fireTimer1 >= m_pattern1SpawnInterval)  //0.03초 마다 생성하기 
         {
             m_fireTimer1 = 0.f;
 
-            float angle = ((float)rand() / RAND_MAX) * 2.f * PI;
-            float radius = 50.f + ((float)rand() / RAND_MAX) * 250.f;
+            float angle = ((float)rand() / RAND_MAX) * 2.f * PI;  //angle을 360도에서 랜덤 뽑을려고 2ㅠ 곱함
+            float radius = 50.f + ((float)rand() / RAND_MAX) * 250.f;  //떨어진거리
 
             float dx = std::cos(angle);
-            float dy = std::sin(angle);
+            float dy = std::sin(angle);  //여기가 벡터 구하기 
 
             Vec2 pos;
             pos.x = center.x + dx * radius;
-            pos.y = center.y + dy * radius;
+            pos.y = center.y + dy * radius;  //Vec2로 점 생성하기
 
             BossProjectile* proj = new BossProjectile();
             proj->SetPos(pos);
@@ -234,10 +188,11 @@ void Boss2::Pattern1()
             proj->SetSpeed(380.f);
             scene->AddObject(proj, Layer::BOSSPROJECTILE);
             m_pattern1Bullets.push_back(proj);
+            //총알 생성 후 vector에 추가하기
         }
     }
 
-    if (!m_pattern1Launched && m_patternElapsed > m_pattern1LaunchTime)
+    if (!m_pattern1Launched && m_patternElapsed > m_pattern1LaunchTime)  //2초후에
     {
         m_pattern1Launched = true;
 
@@ -249,40 +204,129 @@ void Boss2::Pattern1()
             dir.x = pos.x - center.x;
             dir.y = pos.y - center.y;
             proj->Launch(dir);
+            //발사하기
         }
 
-        m_pattern1Bullets.clear();
+        m_pattern1Bullets.clear(); //혹시 모르니까 clear까지
     }
 }
 
-// ======================= PATTERN 2 =======================
-// Boss2Laser 한 개만 사용, 내부에서 십자 레이저 회전
-
+//PATTERN 2 레이저 생성하고 오는 패턴
 void Boss2::Pattern2()
 {
-    Vec2 center = GetPos();
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
 
     if (!m_patternInitialized)
     {
         m_patternInitialized = true;
 
-        m_laser = new Boss2Laser();
-        m_laser->SetPos(center);
-        m_laser->SetArmLength(500.f);
-        m_laser->SetThickness(40.f);
-        m_laser->SetRotateSpeed(m_pattern2RotateSpeed);
+        m_pattern2SideWaveCount = 0;
+        m_pattern2VerticalWaveCount = 0;
+        m_pattern2VerticalLasers.clear();
+    }  //그냥 초기화
 
-        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(m_laser, Layer::LASER);
+    if (m_pattern2SideWaveCount < 2)
+    {
+        bool canSpawn = false;
+
+        if (m_pattern2SideWaveCount == 0 && m_patternElapsed >= 0.f)  //시작하자마자 수직 레이저 발사
+            canSpawn = true;
+        else if (m_pattern2SideWaveCount == 1 && m_patternElapsed >= m_pattern2SideInterval)  //대기 후 발사
+            canSpawn = true;
+
+        if (canSpawn)
+        {
+            auto* leftLaser = new LaserObject(true);
+            leftLaser->SetPos({ 0.f, WINDOW_HEIGHT / 2.f });
+            leftLaser->SetDir(1);
+            scene->AddObject(leftLaser, Layer::LASER);
+
+            auto* rightLaser = new LaserObject(false);
+            rightLaser->SetPos({ (float)WINDOW_WIDTH - 20.f, WINDOW_HEIGHT / 2.f });
+            rightLaser->SetDir(-1);
+            scene->AddObject(rightLaser, Layer::LASER);
+
+            ++m_pattern2SideWaveCount;
+        }  //여기까지가 생성
     }
 
-    if (m_laser)
+    if (m_pattern2VerticalWaveCount < 1)
     {
-        m_laser->SetPos(center);
+        float baseStart =
+            m_pattern2VerticalStartTime +
+            m_pattern2VerticalWaveCount * m_pattern2VerticalInterval;
+        //수평 레이저 
+        if (m_patternElapsed >= baseStart)
+        {
+            {
+                Boss2Laser* laser = new Boss2Laser();
+                laser->SetPos({ WINDOW_WIDTH / 2.f, -50.f });
+                laser->SetArmLength(WINDOW_WIDTH / 2.f);
+                laser->SetThickness(60.f);
+                scene->AddObject(laser, Layer::LASER);
+
+                VerticalLaser v;
+                v.laser = laser;
+                v.dir = 1;
+                m_pattern2VerticalLasers.push_back(v);  //생성하고 VerticalLaser에 추가
+            }
+
+            {
+                Boss2Laser* laser = new Boss2Laser();
+                laser->SetPos({ WINDOW_WIDTH / 2.f, (float)WINDOW_HEIGHT + 50.f });
+                laser->SetArmLength(WINDOW_WIDTH / 2.f);
+                laser->SetThickness(60.f);
+                scene->AddObject(laser, Layer::LASER);
+
+                VerticalLaser v;
+                v.laser = laser;
+                v.dir = -1;
+                m_pattern2VerticalLasers.push_back(v);  //여기도 마찬가지
+            }
+
+            ++m_pattern2VerticalWaveCount;
+        }
+    }
+
+    for (size_t i = 0; i < m_pattern2VerticalLasers.size(); )
+    {
+        VerticalLaser& v = m_pattern2VerticalLasers[i];  //Verticallaser를 움직이기
+
+        if (!v.laser)
+        {
+            m_pattern2VerticalLasers.erase(m_pattern2VerticalLasers.begin() + i);
+            continue;
+        }
+
+        v.laser->Translate({ 0.f, v.dir * m_pattern2VerticalSpeed * fDT });
+
+        float y = v.laser->GetPos().y;
+        bool shouldDie = false;
+
+        if (v.dir > 0)
+        {
+            if (y > WINDOW_HEIGHT / 2.f)
+                shouldDie = true;  //중앙이면 삭제
+        }
+        else
+        {
+            if (y < WINDOW_HEIGHT / 2.f)
+                shouldDie = true;  //중앙이면 삭제
+        }
+
+        if (shouldDie)
+        {
+            v.laser->SetDead();
+            m_pattern2VerticalLasers.erase(m_pattern2VerticalLasers.begin() + i);  //삭제
+        }
+        else
+        {
+            ++i;
+        }
     }
 }
 
-// ======================= PATTERN 3 =======================
-
+//PATTERN 3 서브 코어 터지면 총알 발사하는 패턴
 void Boss2::Pattern3()
 {
     std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
@@ -294,18 +338,18 @@ void Boss2::Pattern3()
         m_areaSpawned = false;
         m_areaLaunched = false;
         m_areaProjectiles.clear();
-    }
+    }  //초기화
 
     if (!m_areaSpawned)
     {
-        m_areaSpawned = true;
+        m_areaSpawned = true;  //스폰 되어 있지 않으면 스폰 하기
 
         int count = 40;
         for (int i = 0; i < count; ++i)
         {
             float t = (2.f * PI * i) / (float)count;
             float dx = std::cos(t);
-            float dy = std::sin(t);
+            float dy = std::sin(t);  //총 40발을 360도 돌면서 생성하기
 
             Vec2 pos;
             pos.x = center.x + dx * m_areaRadius;
@@ -316,7 +360,7 @@ void Boss2::Pattern3()
             proj->SetSize({ 12.f, 12.f });
             proj->SetSpeed(400.f);
             scene->AddObject(proj, Layer::BOSSPROJECTILE);
-            m_areaProjectiles.push_back(proj);
+            m_areaProjectiles.push_back(proj);  //생성하고 넣기
         }
     }
 
@@ -332,13 +376,11 @@ void Boss2::Pattern3()
             dir.x = center.x - pos.x;
             dir.y = center.y - pos.y;
             proj->Launch(dir);
-        }
+        }  //발사 시간되면 발사하기
     }
 }
 
-// ======================= PATTERN 4 =======================
-// 보스 주변 링 탄이 2초 동안 두 바퀴 회전한 뒤 그 방향으로 발사
-
+//PATTERN 4 보스 위치에서 총알 발사하는 패턴
 void Boss2::Pattern4()
 {
     std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
@@ -348,9 +390,9 @@ void Boss2::Pattern4()
     {
         m_patternInitialized = true;
         m_pattern4RingBullets.clear();
-        m_pattern4Launched = false;
+        m_pattern4Launched = false;  //초기화
 
-        int   count = 40;
+        int count = 40;
         float radius = m_pattern4Radius;
 
         for (int i = 0; i < count; ++i)
@@ -358,7 +400,7 @@ void Boss2::Pattern4()
             float angle = (2.f * PI * i) / (float)count;
 
             float dx = std::cos(angle);
-            float dy = std::sin(angle);
+            float dy = std::sin(angle);  //총알 생성, 방향 설정
 
             Vec2 pos;
             pos.x = center.x + dx * radius;
@@ -374,7 +416,7 @@ void Boss2::Pattern4()
             rb.proj = proj;
             rb.angle = angle;
             rb.radius = radius;
-            m_pattern4RingBullets.push_back(rb);
+            m_pattern4RingBullets.push_back(rb);  //진짜 생성, 넣기
         }
     }
 
@@ -393,7 +435,7 @@ void Boss2::Pattern4()
             pos.x = center.x + dx * rb.radius;
             pos.y = center.y + dy * rb.radius;
 
-            rb.proj->SetPos(pos);
+            rb.proj->SetPos(pos);  //2바퀴 회전
         }
     }
     else if (!m_pattern4Launched)
@@ -406,16 +448,14 @@ void Boss2::Pattern4()
 
             Vec2 pos = rb.proj->GetPos();
             Vec2 dir;
-            dir.x = pos.x - center.x;
+            dir.x = pos.x - center.x;  //보스 중심에서 바깥으로 향하는 벡터
             dir.y = pos.y - center.y;
-            rb.proj->Launch(dir);
+            rb.proj->Launch(dir);  //회전 끝나면 방향으로 발사
         }
     }
 }
 
-// ======================= PATTERN 5 =======================
-// 화면 모서리에서 직선 랜덤 탄막 (최대 탄 수 제한)
-
+//PATTERN 5 x, y값 랜덤 위치에서 총알 막 날라오는 패턴
 void Boss2::Pattern5()
 {
     std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
@@ -425,16 +465,16 @@ void Boss2::Pattern5()
         m_patternInitialized = true;
         m_fireTimer1 = 0.f;
         m_pattern5SpawnedCount = 0;
-    }
+    }  //초기화
 
     if (m_pattern5SpawnedCount >= m_pattern5MaxBullets)
-        return;
+        return;  //최대 탄 수 넘으면 return
 
     m_fireTimer1 += fDT;
 
     if (m_fireTimer1 >= m_pattern5ShotInterval)
     {
-        m_fireTimer1 = 0.f;
+        m_fireTimer1 = 0.f;  //발사 타이밍 마다 발사함
 
         int dirType = rand() % 4;
 
@@ -473,52 +513,53 @@ void Boss2::Pattern5()
 
             scene->AddObject(proj, Layer::BOSSPROJECTILE);
 
-            ++m_pattern5SpawnedCount;
+            ++m_pattern5SpawnedCount;  //발사하고 총알 수++
         }
     }
 }
 
-// ======================= 패턴 종료 / 코어 연동 =======================
+    #pragma endregion
 
+    #pragma region Core
+
+//패턴 종료 / 코어 생성
 void Boss2::EndPattern()
 {
     Boss2Pattern finished = m_curPattern;
 
-    m_patternCount++;
-    m_patternsSinceLastCore++;
+    m_patternCount++;  //총 패턴 몇 번 했는지 추가
+    m_patternsSinceLastCore++;  //서브 코어 파괴 후 패턴 몇 번 했는지 추가
 
     m_isCooldown = true;
-    m_curPattern = Boss2Pattern::NONE;
+    m_curPattern = Boss2Pattern::NONE;  //패턴 없애기
 
-    if (finished == Boss2Pattern::PATTERN3)
+    if (finished == Boss2Pattern::PATTERN3)  //근데 3이 끝난거면
     {
         m_isCoreExplosionPhase = false;
         ResetPatternState();
-        m_patternTimer = 0.f;
         m_patternElapsed = 0.f;
         StartRandomPattern();
-        return;
+        return;  //초기화 작업
     }
 
-    if (m_patternsSinceLastCore >= 3 && m_nextCoreToOpen < (int)m_cores.size())
+    if (m_patternsSinceLastCore >= 3 && m_nextCoreToOpen < (int)m_cores.size())  //만약 3번 했으면
     {
-        m_patternsSinceLastCore = 0;
+        m_patternsSinceLastCore = 0;  //초기화
 
         Boss2Core* core = m_cores[m_nextCoreToOpen];
         if (core)
-            core->OpenCore();
+            core->OpenCore();  //서브 코어 열기
 
-        ++m_nextCoreToOpen;
+        ++m_nextCoreToOpen;  //인덱스 추가
     }
 
     if (m_totalCoresDestroyed >= (int)m_cores.size())
     {
-        SpawnMainCore();
+        SpawnMainCore();  //서브 코어 수 보다 부서진 수가 같거나 많아지면 메인 소환
     }
-    else
+    else  //아니면 초기화
     {
         ResetPatternState();
-        m_patternTimer = 0.f;
         m_patternElapsed = 0.f;
         StartRandomPattern();
     }
@@ -526,21 +567,18 @@ void Boss2::EndPattern()
 
 void Boss2::NotifyCoreDestroyed(Boss2Core* core)
 {
-    m_totalCoresDestroyed++;
+    m_totalCoresDestroyed++;  //파괴 수 증가
 
     m_isCoreExplosionPhase = true;
     m_curPattern = Boss2Pattern::PATTERN3;
-    m_patternTimer = 0.f;
-    m_patternElapsed = 0.f;
-
-    //m_startDelayTimer = m_startDelay;
+    m_patternElapsed = 0.f;  //패턴 3으로 설정
 
     if (core)
         m_areaCenter = core->GetPos();
     else
         m_areaCenter = GetPos();
-
-    ResetPatternState();
+    //센터를 core위치로 잡기
+    ResetPatternState();  //초기화
 }
 
 void Boss2::SpawnMainCore()
@@ -554,20 +592,19 @@ void Boss2::SpawnMainCore()
 }
 
 // 서브 코어 4개 생성
-
 void Boss2::InitSpawnCore()
 {
     std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
 
     m_cores.clear();
-    m_coreOffsets.clear();
+    m_coreOffsets.clear();  //코어들 초기화, 위치 초기화
 
     m_nextCoreToOpen = 0;
     m_patternsSinceLastCore = 0;
-    m_totalCoresDestroyed = 0;
+    m_totalCoresDestroyed = 0;  //초기화
 
     float offset = 450.f;
-    float yOffset = 100.f;
+    float yOffset = 100.f;  //x랑 y의 offset 설정
 
     Vec2 offsets[4] =
     {
@@ -576,12 +613,12 @@ void Boss2::InitSpawnCore()
         {  offset, -yOffset }, // 우상
         {  offset,  yOffset }  // 우하
     };
-
+    //위치 잡기
     Vec2 bossPos = GetPos();
 
     for (int i = 0; i < 4; ++i)
     {
-        Boss2Core* core = new Boss2Core(this, i);
+        Boss2Core* core = new Boss2Core(this, i);  //위치에 따라 생성
 
         Vec2 pos;
         pos.x = bossPos.x + offsets[i].x;
@@ -589,11 +626,42 @@ void Boss2::InitSpawnCore()
 
         core->SetPos(pos);
         core->SetSize({ 60.f, 60.f });
-        core->SetHP(10);
+        core->SetHP(1);  //사실 체력 넣으려다가 뺌
 
         scene->AddObject(core, Layer::BOSSCORE);
 
         m_cores.push_back(core);
-        m_coreOffsets.push_back(offsets[i]);
+        m_coreOffsets.push_back(offsets[i]);  //코어랑 위치 넣기
+    }
+
+    for (size_t i = 0; i < m_cores.size(); ++i)
+    {
+        size_t j = rand() % m_cores.size();
+
+        std::swap(m_cores[i], m_cores[j]);
+        std::swap(m_coreOffsets[i], m_coreOffsets[j]);  //위치 랜덤 돌리기
+    }
+
+}
+
+//코어 위치 업데이트
+void Boss2::UpdateCorePositions()
+{
+    Vec2 bossPos = GetPos();
+
+    for (size_t i = 0; i < m_cores.size() && i < m_coreOffsets.size(); ++i)
+    {
+        Boss2Core* core = m_cores[i];
+        if (!core) continue;
+
+        Vec2 offset = m_coreOffsets[i];
+
+        Vec2 pos;
+        pos.x = bossPos.x + offset.x;
+        pos.y = bossPos.y + offset.y;
+
+        core->SetPos(pos);
     }
 }
+
+    #pragma endregion

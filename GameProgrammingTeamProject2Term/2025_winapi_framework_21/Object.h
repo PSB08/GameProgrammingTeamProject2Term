@@ -21,12 +21,12 @@ public:
 	void SetSize(Vec2 _size) { m_size = _size; }
 	const Vec2& GetPos() const { return m_pos; }
 	const Vec2& GetSize()const { return m_size; }
-protected:
 	void Translate(Vec2 _delta)
 	{
 		m_pos.x += _delta.x;
 		m_pos.y += _delta.y;
 	}
+protected:
 	void Scale(Vec2 _s)
 	{
 		if (_s.x <= 0.f || _s.y <= 0.f)
