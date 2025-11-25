@@ -225,7 +225,7 @@ void Boss2::Pattern2()
         m_pattern2VerticalLasers.clear();
     }  //그냥 초기화
 
-    if (m_pattern2SideWaveCount < 2)
+    if (m_pattern2SideWaveCount < 1)
     {
         bool canSpawn = false;
 
