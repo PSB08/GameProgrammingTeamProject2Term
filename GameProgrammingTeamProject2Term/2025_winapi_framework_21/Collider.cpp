@@ -44,14 +44,14 @@ void Collider::Render(HDC _hdc)
 	if (!m_enabled)
 		return;
 
-	/*PenType colorPen = PenType::GREEN;
+	PenType colorPen = PenType::GREEN;
 	if(m_showDebug)
 		colorPen = PenType::RED;
 	GDISelector pen(_hdc, colorPen);
 	GDISelector brush(_hdc, BrushType::HOLLOW);
 
 	RECT_RENDER(_hdc, m_updatedPos.x, m_updatedPos.y
-		, m_size.x, m_size.y);*/
+		, m_size.x, m_size.y);
 }
 
 void Collider::Init()
