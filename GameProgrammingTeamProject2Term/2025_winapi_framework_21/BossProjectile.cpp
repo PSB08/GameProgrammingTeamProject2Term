@@ -30,7 +30,7 @@ void BossProjectile::Update()
 	}
 
 	m_lifeTime += fDT;
-	if (m_lifeTime >= 3.f)
+	if (m_lifeTime >= 6.f)
 	{
 		SetDead();
 		return;

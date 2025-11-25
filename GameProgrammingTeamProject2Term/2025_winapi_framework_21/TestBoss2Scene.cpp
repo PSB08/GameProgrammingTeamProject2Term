@@ -8,6 +8,7 @@
 #include "CollisionManager.h"
 #include "ResourceManager.h"
 #include "Floor.h"
+#include "DeadFloor.h"
 
 void TestBoss2Scene::Init()
 {
@@ -28,6 +29,9 @@ void TestBoss2Scene::Init()
 			Layer::DEFAULT
 			, { WINDOW_WIDTH / 2, 600 }
 	, { 100,100 });
+
+	Spawn<DeadFloor>
+		(Layer::DEFAULT, { WINDOW_WIDTH / 2, 700 }, { 100, 100 });
 
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PROJECTILE, Layer::BOSS);
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PROJECTILE, Layer::BOSSCORE);
