@@ -15,7 +15,7 @@
 Player::Player()
 	: m_pTexture(nullptr),
 	jumpPower(10.f),
-	dashPower(80.f),
+	dashPower(1.f),
 	playerCanDamaged(true),
 	dashCooltime(1.f),
 	shieldCooltime(5.f),
@@ -102,9 +102,9 @@ void Player::ExitCollision(Collider* _other)
 void Player::Update()
 {
 	Vec2 dir = {};
-	if (GET_KEY(KEY_TYPE::A)) dir.x -= 1.f;
+	if (GET_KEY(KEY_TYPE::A)) dir.x -= (1.f * dashPower);
 	
-	if (GET_KEY(KEY_TYPE::D)) dir.x += 1.f;
+	if (GET_KEY(KEY_TYPE::D)) dir.x += (1.f * dashPower);
 
 	if (GET_KEY(KEY_TYPE::SPACE)) PlayerJump();
 	if (GET_KEY(KEY_TYPE::L) &&
@@ -112,6 +112,8 @@ void Player::Update()
 	if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime) PlayerDash();
 
 	Rigidbody* rigid = GetComponent<Rigidbody>();
+
+#pragma region 쿨타임 처리 부분
 	if (playerCanDamaged && shieldTime < shieldCooltime)
 	{
 		shieldTime += fDT;
@@ -124,6 +126,10 @@ void Player::Update()
 	{
 		JumpTime += fDT;
 	}
+	if (dashPower > 1.f)
+	{
+		dashPower -= (fDT * ((5.f + dashPower) / 1.f));
+	}
 	if (InvincibleTime < InvincibleHoldTime)
 	{
 		InvincibleTime += fDT;
@@ -132,6 +138,8 @@ void Player::Update()
 	{
 		playerIsInvincibility = false;
 	}
+
+#pragma endregion
 
 	Translate({ dir.x * 300.f * fDT, dir.y * 300.f * fDT });
 
@@ -190,13 +198,7 @@ void Player::PlayerShield()
 
 void Player::PlayerDash()
 {
-	Rigidbody* rigid = GetComponent<Rigidbody>();
-	Vec2 dash = { 100, 0 };
-
-	if (GET_KEY(KEY_TYPE::A)) rigid->AddImpulse(dash * -dashPower);
-
-	if (GET_KEY(KEY_TYPE::D)) rigid->AddImpulse(dash * dashPower);
-
+	dashPower = 5.f;
 	playerIsInvincibility = true;
 	dashTime = 0.f;
 	InvincibleTime = 0.f;
