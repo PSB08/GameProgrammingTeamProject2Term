@@ -31,7 +31,8 @@ Scene::~Scene()
 
 void Scene::Update()
 {
-	// ?? OBJ UPDATE
+	UpdateShake(fDT);
+
 	for (UINT i = 0; i < (UINT)Layer::END; ++i)
 	{
 		auto& vec = m_vecObj[i];
@@ -53,6 +54,13 @@ void Scene::LateUpdate()
 
 void Scene::Render(HDC _hdc)
 {
+	POINT oldPos;
+	GetViewportOrgEx(_hdc, &oldPos);
+
+	int offX = (int)m_shakeOffset.x;
+	int offY = (int)m_shakeOffset.y;
+	SetViewportOrgEx(_hdc, oldPos.x + offX, oldPos.y + offY, nullptr);
+
 	for (UINT i = 0; i < (UINT)Layer::END; ++i)
 	{
 		auto& vec = m_vecObj[i];
@@ -60,6 +68,8 @@ void Scene::Render(HDC _hdc)
 			if (!obj->GetIsDead())
 				obj->Render(_hdc);
 	}
+
+	SetViewportOrgEx(_hdc, oldPos.x, oldPos.y, nullptr);
 
 	// 2) UI ·»´õ (¸Ç À§¿¡)
 	for (auto* ui : m_vecUI)
@@ -144,6 +154,15 @@ void Scene::RequestSpawn(Object* obj, Layer _type)
 }
 
 
+void Scene::StartShake(float duration, float magnitude)
+{
+	m_isShaking = true;
+	m_shakeTimer = 0.f;
+	m_shakeDuration = duration;
+	m_shakeMagnitude = magnitude;
+	m_shakeOffset = { 0.f, 0.f };
+}
+
 void Scene::RemoveObject(Object* _obj)
 {
 	for (UINT i = 0; i < (UINT)Layer::END; ++i)
@@ -152,4 +171,30 @@ void Scene::RemoveObject(Object* _obj)
 		v.erase(std::remove(v.begin(), v.end(), _obj), v.end());
 	}
 
+}
+
+void Scene::UpdateShake(float dt)
+{
+	if (!m_isShaking)
+	{
+		m_shakeOffset = { 0.f, 0.f };
+		return;
+	}
+
+	m_shakeTimer += dt;
+	if (m_shakeTimer >= m_shakeDuration)
+	{
+		m_isShaking = false;
+		m_shakeOffset = { 0.f, 0.f };
+		return;
+	}
+
+	float t = m_shakeTimer / m_shakeDuration;
+	float falloff = 1.f - t;
+
+	float rx = ((float)rand() / RAND_MAX) * 2.f - 1.f;
+	float ry = ((float)rand() / RAND_MAX) * 2.f - 1.f;
+
+	m_shakeOffset.x = rx * m_shakeMagnitude * falloff;
+	m_shakeOffset.y = ry * m_shakeMagnitude * falloff;
 }

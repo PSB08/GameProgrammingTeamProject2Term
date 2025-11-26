@@ -132,7 +132,7 @@ private:
     int m_pattern5SpawnedCount = 0;
 
     //PATTERN5에서 한 패턴 동안 생성 가능한 최대 탄 수
-    int m_pattern5MaxBullets = 120;
+    int m_pattern5MaxBullets = 90;
 
     //서브 코어 객체 리스트
     std::vector<Boss2Core*> m_cores;

@@ -47,8 +47,12 @@ public:
 	void SetPlayer(Player* player) { m_player = player; }
 	Player* GetPlayer() const { return m_player; }
 
+	void StartShake(float duration, float magnitude);
+
 private:
 	void RemoveObject(Object* _obj);
+
+	void UpdateShake(float dt);
 private:
 	vector<Object*> m_vecObj[(UINT)Layer::END];
 	vector<Object*> m_killObject;
@@ -58,5 +62,11 @@ private:
 	vector<UIObject*> m_killUI;
 
 	Player* m_player = nullptr;
+
+	bool m_isShaking = false;
+	float m_shakeTimer = 0.f;
+	float m_shakeDuration = 0.f;
+	float m_shakeMagnitude = 0.f;
+	Vec2 m_shakeOffset = { 0.f, 0.f };
 };
 

@@ -199,6 +199,7 @@ void Boss2::Pattern1()
         for (BossProjectile* proj : m_pattern1Bullets)
         {
             if (!proj) continue;
+            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
             Vec2 pos = proj->GetPos();
             Vec2 dir;
             dir.x = pos.x - center.x;
@@ -245,6 +246,7 @@ void Boss2::Pattern2()
             rightLaser->SetPos({ (float)WINDOW_WIDTH - 20.f, WINDOW_HEIGHT / 2.f });
             rightLaser->SetDir(-1);
             scene->AddObject(rightLaser, Layer::LASER);
+            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
 
             ++m_pattern2SideWaveCount;
         }  //여기까지가 생성
@@ -283,7 +285,7 @@ void Boss2::Pattern2()
                 v.dir = -1;
                 m_pattern2VerticalLasers.push_back(v);  //여기도 마찬가지
             }
-
+            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
             ++m_pattern2VerticalWaveCount;
         }
     }
@@ -376,7 +378,8 @@ void Boss2::Pattern3()
             dir.x = center.x - pos.x;
             dir.y = center.y - pos.y;
             proj->Launch(dir);
-        }  //발사 시간되면 발사하기
+        }  //발사 시간되면 발사하기 - 2번하게 바꿀 생각임
+        GET_SINGLE(SceneManager)->GetCurScene()->StartShake(2.f, 7.5f);
     }
 }
 
@@ -425,6 +428,7 @@ void Boss2::Pattern4()
         for (auto& rb : m_pattern4RingBullets)
         {
             if (!rb.proj) continue;
+            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
 
             rb.angle += m_pattern4AngularSpeed * fDT;
 
@@ -514,6 +518,7 @@ void Boss2::Pattern5()
             scene->AddObject(proj, Layer::BOSSPROJECTILE);
 
             ++m_pattern5SpawnedCount;  //발사하고 총알 수++
+            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 2.f);
         }
     }
 }
