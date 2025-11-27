@@ -3,7 +3,7 @@
 #include "Collider.h"
 
 UpDownPlatform::UpDownPlatform()
-	: m_DownCheckTimer(3.f),
+	: m_DownCheckTimer(5.f),
 	m_UpCheckValue(10),
 	m_sizeDownValue(100.f)
 {

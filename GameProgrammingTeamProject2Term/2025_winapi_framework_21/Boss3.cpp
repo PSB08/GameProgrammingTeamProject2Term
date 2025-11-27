@@ -5,6 +5,7 @@
 #include "BossProjectile.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "FollowProjectile.h"
 
 Boss3::Boss3()
     : m_isCorePhase(false),
@@ -23,7 +24,7 @@ Boss3::~Boss3()
 
 void Boss3::StartRandomPattern()
 {
-    cout << "이거뜨면 버그임...";
+    m_setPos = false;
 }
 
 void Boss3::UpdatePattern()
@@ -46,40 +47,45 @@ void Boss3::UpdatePattern()
     {
     case Boss3Pattern::PATTERN1:
         Pattern1();
-        if (m_patternTimer > 5.f)
+        if (m_patternTimer > 1.f)
         {
             EndPattern();
+            m_curPattern = Boss3Pattern::PATTERN2;
         }
         break;
 
     case Boss3Pattern::PATTERN2:
         Pattern2();
-        if (m_patternTimer > 5.f)
+        if (m_patternTimer > 1.f)
         {
             EndPattern();
+            m_curPattern = Boss3Pattern::PATTERN3;
         }
         break;
 
     case Boss3Pattern::PATTERN3:
         Pattern3();
-        if (m_patternTimer > 3.f)
+        if (m_patternTimer > 0.1f)
         {
             EndPattern();
+            m_curPattern = Boss3Pattern::PATTERN4;
         }
         break;
     case Boss3Pattern::PATTERN4:
         Pattern4();
-        if (m_patternTimer > 5.f)
+        if (m_patternTimer > 0.1f)
         {
             EndPattern();
+            m_curPattern = Boss3Pattern::PATTERN5;
         }
         break;
 
     case Boss3Pattern::PATTERN5:
         Pattern5();
-        if (m_patternTimer > 3.f)
+        if (m_patternTimer > 0.1f)
         {
             EndPattern();
+            m_curPattern = Boss3Pattern::PATTERN1;
         }
         break;
     }
@@ -87,9 +93,9 @@ void Boss3::UpdatePattern()
 
 void Boss3::EndPattern()
 {
+    m_isShotFollow = false;
     m_isCooldown = true;
-    m_curPattern = Boss3Pattern::NONE;
-
+    m_patternTimer = 0.f;
     if (m_patternCount >= m_maxPatternCount)
     {
         SpawnCore();
@@ -110,34 +116,73 @@ void Boss3::StartPattern()
     proj->SetPos(center);
     proj->SetSize({ 30.f, 30.f });
     proj->SetDir(dir);
-
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
     m_isStartPhase = false;
+    m_curPattern = Boss3Pattern::PATTERN1;
 }
 
 void Boss3::Pattern1()
 {
-    cout << "adsf";
+    Vec2 pos = GetPos();
+    float position = 0.f;
+    float nowPosition = pos.x;
+
+    while (!m_setPos)
+    {
+        int randPos = rand() % 3;
+        switch (randPos)
+        {
+        case 0:
+            position = 320.f;
+            break;
+        case 1:
+            position = 640.f;
+            break;
+        case 2:
+            position = 960.f;
+            break;
+        }
+
+        if (nowPosition != position)
+        {
+            m_setPos = true;
+            SetPos({ position, pos.y });
+            break;
+        }
+
+    }
 }
 
 void Boss3::Pattern2()
 {
-    cout << "adsf";
+    Vec2 center = GetPos();
+
+    Vec2 dir = {  };
+
+    if (!m_isShotFollow)
+    {
+        m_isShotFollow = true;
+        auto* proj = new FollowProjectile;
+        proj->SetPos(center);
+        proj->SetSize({ 30.f, 30.f });
+        proj->SetDir(dir);
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
+    }
 }
 
 void Boss3::Pattern3()
 {
-    cout << "adsf";
+
 }
 
 void Boss3::Pattern4()
 {
-    cout << "adsf";
+
 }
 
 void Boss3::Pattern5()
 {
-    cout << "adsf";
+
 }
 
 void Boss3::SpawnCore()

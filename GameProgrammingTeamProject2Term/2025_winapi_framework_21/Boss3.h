@@ -19,7 +19,7 @@ private:
 private:
     // ===== 개별 패턴 =====
     void StartPattern(); // 개막패턴 -
-    void Pattern1();   // 
+    void Pattern1();   // 위치 옮기기
     void Pattern2();   // 
     void Pattern3();   // 
     void Pattern4();   // 
@@ -32,6 +32,8 @@ private:
     bool m_isStartPhase;
     float m_startDelayTimer = 0.f;  // 시작 지연용 타이머
     const float m_startDelay = 3.f;  //대기 타이머 - 3초 대기 후 패턴 시작함
+    bool m_setPos = false;
+    bool m_isShotFollow = false;
 
     float m_angle1;
     float m_fireTimer1;

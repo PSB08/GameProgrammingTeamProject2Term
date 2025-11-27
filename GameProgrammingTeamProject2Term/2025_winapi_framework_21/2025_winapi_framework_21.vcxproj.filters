@@ -235,6 +235,8 @@
     <ClInclude Include="Boss2Laser.h">
       <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClInclude>
+    <ClInclude Include="DeadFloor.h" />
+    <ClInclude Include="FollowProjectile.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -388,5 +390,7 @@
     <ClCompile Include="Boss2Laser.cpp">
       <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClCompile>
+    <ClCompile Include="DeadFloor.cpp" />
+    <ClCompile Include="FollowProjectile.cpp" />
   </ItemGroup>
 </Project>
