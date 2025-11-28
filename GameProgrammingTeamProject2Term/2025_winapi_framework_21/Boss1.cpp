@@ -97,6 +97,7 @@ void Boss1::Pattern1()
 
     m_angle1 += 25.f;
     if (m_angle1 >= 360.f) m_angle1 -= 360.f;
+    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 3.f);
 }
 
 void Boss1::Pattern2()
@@ -123,6 +124,7 @@ void Boss1::Pattern2()
 
     m_angle2 += 10.f;
     if (m_angle2 >= 360.f) m_angle2 -= 360.f;
+    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 3.f);
 }
 
 void Boss1::Pattern3()
@@ -141,6 +143,7 @@ void Boss1::Pattern3()
         rightLaser->SetPos({ (float)WINDOW_WIDTH - 20.f, WINDOW_HEIGHT / 2.f }); // È­¸é Áß¾Ó
         rightLaser->SetDir(-1);  // ¿ÞÂÊÀ¸·Î ÀÌµ¿
         GET_SINGLE(SceneManager)->GetCurScene()->AddObject(rightLaser, Layer::LASER);
+        GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
     }
 }
 
