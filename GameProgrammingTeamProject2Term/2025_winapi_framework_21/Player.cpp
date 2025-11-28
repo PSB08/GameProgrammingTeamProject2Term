@@ -142,7 +142,7 @@ void Player::Update()
 #pragma endregion
 
 	Translate({ dir.x * 300.f * fDT, dir.y * 300.f * fDT });
-
+	m_playerPos = GetPos();
 	if (GET_KEYDOWN(KEY_TYPE::J))
 		CreateProjectile();
 
@@ -202,5 +202,22 @@ void Player::PlayerDash()
 	playerIsInvincibility = true;
 	dashTime = 0.f;
 	InvincibleTime = 0.f;
+}
+
+void Player::PlayerBounce()
+{
+	Rigidbody* rigid = GetComponent<Rigidbody>();
+	if (rigid->IsGrounded() && JumpTime > JumpDelayTime)
+	{
+		Vec2 jump = { 0, -55 };
+		rigid->AddImpulse(jump * jumpPower);
+		rigid->SetGrounded(false);
+	}
+	else if (!rigid->IsGrounded() && JumpTime > JumpDelayTime)
+	{
+		Vec2 jump = { 0, -25 };
+		rigid->AddImpulse(jump * jumpPower);
+	}
+
 }
 

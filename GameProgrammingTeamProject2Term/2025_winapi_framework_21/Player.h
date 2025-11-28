@@ -16,8 +16,13 @@ private:
 	void PlayerJump();
 	void PlayerShield();
 	void PlayerDash();
+public:
+	void PlayerBounce();
+	Vec2 GetPlayerPos() { return m_playerPos; }
 private:
 	Texture* m_pTexture;
+	Vec2 m_playerPos;
+private:
 	bool playerCanDamaged;
 	bool playerIsInvincibility;
 	float jumpPower;
