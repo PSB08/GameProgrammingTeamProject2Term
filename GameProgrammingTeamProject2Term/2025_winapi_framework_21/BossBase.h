@@ -37,17 +37,6 @@ public:
 
     void Render(HDC _hdc) override
     {
-        Vec2 pos = GetPos();
-        Vec2 size = GetSize();
-        int width = m_pTexture->GetWidth();
-        int height = m_pTexture->GetHeight();
-
-        ::TransparentBlt(_hdc
-            , (int)(pos.x - size.x / 2)
-            , (int)(pos.y - size.y / 2)
-            , size.x, size.y,
-            m_pTexture->GetTextureDC(),
-            0, 0, width, height, RGB(0, 0, 0));
         ComponentRender(_hdc);
         RenderPattern(_hdc); // 자식이 필요하면 구현
     }

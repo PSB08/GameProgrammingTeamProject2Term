@@ -2,6 +2,7 @@
 #include "BossBase.h"
 #include "BossProjectile.h"
 #include "Enums.h"
+#include "Animator.h"
 #include <vector>
 
 class Boss2Core;
@@ -176,4 +177,11 @@ private:
 
     //현재 패턴이 시작된 후 흐른 시간
     float m_patternElapsed = 0.f;
+
+    private:
+        Animator* m_animator;
+
+        void SetupAnimations();
+        void PlayIdle();
+
 };

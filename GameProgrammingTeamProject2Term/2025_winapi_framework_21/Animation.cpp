@@ -139,6 +139,6 @@ void Animation::Render(HDC _hdc)
         dx, dy, dw, dh,
         m_tex->GetTextureDC(),
         sx, sy, sw, sh,
-        RGB(255, 0, 255));
+        RGB(0, 0, 0));
         
 }

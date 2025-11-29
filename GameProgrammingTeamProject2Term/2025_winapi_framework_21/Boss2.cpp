@@ -19,6 +19,11 @@ Boss2::Boss2()
     , m_patternElapsed(0.f)
 {
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2");
+
+    m_animator = AddComponent<Animator>();
+    SetupAnimations();
+    PlayIdle();
+
     InitSpawnCore();
 }
 
@@ -672,3 +677,30 @@ void Boss2::UpdateCorePositions()
 }
 
     #pragma endregion
+
+void Boss2::SetupAnimations()
+{
+    if (!m_animator || !m_pTexture)
+        return;
+
+    Vec2 sliceSize = { 160.f, 160.f };
+    Vec2 step = { 160.f, 0.f };
+
+    m_animator->CreateAnimation(
+        L"boss2Idle",
+        m_pTexture,
+        { 0.f, 0.f },
+        sliceSize,
+        step,
+        14,
+        0.1f
+    );
+}
+
+void Boss2::PlayIdle()
+{
+    if (!m_animator)
+        return;
+
+    m_animator->Play(L"boss2Idle", PlayMode::Loop, 1, 1.f);
+}
