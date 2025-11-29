@@ -73,6 +73,11 @@ void Animation::Update()
     AdvanceFrame();
 }
 
+void Animation::SetFinishCallback(const std::function<void()>& func)
+{
+    m_onFinish = func;
+}
+
 void Animation::AdvanceFrame()
 {
     const tAnimFrame& _fr = m_frames[(size_t)m_curFrame];
@@ -90,6 +95,8 @@ void Animation::AdvanceFrame()
             case PlayMode::Once:
                 m_curFrame = (int)m_frames.size() - 1;
                 m_finished = true;
+                if (m_onFinish)
+                    m_onFinish();
                 break;
             case PlayMode::Loop:
                 m_curFrame = 0;
@@ -98,11 +105,15 @@ void Animation::AdvanceFrame()
             {
                 --m_loopCount;
                 if (m_loopCount > 0)
+                {
                     m_curFrame = 0;
+                }
                 else
                 {
                     m_curFrame = (int)m_frames.size() - 1;
                     m_finished = true;
+                    if (m_onFinish)
+                        m_onFinish();
                 }
             }
             break;
@@ -138,4 +149,5 @@ void Animation::Render(HDC _hdc)
         m_tex->GetTextureDC(),
         sx, sy, sw, sh,
         RGB(255, 0, 255));
+        
 }

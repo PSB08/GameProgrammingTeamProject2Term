@@ -1,4 +1,7 @@
 #pragma once
+
+#include <functional>
+
 class Animator;
 class Texture;
 struct tAnimFrame
@@ -40,6 +43,8 @@ public:
     int  GetMaxFrame() const { return (int)m_frames.size(); }
     bool IsFinished()  const { return m_finished; }
 
+    void SetFinishCallback(const std::function<void()>& func);
+
 private:
     void AdvanceFrame();
 
@@ -56,4 +61,6 @@ private:
     int      m_loopCount;
     float    m_speed;
     bool     m_finished;
+
+    std::function<void()> m_onFinish;
 };

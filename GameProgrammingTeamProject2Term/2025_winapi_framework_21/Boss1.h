@@ -1,5 +1,6 @@
 #pragma once
 #include "BossBase.h"
+#include "Animator.h"
 #include "Enums.h" // Boss1Pattern Æ÷ÇÔ
 
 class Boss1 : public BossBase<Boss1Pattern>
@@ -41,4 +42,14 @@ private:
     float m_laserLeftX;
     float m_laserRightX;
     bool  m_laserActive;
+
+private:
+    Animator* m_animator;
+
+    int m_currLine;
+    int m_totalLines;
+
+    void SetupAnimations();
+    void PlayNextLine();
+    void OnAnimLineFinished();
 };

@@ -187,6 +187,9 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"plane", L"Texture\\plane.bmp");
 	LoadTexture(L"bullet", L"Texture\\Bullet.bmp");
 	LoadTexture(L"jiwoo", L"Texture\\jiwoo.bmp");
+	LoadTexture(L"boss1", L"Texture\\boss1.bmp");
+	LoadTexture(L"boss2", L"Texture\\boss2.bmp");
+	LoadTexture(L"bossBullet", L"Texture\\bossBullet.bmp");
 }
 
 

@@ -12,7 +12,7 @@ BossProjectile::BossProjectile()
 	, m_lifeTime(0.f)
 	, m_collider(nullptr)
 {
-	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");  //¹Ù²ã¾ßÇÔ
+	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"bossBullet");
 	auto* com = AddComponent<Collider>();
 	com->SetSize({ 20.f,20.f });
 	com->SetName(L"BossProjectile");

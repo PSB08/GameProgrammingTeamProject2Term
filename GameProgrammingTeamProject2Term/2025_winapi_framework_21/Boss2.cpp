@@ -5,6 +5,7 @@
 #include "Boss2Laser.h"
 #include "LaserObject.h"
 #include "SceneManager.h"
+#include "ResourceManager.h"
 #include "Scene.h"
 #include "Player.h"
 #include <cmath>
@@ -17,6 +18,7 @@ Boss2::Boss2()
     , m_patternInitialized(false)
     , m_patternElapsed(0.f)
 {
+    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2");
     InitSpawnCore();
 }
 
