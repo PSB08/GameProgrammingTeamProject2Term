@@ -52,7 +52,7 @@ void BossProjectile::Render(HDC _hdc)
 		, (int)(pos.y - size.y / 2)
 		, size.x, size.y,
 		m_pTexture->GetTextureDC(),
-		0, 0, width, height, RGB(255, 0, 255));
+		0, 0, width, height, RGB(0, 0, 0));
 	ComponentRender(_hdc);
 }
 
