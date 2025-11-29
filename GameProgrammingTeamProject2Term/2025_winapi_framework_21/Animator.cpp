@@ -83,11 +83,3 @@ void Animator::Resume()
 {
     m_paused = false;
 }
-
-void Animator::SetOnAnimationFinish(const std::function<void()>& func)
-{
-    m_onAnimFinish = func;
-    if (m_curAnimation)
-        m_curAnimation->SetFinishCallback(m_onAnimFinish);
-}
-

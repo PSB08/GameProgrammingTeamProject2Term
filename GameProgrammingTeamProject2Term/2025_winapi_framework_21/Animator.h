@@ -33,8 +33,6 @@ public:
     void Pause();
     void Resume();
 
-    void SetOnAnimationFinish(const std::function<void()>& func);
-
 public:
     Animation* GetCurrent() const { return m_curAnimation; }
     bool IsPaused() const { return m_paused; }
@@ -43,6 +41,5 @@ private:
     std::unordered_map<std::wstring, Animation*> m_mapAnim; // 소유권
     Animation* m_curAnimation; // 선택만
     bool       m_paused;
-    std::function<void()> m_onAnimFinish;
 
 };

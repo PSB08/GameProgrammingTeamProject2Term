@@ -73,11 +73,6 @@ void Animation::Update()
     AdvanceFrame();
 }
 
-void Animation::SetFinishCallback(const std::function<void()>& func)
-{
-    m_onFinish = func;
-}
-
 void Animation::AdvanceFrame()
 {
     const tAnimFrame& _fr = m_frames[(size_t)m_curFrame];
@@ -95,8 +90,6 @@ void Animation::AdvanceFrame()
             case PlayMode::Once:
                 m_curFrame = (int)m_frames.size() - 1;
                 m_finished = true;
-                if (m_onFinish)
-                    m_onFinish();
                 break;
             case PlayMode::Loop:
                 m_curFrame = 0;
@@ -112,8 +105,6 @@ void Animation::AdvanceFrame()
                 {
                     m_curFrame = (int)m_frames.size() - 1;
                     m_finished = true;
-                    if (m_onFinish)
-                        m_onFinish();
                 }
             }
             break;
