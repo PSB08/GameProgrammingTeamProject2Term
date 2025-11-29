@@ -190,6 +190,9 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"boss1", L"Texture\\boss1.bmp");
 	LoadTexture(L"boss2", L"Texture\\boss2.bmp");
 	LoadTexture(L"bossBullet", L"Texture\\bossBullet.bmp");
+	LoadTexture(L"PlayerMove", L"Texture\\PlayerMove.bmp");
+	LoadTexture(L"Player_Back", L"Texture\\Player_Back.bmp");
+	LoadTexture(L"PlayerBullet", L"Texture\\PlayerBullet.bmp");
 }
 
 
@@ -203,7 +206,6 @@ void ResourceManager::LoadTexture(const wstring& _key, const wstring& _path)
 	// 처음에 없을거니 경로 찾아서
 	wstring texPath = m_resourcePath;
 	texPath += _path;
-
 	// 만들어서
 	pTex = new Texture;
 	pTex->Load(texPath); // 텍스처 자체 로드

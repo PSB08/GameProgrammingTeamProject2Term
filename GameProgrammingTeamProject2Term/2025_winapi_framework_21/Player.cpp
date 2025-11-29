@@ -13,7 +13,7 @@
 #include "SceneManager.h"
 
 Player::Player()
-	: m_pTexture(nullptr),
+	: m_pNormalTexture(nullptr),
 	jumpPower(10.f),
 	dashPower(1.f),
 	playerCanDamaged(true),
@@ -27,19 +27,31 @@ Player::Player()
 	JumpDelayTime(0.02f),
 	JumpTime(0.f),
 	m_pendingSceneChange(false),
-	m_delay(0.f)
+	m_delay(0.f),
+	m_shootDelayTime(0.f)
 {
-	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"jiwoo");
+	m_pNormalTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerMove");
+	m_pShootingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"Player_Back");
 	AddComponent<Collider>();
-	auto* animator = AddComponent<Animator>();
-	animator->CreateAnimation
-	(L"jiwooFront"
-	,m_pTexture
-	,{0.f,150.f}
-	,{50.f,50.f}
-	,{50.f,0.f}
-	,5,0.1f);
-	animator->Play(L"jiwooFront");
+	AddComponent<Animator>();
+	m_animator = GetComponent<Animator>();
+	m_animator->CreateAnimation
+	(L"playerMove"
+	,m_pNormalTexture
+	,{0.f,0.f}
+	,{32.f,32.f}
+	,{32.f,0.f}
+	,10,0.1f);
+
+	m_animator->CreateAnimation
+	(L"playerShoot"
+		, m_pShootingTexture
+		, { 0.f,0.f }
+		, { 160.f,160.f }
+		, { 160.f,0.f }
+	, 1, 0.1f);
+
+	m_animator->Play(L"playerMove");
 	AddComponent<Rigidbody>();
 }
 
@@ -51,8 +63,8 @@ void Player::Render(HDC _hdc)
 {
 	Vec2 pos = GetPos();
 	Vec2 size = GetSize();
-	int width = m_pTexture->GetWidth();
-	int height = m_pTexture->GetHeight();
+	int width = m_pNormalTexture->GetWidth();
+	int height = m_pNormalTexture->GetHeight();
 
 	if (!playerCanDamaged)
 		ELLIPSE_RENDER(_hdc, pos.x, pos.y, width / 3, height / 3);
@@ -102,6 +114,7 @@ void Player::ExitCollision(Collider* _other)
 void Player::Update()
 {
 	Vec2 dir = {};
+	Animation* cur = m_animator->GetCurrent();
 	if (GET_KEY(KEY_TYPE::A)) dir.x -= (1.f * dashPower);
 	
 	if (GET_KEY(KEY_TYPE::D)) dir.x += (1.f * dashPower);
@@ -112,6 +125,26 @@ void Player::Update()
 	if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime) PlayerDash();
 
 	Rigidbody* rigid = GetComponent<Rigidbody>();
+
+	if (!isShooting)
+	{
+		if (!isMoving)
+		{
+			m_animator->Play(L"playerMove");
+			isMoving = true;
+		}
+	}
+	else
+	{
+		m_animator->Play(L"playerShoot");
+		m_shootDelayTime += fDT;
+		if (m_shootDelayTime > 0.4f)
+		{
+			isShooting = false;
+			isMoving = false;
+
+		}
+	}
 
 #pragma region 쿨타임 처리 부분
 	if (playerCanDamaged && shieldTime < shieldCooltime)
@@ -164,6 +197,8 @@ void Player::Update()
 
 void Player::CreateProjectile()
 {
+	isShooting = true;
+	m_shootDelayTime = 0.f;
 	Projectile* proj = new Projectile;
 	// set
 	Vec2 pos = GetPos();

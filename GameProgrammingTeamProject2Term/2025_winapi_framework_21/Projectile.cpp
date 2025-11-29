@@ -7,7 +7,7 @@ Projectile::Projectile()
 	: // m_dir(-1.f)
 	m_angle(0.f)
 {
-	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"bullet");
+	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerBullet");
 	auto* com = AddComponent<Collider>();
 	com->SetSize({ 20.f,20.f });
 	com->SetName(L"PlayerBullet");

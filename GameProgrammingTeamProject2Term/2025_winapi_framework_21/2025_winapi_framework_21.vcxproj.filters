@@ -237,6 +237,7 @@
     </ClInclude>
     <ClInclude Include="DeadFloor.h" />
     <ClInclude Include="FollowProjectile.h" />
+    <ClInclude Include="Explosion.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -392,5 +393,6 @@
     </ClCompile>
     <ClCompile Include="DeadFloor.cpp" />
     <ClCompile Include="FollowProjectile.cpp" />
+    <ClCompile Include="Explosion.cpp" />
   </ItemGroup>
 </Project>

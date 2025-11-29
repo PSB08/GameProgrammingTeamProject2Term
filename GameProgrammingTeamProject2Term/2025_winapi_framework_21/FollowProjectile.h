@@ -37,6 +37,8 @@ private:
     float m_waitTimerValue;
     float m_exploseTimer = 0.f;
     float m_exploseTimerValue;
+    float m_doExploseTimer = 0.f;
+    float m_doExploseTimerValue;
     bool m_exploseState = false;
     bool m_isfired = false;
 };

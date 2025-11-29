@@ -6,11 +6,13 @@
 #include "FollowProjectile.h"
 #include "Player.h"
 #include "Enums.h"
+#include "Explosion.h"
 
 FollowProjectile::FollowProjectile()
 	: m_angle(0.f),
 	m_waitTimerValue(1.f),
-	m_exploseTimerValue(1.f)
+	m_exploseTimerValue(1.f),
+	m_doExploseTimerValue(0.5f)
 {
 	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");  //바꿔야함
 	auto* com = AddComponent<Collider>();
@@ -35,15 +37,23 @@ void FollowProjectile::Update()
 		}
 		else
 		{
-			Translate({-(m_myPos.x - m_playerPos.x) * 2.f * fDT, -(m_myPos.y - m_playerPos.y) * 2.f * fDT }); // 위치벡터 구하기
+			Translate({-(m_myPos.x - m_playerPos.x) * 8.f * fDT, -(m_myPos.y - m_playerPos.y) * 8.f * fDT }); // 위치벡터 구하기
 		}
 	}
 	else
 	{
-		if (m_exploseTimer < m_exploseTimerValue)
+		if (m_exploseTimer > m_exploseTimerValue)
 		{
 			m_exploseTimer += fDT;
-			Explose();
+		}
+		else
+		{
+			if (m_doExploseTimer < m_doExploseTimerValue)
+			{
+				m_doExploseTimer += fDT;
+			}
+			else
+				Explose();
 		}
 	}
 
@@ -68,7 +78,10 @@ void FollowProjectile::Render(HDC _hdc)
 
 void FollowProjectile::Explose()
 {
-	cout << "Boom";
+	Explosion* exp = new Explosion();
+	exp->SetPos(GetPos());
+	GET_SINGLE(SceneManager)->GetCurScene()
+		->AddObject(exp, Layer::BOSSPROJECTILE);
 	SetDead();
 }
 
