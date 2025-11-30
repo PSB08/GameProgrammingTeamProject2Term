@@ -172,7 +172,33 @@ void Boss3::Pattern2()
 
 void Boss3::Pattern3()
 {
+    Vec2 pos = GetPos();
+    SetPos({640.f, pos.y});
+    m_fireTimer1 += fDT;
+    if (m_fireTimer1 < 0.02f) return;
+    m_fireTimer1 = 0.f;
 
+    Vec2 center = GetPos();
+
+    Vec2 dir = {  };
+
+    for (int i = 0; i < 15; i++)
+    {
+        float dx = rand() % 80 + 10;
+        float dy = rand() % 300 + 150;
+
+        if(i % 2 == 0)
+        dx *= -1;
+
+        auto* proj = new ExploseProjectile;
+        proj->SetPos(center);
+        proj->SetSize({ 30.f, 30.f });
+        proj->SetForce({dx, -dy});
+        proj->SetGravity(true);
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
+        m_isStartPhase = false;
+        m_curPattern = Boss3Pattern::PATTERN1;
+    }
 }
 
 void Boss3::Pattern4()
