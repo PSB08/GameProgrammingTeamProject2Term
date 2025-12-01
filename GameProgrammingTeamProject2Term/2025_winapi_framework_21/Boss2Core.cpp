@@ -13,11 +13,13 @@ Boss2Core::Boss2Core(Boss2* owner, int index)
     , m_collidable(false)
     , m_hp(1)
     , m_pTexture(nullptr)
+    , m_pBrokenTexture(nullptr)
     , m_collider(nullptr)
 {
     SetSize({ 60.f, 60.f });
 
-    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");
+    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Subcore");
+    m_pBrokenTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreak");
 
     m_collider = AddComponent<Collider>();
     m_collider->SetTrigger(true);
@@ -43,37 +45,37 @@ void Boss2Core::Update()
 
 void Boss2Core::Render(HDC _hdc)
 {
+    Texture* tex = nullptr;
+
+    if (m_isDead)
+        tex = m_pBrokenTexture ? m_pBrokenTexture : m_pTexture;
+    else
+        tex = m_pTexture;
+
+    if (!tex)
+        return;
+
     Vec2 pos = GetPos();
     Vec2 size = GetSize();
 
-    RECT rc =
-    {
-        (LONG)(pos.x - size.x / 2.f),
-        (LONG)(pos.y - size.y / 2.f),
-        (LONG)(pos.x + size.x / 2.f),
-        (LONG)(pos.y + size.y / 2.f)
-    };
+    int texW = tex->GetWidth();
+    int texH = tex->GetHeight();
 
-    if (m_isOpened)
-    {
-        HBRUSH b = CreateSolidBrush(RGB(255, 0, 0));
-        FillRect(_hdc, &rc, b);
-        DeleteObject(b);
-    }
-    else
-    {
-        HBRUSH brush = (HBRUSH)GetStockObject(NULL_BRUSH);
-        HBRUSH oldBrush = (HBRUSH)SelectObject(_hdc, brush);
+    int dx = (int)(pos.x - size.x / 2.f);
+    int dy = (int)(pos.y - size.y / 2.f);
+    int dw = (int)size.x;
+    int dh = (int)size.y;
 
-        HPEN pen = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
-        HPEN oldPen = (HPEN)SelectObject(_hdc, pen);
+    int sx = 0;
+    int sy = 0;
+    int sw = texW;
+    int sh = texH;
 
-        Rectangle(_hdc, rc.left, rc.top, rc.right, rc.bottom);
-
-        SelectObject(_hdc, oldPen);
-        DeleteObject(pen);
-        SelectObject(_hdc, oldBrush);
-    }
+    ::TransparentBlt(_hdc,
+        dx, dy, dw, dh,
+        tex->GetTextureDC(),
+        sx, sy, sw, sh,
+        RGB(0, 0, 0));
 
     ComponentRender(_hdc);
 }

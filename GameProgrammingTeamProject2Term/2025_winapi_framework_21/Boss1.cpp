@@ -11,20 +11,26 @@
 #include "Texture.h"
 
 Boss1::Boss1()
-    : m_angle1(0.f)
-    , m_angle2(0.f)
+    : m_isCorePhase(false)
+    , m_startDelayTimer(0.f)
+    , m_angle1(0.f)
     , m_fireTimer1(0.f)
+    , m_angle2(0.f)
     , m_fireTimer2(0.f)
     , m_laserLeftX(0.f)
     , m_laserRightX(WINDOW_WIDTH)
     , m_laserActive(false)
-    , m_isCorePhase(false)
     , m_animator(nullptr)
     , m_currLine(0)
     , m_totalLines(4)
+    , m_isDying(false)
+    , m_pDeathTexture(nullptr)
 {
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1");
+    m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1Core");  //파괴 되는 애니메이션으로
     m_animator = AddComponent<Animator>();
+
+    m_deathAnimName = L"boss1_death";
 
     if (m_pTexture && m_animator)
     {
@@ -55,6 +61,20 @@ void Boss1::UpdatePattern()
 {
     if (m_isCorePhase)
         return;
+
+    if (m_isDying)
+    {
+        if (m_animator)
+        {
+            Animation* curAnim = m_animator->GetCurrent();
+            if (curAnim && curAnim->IsFinished())
+            {
+                SetActiveBoss(false);
+                SpawnCore();
+            }
+        }
+        return;
+    }
 
     if (m_startDelayTimer < m_startDelay)
     {
@@ -175,12 +195,43 @@ void Boss1::Pattern3()
 void Boss1::EndPattern()
 {
     m_patternCount++;
-    m_isCooldown = true;
-    m_curPattern = Boss1Pattern::NONE;
 
-    if (m_patternCount >= m_maxPatternCount)
+    if (m_patternCount >= m_maxPatternCount && !m_isDying)
     {
-        SpawnCore();
+        StartDeathSequence();
+    }
+    else
+    {
+        m_isCooldown = true;
+        m_curPattern = Boss1Pattern::NONE;
+    }
+}
+
+void Boss1::StartDeathSequence()
+{
+    m_isDying = true;
+    m_isCooldown = false;
+    m_curPattern = Boss1Pattern::NONE;
+    m_patternTimer = 0.f;
+
+    if (m_animator)
+    {
+        if (m_pDeathTexture)
+        {
+            Vec2 slice = { 160.f, 160.f };
+            Vec2 step = { 160.f, 0.f };
+            m_animator->CreateAnimation(
+                m_deathAnimName,
+                m_pDeathTexture,
+                { 0.f, 0.f },
+                slice,
+                step,
+                1,
+                0.1f
+            );
+        }
+
+        m_animator->Play(m_deathAnimName, PlayMode::Once, 1, 1.f);
     }
 }
 
@@ -190,7 +241,7 @@ void Boss1::SpawnCore()
 
     auto* core = new Boss1Core(this);
     core->SetPos(GetPos());
-    core->SetSize({ 100.f, 100.f });
+    core->SetSize({ 1.f, 1.f });
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
 }
 

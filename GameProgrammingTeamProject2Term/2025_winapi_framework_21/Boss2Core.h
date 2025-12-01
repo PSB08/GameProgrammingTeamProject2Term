@@ -37,5 +37,6 @@ private:
     int       m_hp;
 
     Texture* m_pTexture;
+    Texture* m_pBrokenTexture;;
     Collider* m_collider;
 };

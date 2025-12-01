@@ -52,4 +52,10 @@ private:
     void SetupAnimations();
     void PlayNextLine();
     void OnAnimLineFinished();
+
+    bool m_isDying;
+    Texture* m_pDeathTexture;
+    std::wstring m_deathAnimName;
+
+    void StartDeathSequence();
 };
