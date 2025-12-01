@@ -591,9 +591,9 @@ void Boss2::EndPattern()
 
         Boss2Core* core = m_cores[m_nextCoreToOpen];
         if (core)
-            core->OpenCore();  //서브 코어 열기
-
-        ++m_nextCoreToOpen;  //인덱스 추가
+        {
+            core->OpenCore();  //열기
+        }
     }
 
     if (m_totalCoresDestroyed >= (int)m_cores.size())
@@ -622,6 +622,7 @@ void Boss2::NotifyCoreDestroyed(Boss2Core* core)
         m_areaCenter = GetPos();
     //센터를 core위치로 잡기
     ResetPatternState();  //초기화
+    ++m_nextCoreToOpen;
 }
 
 void Boss2::SpawnMainCore()

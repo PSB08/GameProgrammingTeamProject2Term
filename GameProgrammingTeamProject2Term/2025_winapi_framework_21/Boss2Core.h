@@ -4,10 +4,8 @@
 class Boss2;
 class Texture;
 class Collider;
+class Animator;
 
-// 서브 코어
-// - 처음엔 닫힘 상태(파란 테두리, 충돌 X)
-// - Boss2::OpenCore() 호출 시 빨간색으로 바뀌고, 충돌 가능
 class Boss2Core : public Enemy
 {
 public:
@@ -18,25 +16,43 @@ public:
     virtual void Render(HDC _hdc) override;
     virtual void EnterCollision(Collider* _other) override;
 
-    void OpenCore();            // 열어서 공격 가능 상태로 만들기
+    // 보스에서 호출해서 “코어 열기” (이때부터 3초 카운트 시작)
+    void OpenCore();
     bool IsOpened() const { return m_isOpened; }
 
-    void SetHP(int hp) { m_hp = hp; }
+    void SetHP(int hp) { m_hp = hp; m_maxHp = hp; }
 
 private:
-    void HandleDeath();
+    void HandleDeath();      // HP 0 → 완전 파괴 (돌아가지 않음)
+    void SetupAnimations();  // 애니메이션 생성
+    void ResetToIdle();      // 완전 닫힌 상태로 복귀
+
+    enum class CoreState
+    {
+        Idle,       // 닫힘 (맞을 수 없음)
+        Opened,     // 열림 (파괴 가능, 3초 타이머 진행)
+        Returning,  // 3초 버티고 살아남아서 돌아가는 애니 중
+        Breaking    // 총알 맞고 파괴될 때 애니 중 (끝나면 SetDead)
+    };
 
 private:
     Boss2* m_owner;
-    int       m_index;
+    int m_index;
 
-    bool      m_isOpened;
-    bool      m_isDead;
-    bool      m_collidable;     // true 일 때만 충돌 처리
+    bool m_isOpened;     // “열렸다” 플래그
+    bool m_collidable;   // 플레이어 총알 충돌 허용 여부
 
-    int       m_hp;
+    int m_hp;
+    int m_maxHp;
 
-    Texture* m_pTexture;
-    Texture* m_pBrokenTexture;;
+    Texture* m_pTexture;        // 일반/닫힌 상태 텍스처
+    Texture* m_pBrokenTexture;  // 열림/부서지는 텍스처
     Collider* m_collider;
+    Animator* m_animator;
+
+    CoreState m_state;
+
+    // 열려있는 상태 유지 타이머 (열린 순간부터 3초 세기)
+    float m_openTimer;
+    float m_openDuration; // 3.f
 };
