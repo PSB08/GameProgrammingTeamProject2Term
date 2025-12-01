@@ -47,7 +47,7 @@ void Boss2Core::Render(HDC _hdc)
 {
     Texture* tex = nullptr;
 
-    if (m_isDead)
+    if (m_isOpened)
         tex = m_pBrokenTexture ? m_pBrokenTexture : m_pTexture;
     else
         tex = m_pTexture;

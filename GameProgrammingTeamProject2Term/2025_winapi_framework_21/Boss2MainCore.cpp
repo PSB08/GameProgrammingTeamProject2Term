@@ -2,21 +2,58 @@
 #include "Boss2MainCore.h"
 #include "Collider.h"
 #include "SceneManager.h"
+#include "ResourceManager.h"
 #include "Boss1.h"
 #include "EventBus.h"
 
 Boss2MainCore::Boss2MainCore(Boss2* boss)
-	: m_owner(boss)
+    : m_owner(boss)
+    , m_pendingSceneChange(false)
+    , m_delay(0.f)
+    , m_pTexture(nullptr)
+    , m_animator(nullptr)
 {
-    //Texture 있어야 함
+    SetSize({ 100.f, 100.f });
+
+    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Maincore");
+
     Collider* col = AddComponent<Collider>();
     col->SetTrigger(true);
     col->SetName(L"Boss2MainCore");
-    SetSize({ 100.f, 100.f });
+
+    m_animator = AddComponent<Animator>();
+    if (m_pTexture && m_animator)
+        SetupAnimations();
 }
 
 Boss2MainCore::~Boss2MainCore()
 {
+}
+
+void Boss2MainCore::SetupAnimations()
+{
+    if (!m_pTexture || !m_animator)
+        return;
+
+    int texW = m_pTexture->GetWidth();
+    int texH = m_pTexture->GetHeight();
+
+    const int frameCount = texW / 160.f;
+
+    Vec2 sliceSize = { 160.f, 160.f };
+    Vec2 step = { 160.f, 0.f };
+
+    m_animator->CreateAnimation(
+        L"boss2MainCoreLoop",
+        m_pTexture,
+        { 0.f, 0.f },
+        sliceSize,
+        step,
+        frameCount,
+        0.1f
+    );
+
+    m_animator->Play(L"boss2MainCoreLoop", PlayMode::Loop, 1, 1.f);
 }
 
 void Boss2MainCore::Update()
@@ -32,6 +69,11 @@ void Boss2MainCore::Update()
 
         m_pendingSceneChange = false;
     }
+}
+
+void Boss2MainCore::Render(HDC _hdc)
+{
+    ComponentRender(_hdc);
 }
 
 void Boss2MainCore::EnterCollision(Collider* _other)

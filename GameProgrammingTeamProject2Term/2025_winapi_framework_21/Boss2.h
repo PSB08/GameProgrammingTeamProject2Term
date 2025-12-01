@@ -18,6 +18,7 @@ public:
     //서브 코어가 파괴될 때 호출 (Boss2Core -> Boss2)
     //어떤 코어가 죽었는지 알려주고, 그 위치 기준으로 코어 폭발 패턴(PATTERN3)을 발동
     void NotifyCoreDestroyed(Boss2Core* core);
+    void StartDeathSequence();
 
 private:
     //랜덤으로 다음 패턴을 선택
@@ -180,6 +181,9 @@ private:
 
     private:
         Animator* m_animator;
+        bool m_isDyingToCore;
+        Texture* m_pDeathTexture;
+        std::wstring m_deathAnimName;
 
         void SetupAnimations();
         void PlayIdle();

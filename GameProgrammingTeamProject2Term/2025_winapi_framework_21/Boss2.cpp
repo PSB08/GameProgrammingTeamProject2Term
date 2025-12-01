@@ -8,6 +8,7 @@
 #include "ResourceManager.h"
 #include "Scene.h"
 #include "Player.h"
+#include "Animation.h"
 #include <cmath>
 
 Boss2::Boss2()
@@ -17,11 +18,20 @@ Boss2::Boss2()
     , m_fireTimer1(0.f)
     , m_patternInitialized(false)
     , m_patternElapsed(0.f)
+    , m_animator(nullptr)
+    , m_isDyingToCore(false)
 {
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2");
 
+    m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Death");
+    if (!m_pDeathTexture)
+        m_pDeathTexture = m_pTexture;
+
     m_animator = AddComponent<Animator>();
-    SetupAnimations();
+    m_deathAnimName = L"boss2_death";
+
+    if (m_animator && m_pTexture)
+        SetupAnimations();
     PlayIdle();
 
     InitSpawnCore();
@@ -91,6 +101,19 @@ void Boss2::StartRandomPattern()
 
 void Boss2::UpdatePattern()
 {
+    if (m_isDyingToCore)
+    {
+        if (m_animator)
+        {
+            Animation* cur = m_animator->GetCurrent();
+            if (cur && cur->IsFinished())
+            {
+                SetActiveBoss(false);
+            }
+        }
+        return;
+    }
+
     if (m_isCorePhase)
         return;
 
@@ -191,7 +214,7 @@ void Boss2::Pattern1()
 
             BossProjectile* proj = new BossProjectile();
             proj->SetPos(pos);
-            proj->SetSize({ 14.f, 14.f });
+            proj->SetSize({ 20.f, 20.f });
             proj->SetSpeed(380.f);
             scene->AddObject(proj, Layer::BOSSPROJECTILE);
             m_pattern1Bullets.push_back(proj);
@@ -343,11 +366,19 @@ void Boss2::Pattern3()
 
     if (!m_patternInitialized)
     {
+        auto& bullets = scene->GetLayerObjects(Layer::BOSSPROJECTILE);
+
+        for (auto* obj : bullets)
+        {
+            if (!obj) continue;
+            obj->SetDead();
+        }
+
         m_patternInitialized = true;
         m_areaSpawned = false;
         m_areaLaunched = false;
         m_areaProjectiles.clear();
-    }  //초기화
+    }  //초기화 작업
 
     if (!m_areaSpawned)
     {
@@ -366,7 +397,7 @@ void Boss2::Pattern3()
 
             BossProjectile* proj = new BossProjectile();
             proj->SetPos(pos);
-            proj->SetSize({ 12.f, 12.f });
+            proj->SetSize({ 20.f, 20.f });
             proj->SetSpeed(400.f);
             scene->AddObject(proj, Layer::BOSSPROJECTILE);
             m_areaProjectiles.push_back(proj);  //생성하고 넣기
@@ -385,7 +416,7 @@ void Boss2::Pattern3()
             dir.x = center.x - pos.x;
             dir.y = center.y - pos.y;
             proj->Launch(dir);
-        }  //발사 시간되면 발사하기 - 2번하게 바꿀 생각임
+        }
         GET_SINGLE(SceneManager)->GetCurScene()->StartShake(2.f, 7.5f);
     }
 }
@@ -418,7 +449,7 @@ void Boss2::Pattern4()
 
             BossProjectile* proj = new BossProjectile();
             proj->SetPos(pos);
-            proj->SetSize({ 12.f, 12.f });
+            proj->SetSize({ 20.f, 20.f });
             proj->SetSpeed(420.f);
             scene->AddObject(proj, Layer::BOSSPROJECTILE);
 
@@ -518,7 +549,7 @@ void Boss2::Pattern5()
 
             BossProjectile* proj = new BossProjectile();
             proj->SetPos(pos);
-            proj->SetSize({ 10.f, 10.f });
+            proj->SetSize({ 20.f, 20.f });
             proj->SetSpeed(450.f);
             proj->Launch(dir);
 
@@ -554,7 +585,7 @@ void Boss2::EndPattern()
         return;  //초기화 작업
     }
 
-    if (m_patternsSinceLastCore >= 3 && m_nextCoreToOpen < (int)m_cores.size())  //만약 3번 했으면
+    if (m_patternsSinceLastCore >= 1 && m_nextCoreToOpen < (int)m_cores.size())  //만약 3번 했으면
     {
         m_patternsSinceLastCore = 0;  //초기화
 
@@ -601,6 +632,8 @@ void Boss2::SpawnMainCore()
     core->SetPos(GetPos());
     core->SetSize({ 100.f, 100.f });
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
+
+    StartDeathSequence();
 }
 
 // 서브 코어 4개 생성
@@ -703,4 +736,37 @@ void Boss2::PlayIdle()
         return;
 
     m_animator->Play(L"boss2Idle", PlayMode::Loop, 1, 1.f);
+}
+
+void Boss2::StartDeathSequence()
+{
+    if (m_isDyingToCore)
+        return;
+
+    m_isDyingToCore = true;
+    m_isCooldown = false;
+    m_curPattern = Boss2Pattern::NONE;
+    m_patternElapsed = 0.f;
+
+    if (!m_animator)
+        return;
+
+    Texture* tex = m_pDeathTexture ? m_pDeathTexture : m_pTexture;
+
+    Vec2 sliceSize = { 160.f, 160.f };
+    Vec2 step = { 160.f, 0.f };
+
+    int frameCount = tex->GetWidth() / (int)sliceSize.x;
+
+    m_animator->CreateAnimation(
+        m_deathAnimName,
+        tex,
+        { 0.f, 0.f },
+        sliceSize,
+        step,
+        frameCount,
+        0.08f
+    );
+
+    m_animator->Play(m_deathAnimName, PlayMode::Once, 1, 1.f);
 }
