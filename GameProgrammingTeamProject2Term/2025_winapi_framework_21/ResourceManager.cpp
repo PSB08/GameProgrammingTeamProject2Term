@@ -197,7 +197,10 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"boss2Maincore", L"Texture\\Boss2_Break-Sheet.bmp");
 	LoadTexture(L"bossBullet", L"Texture\\bossBullet.bmp");
 
-	LoadTexture(L"BackTest", L"Texture\\backtest1.bmp");
+	LoadTexture(L"BackTest1", L"Texture\\backtest1.bmp");
+	LoadTexture(L"BackTest2", L"Texture\\backtest2.bmp");
+	LoadTexture(L"BackTest3", L"Texture\\backtest3.bmp");
+	LoadTexture(L"BackTest4", L"Texture\\backtest4.bmp");
 
 	LoadTexture(L"PlayerMove", L"Texture\\PlayerMove.bmp");
 	LoadTexture(L"Player_Back", L"Texture\\Player_Back.bmp");
