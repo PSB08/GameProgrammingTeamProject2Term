@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Texture.h"
 
 class UIObject
 {
@@ -7,6 +8,7 @@ public:
     Vec2 m_pos;
     Vec2 m_size;
     wstring m_text;
+    Texture* m_texture = nullptr;
     FontType m_fontType = FontType::TITLE;
 
 public:

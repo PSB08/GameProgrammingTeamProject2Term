@@ -53,5 +53,26 @@ void UIButton::Render(HDC hdc)
     ::DeleteObject(brush);
     ::DeleteObject(hPen);
 
+    if (m_texture)
+    {
+        int dstW = r.right - r.left;
+        int dstH = r.bottom - r.top;
+
+        HDC memDC = m_texture->GetTextureDC();
+        int srcW = m_texture->GetWidth();
+        int srcH = m_texture->GetHeight();
+
+        TransparentBlt(
+            hdc,
+            r.left, r.top, dstW, dstH,
+            memDC,
+            0, 0, srcW, srcH,
+            RGB(0, 0, 0)
+        );
+
+        return;
+    }
+
+
     UIObject::Render(hdc);
 }

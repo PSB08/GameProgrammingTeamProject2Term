@@ -12,7 +12,7 @@ BossSelectScene::BossSelectScene()
     , m_btnBoss3(L"", nullptr)
     , m_btnTitle(L"", nullptr)
 {
-
+    
 }
 
 BossSelectScene::~BossSelectScene()
@@ -31,12 +31,16 @@ void BossSelectScene::Init()
     m_titleLabel.SetSize({ 800.f, 140.f });
     m_titleLabel.SetPos({ WINDOW_WIDTH / 2.f, 120.f });
 
-    float btnW = 100.f;
-    float btnH = 100.f;
-    float startX = 500.f;
+    float btnW = 150.f;
+    float btnH = 150.f;
+    float startX = 450.f;
+    float startY = 525.f;
     float gap = 50.f;
 
-    m_btnBoss1 = UIButton(L"Boss1", []()
+    m_btn1Texture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1Icon");
+    m_btn2Texture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Icon");
+
+    m_btnBoss1 = UIButton(m_btn1Texture, []()
         {
             //Boss1 ¾À
             GET_SINGLE(SceneManager)->LoadScene(L"BossScene");
@@ -44,7 +48,7 @@ void BossSelectScene::Init()
     m_btnBoss1.SetSize({ btnW, btnH });
     m_btnBoss1.SetPos({ startX, WINDOW_HEIGHT / 2.f });
 
-    m_btnBoss2 = UIButton(L"Boss2", []()
+    m_btnBoss2 = UIButton(m_btn2Texture, []()
         {
             //Boss2 ¾À
             GET_SINGLE(SceneManager)->LoadScene(L"Boss2Scene");
@@ -64,8 +68,8 @@ void BossSelectScene::Init()
         {
             GET_SINGLE(SceneManager)->LoadScene(L"TitleScene");
         });
-    m_btnTitle.SetSize({ 800.f, 70.f });
-    m_btnTitle.SetPos({ WINDOW_WIDTH / 2.f, startX + 50.f });
+    m_btnTitle.SetSize({ 600.f, 70.f });
+    m_btnTitle.SetPos({ startX + (btnW + gap), startY });
 
     auto data = GameData::GetInstance();
     m_btnBoss1.Interactable(!data->boss1Cleared);
@@ -88,6 +92,8 @@ void BossSelectScene::Render(HDC hdc)
     m_btnBoss2.Render(hdc);
     m_btnBoss3.Render(hdc);
     m_btnTitle.Render(hdc);
+
+    
 }
 
 void BossSelectScene::EventListener()

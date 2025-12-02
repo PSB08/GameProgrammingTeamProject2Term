@@ -24,6 +24,12 @@ public:
         m_text = text;  //버튼을 생성할 때 눌렀을 때 실행될 함수를 전달
     }
 
+    UIButton(Texture* texture, function<void()> cb)
+        : m_onClick(cb)
+    {
+        m_texture = texture;
+    }
+
     virtual void Update() override;
     virtual void Render(HDC hdc) override;
 

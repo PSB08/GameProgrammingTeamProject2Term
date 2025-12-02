@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "UIButton.h"
+#include "Texture.h"
 #include "EventBus.h"
 #include <memory>
 #include <iostream>
@@ -26,6 +27,10 @@ private:
     UIButton m_btnBoss2;
     UIButton m_btnBoss3;
     UIButton m_btnTitle;
+
+    Texture* m_btn1Texture = nullptr;
+    Texture* m_btn2Texture = nullptr;
+    Texture* m_btn3Texture = nullptr;
 
 private:
     EventBus::ListenerID m_boss1Listener;
