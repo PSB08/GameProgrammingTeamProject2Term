@@ -67,7 +67,7 @@ protected:
     float m_cooldownDuration = 3.f;
 
     int m_patternCount = 0;
-    const int m_maxPatternCount = 1;
+    const int m_maxPatternCount = 10;
 
     bool m_bossActive;
 };

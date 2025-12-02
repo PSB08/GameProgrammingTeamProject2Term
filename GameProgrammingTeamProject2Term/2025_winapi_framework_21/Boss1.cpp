@@ -62,31 +62,10 @@ void Boss1::UpdatePattern()
     if (m_isCorePhase)
         return;
 
-    if (m_isDying)
-    {
-        if (m_animator)
-        {
-            Animation* curAnim = m_animator->GetCurrent();
-            if (curAnim && curAnim->IsFinished())
-            {
-                SetActiveBoss(false);
-                SpawnCore();
-            }
-        }
-        return;
-    }
-
     if (m_startDelayTimer < m_startDelay)
     {
         m_startDelayTimer += fDT;
         return;
-    }
-
-    if (m_animator)
-    {
-        Animation* curAnim = m_animator->GetCurrent();
-        if (curAnim && curAnim->IsFinished())
-            OnAnimLineFinished();
     }
 
     m_patternTimer += fDT;
@@ -121,6 +100,54 @@ void Boss1::UpdatePattern()
     case Boss1Pattern::NONE:
         break;
     }
+}
+
+void Boss1::UpdateRender()
+{
+    if (m_isDying)
+    {
+        if (m_animator)
+        {
+            Animation* curAnim = m_animator->GetCurrent();
+            if (curAnim && curAnim->IsFinished())
+            {
+                SetActiveBoss(false);
+                SpawnCore();
+            }
+        }
+        return;
+    }
+
+    if (m_animator)
+    {
+        Animation* curAnim = m_animator->GetCurrent();
+        if (curAnim && curAnim->IsFinished())
+            OnAnimLineFinished();
+    }
+}
+
+//Boss1은 따로 구현
+void Boss1::Update()
+{
+    UpdateRender();
+
+    if (!m_bossActive)
+        return;
+
+    if (m_isCooldown)
+    {
+        m_cooldownTimer += fDT;
+        if (m_cooldownTimer >= m_cooldownDuration)
+        {
+            m_isCooldown = false;
+            m_cooldownTimer = 0.f;
+            StartRandomPattern();
+        }
+        return;
+    }
+
+    m_patternTimer += fDT;
+    UpdatePattern();
 }
 
 void Boss1::Pattern1()

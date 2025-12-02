@@ -189,6 +189,7 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"jiwoo", L"Texture\\jiwoo.bmp");
 	LoadTexture(L"boss1", L"Texture\\boss1.bmp");
 	LoadTexture(L"boss1Core", L"Texture\\Boss1_Break-Sheet.bmp");
+	LoadTexture(L"boss1CoreBreaking", L"Texture\\Boss1_Breaking-Sheet.bmp");
 
 	LoadTexture(L"boss2", L"Texture\\boss2.bmp");
 	LoadTexture(L"boss2Subcore", L"Texture\\Boss2_SubCore.bmp");

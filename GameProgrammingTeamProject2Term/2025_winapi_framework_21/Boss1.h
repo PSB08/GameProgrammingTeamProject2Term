@@ -16,6 +16,8 @@ private:
 
     // 패턴 실행
     void UpdatePattern() override;
+    void UpdateRender();
+    void Update() override;
 
     void EndPattern();
 
