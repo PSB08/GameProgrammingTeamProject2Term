@@ -39,7 +39,7 @@ void BossSelectScene::Init()
     m_btnBoss1 = UIButton(L"Boss1", []()
         {
             //Boss1 ¾À
-            GET_SINGLE(SceneManager)->LoadScene(L"TestBossScene");
+            GET_SINGLE(SceneManager)->LoadScene(L"BossScene");
         });
     m_btnBoss1.SetSize({ btnW, btnH });
     m_btnBoss1.SetPos({ startX, WINDOW_HEIGHT / 2.f });
@@ -47,7 +47,7 @@ void BossSelectScene::Init()
     m_btnBoss2 = UIButton(L"Boss2", []()
         {
             //Boss2 ¾À
-            GET_SINGLE(SceneManager)->LoadScene(L"TestBoss2Scene");
+            GET_SINGLE(SceneManager)->LoadScene(L"Boss2Scene");
         });
     m_btnBoss2.SetSize({ btnW, btnH });
     m_btnBoss2.SetPos({ startX + (btnW + gap), WINDOW_HEIGHT / 2.f });

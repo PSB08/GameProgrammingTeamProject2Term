@@ -40,6 +40,6 @@ void DevScene::Update()
 	Scene::Update();
 	// 엔터가 눌리면 씬을 변경
 	if (GET_KEY(KEY_TYPE::ENTER))
-		GET_SINGLE(SceneManager)->LoadScene(L"TestBossScene");
+		GET_SINGLE(SceneManager)->LoadScene(L"BossScene");
 }
 

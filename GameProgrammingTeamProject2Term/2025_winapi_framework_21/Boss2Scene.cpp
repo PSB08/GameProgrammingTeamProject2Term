@@ -1,18 +1,20 @@
 #include "pch.h"
-#include "TestBossScene.h"
+#include "Boss2Scene.h"
 #include "Object.h"
 #include "Player.h"
 #include "InputManager.h"
 #include "SceneManager.h"
-#include "Boss1.h"
+#include "Boss2.h"
 #include "CollisionManager.h"
 #include "ResourceManager.h"
 #include "Floor.h"
 #include "DeadFloor.h"
 
-void TestBossScene::Init()
+void Boss2Scene::Init()
 {
-	Object* obj = new Boss1;
+	m_pBackground = GET_SINGLE(ResourceManager)->GetTexture(L"BackTest");
+
+	Object* obj = new Boss2;
 	obj->SetPos({ WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 });
 	obj->SetSize({ 150,150 });
 
@@ -41,7 +43,26 @@ void TestBossScene::Init()
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PLAYER, Layer::DEFAULT);
 }
 
-void TestBossScene::Update()
+void Boss2Scene::Update()
 {
 	Scene::Update();
+}
+
+void Boss2Scene::Render(HDC hdc)
+{
+	if (m_pBackground)
+	{
+		HDC texDC = m_pBackground->GetTextureDC();
+		int texW = (int)m_pBackground->GetWidth();
+		int texH = (int)m_pBackground->GetHeight();
+		::StretchBlt(
+			hdc,
+			0, 0, WINDOW_WIDTH, WINDOW_HEIGHT,
+			texDC,
+			0, 0, texW, texH,
+			SRCCOPY
+		);
+	}
+
+	Scene::Render(hdc);
 }

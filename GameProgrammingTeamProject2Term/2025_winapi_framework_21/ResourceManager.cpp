@@ -197,6 +197,8 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"boss2Maincore", L"Texture\\Boss2_Break-Sheet.bmp");
 	LoadTexture(L"bossBullet", L"Texture\\bossBullet.bmp");
 
+	LoadTexture(L"BackTest", L"Texture\\backtest1.bmp");
+
 	LoadTexture(L"PlayerMove", L"Texture\\PlayerMove.bmp");
 	LoadTexture(L"Player_Back", L"Texture\\Player_Back.bmp");
 	LoadTexture(L"PlayerBullet", L"Texture\\PlayerBullet.bmp");

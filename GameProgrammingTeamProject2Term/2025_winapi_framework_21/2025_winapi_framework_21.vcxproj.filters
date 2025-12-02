@@ -193,7 +193,7 @@
     <ClInclude Include="Boss3Scene.h">
       <Filter>Engine\04. Scene\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="TestBossScene.h">
+    <ClInclude Include="BossScene.h">
       <Filter>Engine\04. Scene\Boss</Filter>
     </ClInclude>
     <ClInclude Include="BossSelectScene.h">
@@ -229,9 +229,6 @@
     <ClInclude Include="Boss2Core.h">
       <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClInclude>
-    <ClInclude Include="TestBoss2Scene.h">
-      <Filter>Engine\04. Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Boss2Laser.h">
       <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClInclude>
@@ -239,6 +236,9 @@
     <ClInclude Include="FollowProjectile.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Boss2Scene.h">
+      <Filter>Engine\04. Scene\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -353,7 +353,7 @@
     <ClCompile Include="Boss3Scene.cpp">
       <Filter>Engine\04. Scene\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="TestBossScene.cpp">
+    <ClCompile Include="BossScene.cpp">
       <Filter>Engine\04. Scene\Boss</Filter>
     </ClCompile>
     <ClCompile Include="BossSelectScene.cpp">
@@ -386,9 +386,6 @@
     <ClCompile Include="Boss2Core.cpp">
       <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClCompile>
-    <ClCompile Include="TestBoss2Scene.cpp">
-      <Filter>Engine\04. Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Boss2Laser.cpp">
       <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClCompile>
@@ -396,5 +393,8 @@
     <ClCompile Include="FollowProjectile.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Boss2Scene.cpp">
+      <Filter>Engine\04. Scene\Boss</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
