@@ -24,8 +24,6 @@ Boss2::Boss2()
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2");
 
     m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Death");
-    if (!m_pDeathTexture)
-        m_pDeathTexture = m_pTexture;
 
     m_animator = AddComponent<Animator>();
     m_deathAnimName = L"boss2_death";
@@ -175,7 +173,7 @@ void Boss2::UpdatePattern()
         if (m_patternElapsed > 4.f) EndPattern();
         break;
     case Boss2Pattern::PATTERN5:
-        if (m_patternElapsed > 4.f) EndPattern();
+        if (m_patternElapsed > 6.f) EndPattern();
         break;
     }
 }

@@ -15,18 +15,18 @@ Boss2Core::Boss2Core(Boss2* owner, int index)
     , m_collidable(false)
     , m_hp(1)
     , m_maxHp(1)
-    , m_pTexture(nullptr)
-    , m_pBrokenTexture(nullptr)
     , m_collider(nullptr)
     , m_animator(nullptr)
     , m_state(CoreState::Idle)
     , m_openTimer(0.f)
-    , m_openDuration(3.f)
+    , m_openDuration(5.f)
 {
     SetSize({ 60.f, 60.f });
 
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Subcore");
     m_pBrokenTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreak");
+    m_pBrokingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreak");
+    m_pReturnTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreak");
 
     m_collider = AddComponent<Collider>();
     m_collider->SetTrigger(true);
@@ -70,10 +70,10 @@ void Boss2Core::SetupAnimations()
             0.1f
         );
 
-        // 열렸다가 3초 버텨서 되돌아갈 때 애니메이션
+        // 열렸다가 되돌아갈 때 애니메이션
         m_animator->CreateAnimation(
             L"CoreReturn",
-            m_pTexture,
+            m_pReturnTexture,
             { 0.f, 0.f },
             slice,
             step,
@@ -104,7 +104,7 @@ void Boss2Core::SetupAnimations()
         // 총알 맞고 터질 때 애니메이션
         m_animator->CreateAnimation(
             L"CoreBreaking",
-            m_pBrokenTexture,
+            m_pBrokingTexture,
             { 0.f, 0.f },
             slice,
             step,
@@ -142,7 +142,7 @@ void Boss2Core::Update()
         break;
 
     case CoreState::Opened:
-        // 열려 있는 동안 3초 카운트
+        // 열려 있는 동안 5초 카운트
         m_openTimer += dt;
         if (m_openTimer >= m_openDuration)
         {

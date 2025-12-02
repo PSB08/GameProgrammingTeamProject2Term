@@ -52,15 +52,18 @@ private:
     //패턴 시작 전 대기 시간용 타이머
     float m_startDelayTimer = 0.f;
 
-    //패턴 시작 전 고정 대기 시간
+    //패턴 시작 전 고정 대기 시간(맨 처음에)
     const float m_startDelay = 3.f;
 
     //여러 패턴에서 공유하는 쿨타임 타이머
     float m_fireTimer1;
 
-    //현재 패턴이 초기화(탄 생성 세팅 등)를 이미 했는가
+    //현재 패턴이 초기화를 이미 했는가
     bool m_patternInitialized = false;
 
+
+private:
+    //-- 패턴 1 --
     //PATTERN1에서 보스 주변에 깔아둔 탄들을 저장
     std::vector<BossProjectile*> m_pattern1Bullets;
 
@@ -75,7 +78,10 @@ private:
 
     //PATTERN1 : 준비 시간 동안 탄을 생성하는 간격
     float m_pattern1SpawnInterval = 0.03f;
+    
 
+private:
+    //-- 패턴 2 --
     //위/아래에서 내려오거나 올라오는 Boss2Laser를 관리하기 위한 구조체
     struct VerticalLaser
     {
@@ -104,6 +110,9 @@ private:
     //위/아래 레이저 생성 사이 간격 시간
     float m_pattern2VerticalInterval = 1.2f;
 
+
+private:
+    //-- 패턴 4 --
     //보스 주변에 원형으로 배치된 탄 정보를 저장하는 구조체
     struct RingBullet
     {
@@ -127,6 +136,9 @@ private:
     //PATTERN4 : 링의 반지름
     float m_pattern4Radius = 160.f;
 
+
+private:
+    //-- 패턴 5 --
     //탄 발사 간격
     float m_pattern5ShotInterval = 0.12f;
 
@@ -136,6 +148,9 @@ private:
     //PATTERN5에서 한 패턴 동안 생성 가능한 최대 탄 수
     int m_pattern5MaxBullets = 90;
 
+
+private:
+    //-- 패턴 3 --
     //서브 코어 객체 리스트
     std::vector<Boss2Core*> m_cores;
 
@@ -179,13 +194,13 @@ private:
     //현재 패턴이 시작된 후 흐른 시간
     float m_patternElapsed = 0.f;
 
-    private:
-        Animator* m_animator;
-        bool m_isDyingToCore;
-        Texture* m_pDeathTexture;
-        std::wstring m_deathAnimName;
+private:
+        Animator* m_animator;  //애니메이터
+        bool m_isDyingToCore;  //죽었는가
+        Texture* m_pDeathTexture;  //죽었을 때 나오는 텍스처
+        std::wstring m_deathAnimName;  //애니메이션 이름
 
-        void SetupAnimations();
-        void PlayIdle();
+        void SetupAnimations();  //애니메이션 세팅
+        void PlayIdle();  //기본 애니메이션 시작
 
 };

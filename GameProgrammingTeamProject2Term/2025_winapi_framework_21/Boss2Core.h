@@ -45,8 +45,10 @@ private:
     int m_hp;
     int m_maxHp;
 
-    Texture* m_pTexture;        // 일반/닫힌 상태 텍스처
-    Texture* m_pBrokenTexture;  // 열림/부서지는 텍스처
+    Texture* m_pTexture = nullptr;        // 일반 상태
+    Texture* m_pBrokenTexture = nullptr;  // 열려 있을 때 
+    Texture* m_pBrokingTexture = nullptr;  // 부서 질 때
+    Texture* m_pReturnTexture = nullptr;  // 돌아갈 때 
     Collider* m_collider;
     Animator* m_animator;
 
@@ -54,5 +56,5 @@ private:
 
     // 열려있는 상태 유지 타이머 (열린 순간부터 3초 세기)
     float m_openTimer;
-    float m_openDuration; // 3.f
+    float m_openDuration; // 5.f
 };
