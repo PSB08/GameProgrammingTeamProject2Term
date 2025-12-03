@@ -53,8 +53,12 @@ void BaseWindow::createWindow()
     int winposx = (screenX - WINDOW_WIDTH) / 2;
     int winposy = (screenY - WINDOW_HEIGHT) / 2;
 
-    m_hWnd = ::CreateWindowW(L"GameP", L"2025 GameP", WS_OVERLAPPEDWINDOW,
-        winposx, winposy, WINDOW_WIDTH, WINDOW_HEIGHT, nullptr, nullptr, m_hInst, nullptr);
+    m_hWnd = ::CreateWindowW(L"GameP", L"2025 GameP", 
+        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+        winposx, winposy, 
+        WINDOW_WIDTH, WINDOW_HEIGHT, 
+        nullptr, nullptr, 
+        m_hInst, nullptr);
 
     RECT rtWindow = { winposx, winposy, winposx + WINDOW_WIDTH, winposy + WINDOW_HEIGHT };
     ::AdjustWindowRect(&rtWindow, WS_OVERLAPPEDWINDOW, false);

@@ -25,8 +25,8 @@ Boss2Core::Boss2Core(Boss2* owner, int index)
 
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Subcore");
     m_pBrokenTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreak");
-    m_pBrokingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreak");
-    m_pReturnTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreak");
+    m_pBrokingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreaking");
+    m_pReturnTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreReturn");
 
     m_collider = AddComponent<Collider>();
     m_collider->SetTrigger(true);
@@ -77,7 +77,7 @@ void Boss2Core::SetupAnimations()
             { 0.f, 0.f },
             slice,
             step,
-            frameCount,
+            frameCount + 1,
             0.06f
         );
     }
@@ -97,7 +97,7 @@ void Boss2Core::SetupAnimations()
             { 0.f, 0.f },
             slice,
             step,
-            frameCount,
+            frameCount - 1,
             0.08f
         );
 
@@ -108,7 +108,7 @@ void Boss2Core::SetupAnimations()
             { 0.f, 0.f },
             slice,
             step,
-            frameCount,
+            frameCount + 1,
             0.05f
         );
     }
@@ -139,6 +139,24 @@ void Boss2Core::Update()
     {
     case CoreState::Idle:
         // 닫혀있는 상태, 아무것도 안 함
+        break;
+
+    case CoreState::Opening:
+        //열리는 애니메이션이 끝났는지 체크
+        if (m_animator)
+        {
+            Animation* cur = m_animator->GetCurrent();
+            if (cur && cur->IsFinished())
+            {
+                // 이제 진짜 열린 상태
+                m_state = CoreState::Opened;
+                m_collidable = true;
+                m_openTimer = 0.f;
+
+                if (m_collider)
+                    m_collider->SetEnabled(true);
+            }
+        }
         break;
 
     case CoreState::Opened:
@@ -192,7 +210,6 @@ void Boss2Core::Update()
 
 void Boss2Core::Render(HDC _hdc)
 {
-    // 애니메이션이 알아서 그리게 함
     ComponentRender(_hdc);
 }
 
@@ -214,18 +231,23 @@ void Boss2Core::EnterCollision(Collider* _other)
 
 void Boss2Core::OpenCore()
 {
+    // 이미 죽는 중이면 무시
+    if (m_state == CoreState::Breaking)
+        return;
+
     // 보스가 코어를 열었을 때 호출됨
-    m_state = CoreState::Opened;
+    m_state = CoreState::Opening;
     m_isOpened = true;
-    m_collidable = true;
-    m_openTimer = 0.f;   //이 순간부터 3초 카운트 시작
+    m_collidable = false;
+    m_openTimer = 0.f;
+    m_hp = m_maxHp;
 
     if (m_collider)
-        m_collider->SetEnabled(true);
+        m_collider->SetEnabled(false);
 
-    // 파괴 가능 상태 애니메이션 재생
+    // 열리는 애니메이션 1회 재생
     if (m_animator)
-        m_animator->Play(L"CoreOpened", PlayMode::Loop, 1, 1.f);
+        m_animator->Play(L"CoreBreaking", PlayMode::Once, 1, 1.f);
 }
 
 void Boss2Core::HandleDeath()
@@ -242,7 +264,7 @@ void Boss2Core::HandleDeath()
         m_collider->SetEnabled(false);
 
     if (m_owner)
-        m_owner->NotifyCoreDestroyed(this); // Boss2 패턴 로직용
+        m_owner->NotifyCoreDestroyed(this); // Boss 패턴 로직용
 
     if (m_animator)
         m_animator->Play(L"CoreBreaking", PlayMode::Once, 1, 1.f);

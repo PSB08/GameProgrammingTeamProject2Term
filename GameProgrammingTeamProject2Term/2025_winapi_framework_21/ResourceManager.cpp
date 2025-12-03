@@ -195,14 +195,20 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"boss2", L"Texture\\boss2.bmp");
 	LoadTexture(L"boss2Icon", L"Texture\\boss2Icon.bmp");
 	LoadTexture(L"boss2Subcore", L"Texture\\Boss2_SubCore.bmp");
-	LoadTexture(L"boss2SubcoreBreak", L"Texture\\Boss2_SubCore_Break.bmp");
-	LoadTexture(L"boss2Maincore", L"Texture\\Boss2_Break-Sheet.bmp");
+	LoadTexture(L"boss2SubcoreBreak", L"Texture\\Boss2_SubCore_Break-sheet.bmp");
+	LoadTexture(L"boss2SubcoreBreaking", L"Texture\\Boss2_SubCore_Breaking-Sheet.bmp");
+	LoadTexture(L"boss2SubcoreReturn", L"Texture\\Boss2_SubCore_ReSpawn-sheet.bmp");
+	LoadTexture(L"boss2Maincore", L"Texture\\Boss2_Break-sheet.bmp");
+	LoadTexture(L"boss2Death", L"Texture\\Boss2_Breaking-sheet.bmp");
 	LoadTexture(L"bossBullet", L"Texture\\bossBullet.bmp");
 
 	LoadTexture(L"BackTest1", L"Texture\\backtest1.bmp");
 	LoadTexture(L"BackTest2", L"Texture\\backtest2.bmp");
 	LoadTexture(L"BackTest3", L"Texture\\backtest3.bmp");
 	LoadTexture(L"BackTest4", L"Texture\\backtest4.bmp");
+	LoadTexture(L"backtest5", L"Texture\\backtest5.bmp");
+
+	LoadTexture(L"Ground", L"Texture\\Ground.bmp");
 
 	LoadTexture(L"Speaker_On", L"Texture\\Speaker_N.bmp");
 	LoadTexture(L"Speaker_Off", L"Texture\\Speaker_S.bmp");

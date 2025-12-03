@@ -12,7 +12,7 @@
 
 void Boss2Scene::Init()
 {
-	m_pBackground = GET_SINGLE(ResourceManager)->GetTexture(L"BackTest4");
+	m_pBackground = GET_SINGLE(ResourceManager)->GetTexture(L"backtest5");
 
 	Object* obj = new Boss2;
 	obj->SetPos({ WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 });

@@ -227,7 +227,7 @@ void Boss2::Pattern1()
         for (BossProjectile* proj : m_pattern1Bullets)
         {
             if (!proj) continue;
-            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
+            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.5f, 7.5f);
             Vec2 pos = proj->GetPos();
             Vec2 dir;
             dir.x = pos.x - center.x;
@@ -400,6 +400,7 @@ void Boss2::Pattern3()
             scene->AddObject(proj, Layer::BOSSPROJECTILE);
             m_areaProjectiles.push_back(proj);  //생성하고 넣기
         }
+        GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
     }
 
     if (!m_areaLaunched && m_patternElapsed > m_areaWarningDuration)
@@ -415,7 +416,7 @@ void Boss2::Pattern3()
             dir.y = center.y - pos.y;
             proj->Launch(dir);
         }
-        GET_SINGLE(SceneManager)->GetCurScene()->StartShake(2.f, 7.5f);
+        GET_SINGLE(SceneManager)->GetCurScene()->StartShake(2.5f, 12.5f);
     }
 }
 
@@ -464,7 +465,7 @@ void Boss2::Pattern4()
         for (auto& rb : m_pattern4RingBullets)
         {
             if (!rb.proj) continue;
-            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
+            GET_SINGLE(SceneManager)->GetCurScene()->StartShake(2.5f, 12.5f);
 
             rb.angle += m_pattern4AngularSpeed * fDT;
 
@@ -710,6 +711,8 @@ void Boss2::UpdateCorePositions()
 
     #pragma endregion
 
+    #pragma region Animations
+
 void Boss2::SetupAnimations()
 {
     if (!m_animator || !m_pTexture)
@@ -755,7 +758,7 @@ void Boss2::StartDeathSequence()
     Vec2 sliceSize = { 160.f, 160.f };
     Vec2 step = { 160.f, 0.f };
 
-    int frameCount = tex->GetWidth() / (int)sliceSize.x;
+    int frameCount = 7;
 
     m_animator->CreateAnimation(
         m_deathAnimName,
@@ -769,3 +772,5 @@ void Boss2::StartDeathSequence()
 
     m_animator->Play(m_deathAnimName, PlayMode::Once, 1, 1.f);
 }
+
+    #pragma endregion
