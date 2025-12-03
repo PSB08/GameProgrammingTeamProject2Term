@@ -251,6 +251,12 @@
       <Filter>Engine\03. Object</Filter>
     </ClInclude>
     <ClInclude Include="BIgBullet.h" />
+    <ClInclude Include="Boss2Scene.h">
+      <Filter>Engine\04. Scene\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Engine\06. Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -414,5 +420,11 @@
       <Filter>Engine\03. Object</Filter>
     </ClCompile>
     <ClCompile Include="BIgBullet.cpp" />
+    <ClCompile Include="Boss2Scene.cpp">
+      <Filter>Engine\04. Scene\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Engine\06. Component</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

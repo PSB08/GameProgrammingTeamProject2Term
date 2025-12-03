@@ -8,11 +8,14 @@
 #include "CollisionManager.h"
 #include "ResourceManager.h"
 #include "Floor.h"
+#include "DeadFloor.h"
 #include "UpDownPlatform.h"
 #include "Button.h"
 
 void Boss3Scene::Init()
 {
+	m_pBackground = GET_SINGLE(ResourceManager)->GetTexture(L"BackTest1");
+
 	Object* obj = new Boss3;
 	obj->SetPos({ WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 });
 	obj->SetSize({ 150,150 });
@@ -49,6 +52,9 @@ void Boss3Scene::Init()
 			, { WINDOW_WIDTH / 2, 600 }
 	, { 100,100 });
 
+	Spawn<DeadFloor>
+		(Layer::DEFAULT, { WINDOW_WIDTH / 2, 700 }, { 1000, 1000 });
+
 #pragma region  콜라이더 충돌처리 하는 부분
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PROJECTILE, Layer::BOSS);
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PROJECTILE, Layer::BOSSCORE);
@@ -66,4 +72,23 @@ void Boss3Scene::Init()
 void Boss3Scene::Update()
 {
 	Scene::Update();
+}
+
+void Boss3Scene::Render(HDC hdc)
+{
+	if (m_pBackground)
+	{
+		HDC texDC = m_pBackground->GetTextureDC();
+		int texW = (int)m_pBackground->GetWidth();
+		int texH = (int)m_pBackground->GetHeight();
+		::StretchBlt(
+			hdc,
+			0, 0, WINDOW_WIDTH, WINDOW_HEIGHT,
+			texDC,
+			0, 0, texW, texH,
+			SRCCOPY
+		);
+	}
+
+	Scene::Render(hdc);
 }

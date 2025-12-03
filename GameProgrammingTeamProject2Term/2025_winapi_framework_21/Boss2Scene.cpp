@@ -33,7 +33,7 @@ void Boss2Scene::Init()
 	, { 100,100 });
 
 	Spawn<DeadFloor>
-		(Layer::DEFAULT, { WINDOW_WIDTH / 2, 700 }, { 100, 100 });
+		(Layer::DEFAULT, { WINDOW_WIDTH / 2, 700 }, { 1000, 1000 });
 
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PROJECTILE, Layer::BOSS);
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PROJECTILE, Layer::BOSSCORE);
