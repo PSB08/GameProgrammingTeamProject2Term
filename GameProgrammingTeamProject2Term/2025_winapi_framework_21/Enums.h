@@ -10,6 +10,7 @@ enum class Layer
 	PROJECTILE,
 	BOSSPROJECTILE,
 	LASER,
+	BUTTON,
 	END
 };
 

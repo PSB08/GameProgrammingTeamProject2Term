@@ -9,6 +9,7 @@
 #include "ResourceManager.h"
 #include "Floor.h"
 #include "UpDownPlatform.h"
+#include "Button.h"
 
 void Boss3Scene::Init()
 {
@@ -30,6 +31,18 @@ void Boss3Scene::Init()
 			, { WINDOW_WIDTH / 2, 450 }
 	, { 100,100 });
 
+	Spawn<UpDownPlatform>
+		(
+			Layer::DEFAULT
+			, { 320, 450 }
+	, { 100,100 });
+
+	Spawn<UpDownPlatform>
+		(
+			Layer::DEFAULT
+			, { 960, 450 }
+	, { 100,100 });
+
 	Spawn<Floor>
 		(
 			Layer::DEFAULT
@@ -44,6 +57,7 @@ void Boss3Scene::Init()
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PROJECTILE, Layer::DEFAULT);
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PLAYER, Layer::DEFAULT);
 	GET_SINGLE(CollisionManager)->CheckLayer(Layer::BOSSPROJECTILE, Layer::DEFAULT);
+	GET_SINGLE(CollisionManager)->CheckLayer(Layer::PLAYER, Layer::BUTTON);
 #pragma endregion
 
 

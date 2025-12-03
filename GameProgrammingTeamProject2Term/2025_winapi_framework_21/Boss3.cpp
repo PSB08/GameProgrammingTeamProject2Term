@@ -4,8 +4,10 @@
 #include "ExploseProjectile.h"
 #include "BossProjectile.h"
 #include "SceneManager.h"
+#include "BIgBullet.h"
 #include "Scene.h"
 #include "FollowProjectile.h"
+#include "EventBus.h"
 
 Boss3::Boss3()
     : m_isCorePhase(false),
@@ -15,7 +17,27 @@ Boss3::Boss3()
     m_fireTimer2(0.f),
     m_angle2(0.f)
 {     
+    debug = 0;
+
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+
     StartPattern();
+    for (int i = 0; i < 3; ++i)
+    {
+        Button* button = new Button(this);  //위치에 따라 생성
+
+        Vec2 pos;
+        pos.x = 320 * (i + 1);
+
+        button->SetPos(pos);
+        button->SetSize({ 60.f, 60.f });
+
+        scene->AddObject(button, Layer::BUTTON);
+
+        //m_cores.push_back(core);
+        //m_coreOffsets.push_back(offsets[i]);  //코어랑 위치 넣기
+    }
+    m_Buttons.clear();
 } 
 
 Boss3::~Boss3()
@@ -73,7 +95,7 @@ void Boss3::UpdatePattern()
         break;
     case Boss3Pattern::PATTERN4:
         Pattern4();
-        if (m_patternTimer > 0.1f)
+        if (m_patternTimer > 2.f)
         {
             EndPattern();
             m_curPattern = Boss3Pattern::PATTERN5;
@@ -82,7 +104,7 @@ void Boss3::UpdatePattern()
 
     case Boss3Pattern::PATTERN5:
         Pattern5();
-        if (m_patternTimer > 0.1f)
+        if (m_patternTimer > 1.f)
         {
             EndPattern();
             m_curPattern = Boss3Pattern::PATTERN1;
@@ -95,7 +117,10 @@ void Boss3::EndPattern()
 {
     m_isShotFollow = false;
     m_isCooldown = true;
+    debug = 0;
+    m_shotDealy = 0.f;
     m_patternTimer = 0.f;
+    m_doShake = false;
     if (m_patternCount >= m_maxPatternCount)
     {
         SpawnCore();
@@ -116,6 +141,7 @@ void Boss3::StartPattern()
     proj->SetPos(center);
     proj->SetSize({ 30.f, 30.f });
     proj->SetDir(dir);
+    proj->SetGravity(false);
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
     m_isStartPhase = false;
     m_curPattern = Boss3Pattern::PATTERN1;
@@ -172,20 +198,32 @@ void Boss3::Pattern2()
 
 void Boss3::Pattern3()
 {
+    Vec2 playerPos;
+    for (UINT i = 0; i < (UINT)Layer::END; ++i)
+    {
+        const auto& objects = GET_SINGLE(SceneManager)->GetCurScene()->GetLayerObjects((Layer)i);
+        for (Object* obj : objects)
+        {
+            if (!obj)
+                continue;
+            if ((Layer)i == Layer::PLAYER)
+                playerPos = obj->GetPos();
+        }
+    }
     Vec2 pos = GetPos();
-    SetPos({640.f, pos.y});
+    SetPos({ playerPos.x, pos.y});
     m_fireTimer1 += fDT;
-    if (m_fireTimer1 < 0.02f) return;
+    if (m_fireTimer1 < 0.1f) return;
     m_fireTimer1 = 0.f;
 
     Vec2 center = GetPos();
 
     Vec2 dir = {  };
 
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < 20; i++)
     {
         float dx = rand() % 80 + 10;
-        float dy = rand() % 300 + 150;
+        float dy = rand() % 300 + 250;
 
         if(i % 2 == 0)
         dx *= -1;
@@ -195,19 +233,45 @@ void Boss3::Pattern3()
         proj->SetSize({ 30.f, 30.f });
         proj->SetForce({dx, -dy});
         proj->SetGravity(true);
+        proj->SetDivision(true);
         GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
-        m_isStartPhase = false;
-        m_curPattern = Boss3Pattern::PATTERN1;
     }
+    m_curPattern = Boss3Pattern::PATTERN5;
 }
 
 void Boss3::Pattern4()
 {
+    m_shotDealy += fDT;
+    if (m_shotDealy < 0.15f) return;
 
+    float dx = rand() % 600 - 180;
+    int ran = rand() % 10 + 3;
+    Vec2 center = GetPos();
+    auto* proj = new ExploseProjectile;
+    proj->SetPos(center);
+    proj->SetSize({ 30.f, 30.f });
+    proj->SetDir({ dx, 1000.f });
+    proj->SetGravity(false);
+    proj->SetDivision(true);
+    proj->SetRigid(false);
+    proj->SetValue(ran);
+    GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
+
+    m_shotDealy = 0.f;
 }
 
 void Boss3::Pattern5()
 {
+    if (m_doShake == false)
+    {
+        GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.3f, 70.f);
+        EventBus::Invoke(L"PlayerBounce");
+        m_doShake = true;
+
+        auto* proj = new BIgBullet;
+        proj->SetDir({-150.f, 0.f});
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
+    }
 
 }
 
@@ -219,4 +283,11 @@ void Boss3::SpawnCore()
     core->SetPos(GetPos());
     core->SetSize({ 100.f, 100.f });
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
+}
+
+void Boss3::PressedButton()
+{
+    EndPattern();
+    cout << "P";
+    m_patternCount++;
 }

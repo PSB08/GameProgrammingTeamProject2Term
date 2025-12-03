@@ -43,7 +43,13 @@ void Rigidbody::FixedUpdate(float _fixedDT)
 	if (m_useGravity)
 	{
 		if (!m_grounded)
-			m_velocity += m_gravity * _fixedDT;
+		{
+			if(m_velocity.y > 0)
+				m_velocity += m_gravity * _fixedDT * 2.8f;
+			else
+				m_velocity += m_gravity * _fixedDT * 2.3f;
+
+		}
 		else
 			m_velocity.y = 0.f;
 	}

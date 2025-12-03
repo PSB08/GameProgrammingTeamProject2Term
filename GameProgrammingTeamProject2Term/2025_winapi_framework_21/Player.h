@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "Animator.h"
+#include "EventBus.h"
 class Texture;
 class Player : public Object
 {
@@ -42,9 +43,14 @@ private: //float변수
 	float JumpDelayTime;
 	float JumpTime;
 	float m_shootDelayTime;
+	float m_dashRecoverTimer = 0.f;
+private: // int 변수
+	int m_dashCount = 0;
+	int m_dashMaxCount = 2;
 private:
 	bool m_pendingSceneChange = false;
 	float m_delay = 0.f;
-
+private:
+	EventBus::ListenerID m_playerJumpListener;
 };
 

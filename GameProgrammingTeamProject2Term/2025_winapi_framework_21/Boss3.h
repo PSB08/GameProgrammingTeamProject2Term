@@ -1,6 +1,8 @@
 #pragma once
 #include "BossBase.h"
 #include "Enums.h"
+#include "Player.h"
+#include "Button.h"
 
 class Boss3 : public BossBase<Boss3Pattern>
 {
@@ -25,20 +27,27 @@ private:
     void Pattern4();   // 
     void Pattern5();   // 
     void SpawnCore();  // 기믹 클리어 후 코어 오픈
-
+public:
+    void PressedButton();
+private:
+    std::vector<Button*> m_Buttons;
 private:
     // 패턴용 변수들
     bool m_isCorePhase;
     bool m_isStartPhase;
+    float m_shotDealy = 0.f;
     float m_startDelayTimer = 0.f;  // 시작 지연용 타이머
     const float m_startDelay = 3.f;  //대기 타이머 - 3초 대기 후 패턴 시작함
     bool m_setPos = false;
     bool m_isShotFollow = false;
+    bool m_doShake = false;
 
     float m_angle1;
     float m_fireTimer1;
 
     float m_angle2;
     float m_fireTimer2;
+
+    int debug = 0;
 };
 

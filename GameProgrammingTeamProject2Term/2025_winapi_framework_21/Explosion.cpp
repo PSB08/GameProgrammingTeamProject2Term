@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Explosion.h"
 #include "Collider.h"
+#include "SceneManager.h"
 
 Explosion::Explosion()
 	: m_explosingTime(0.5f)
@@ -8,6 +9,7 @@ Explosion::Explosion()
 	auto* col = AddComponent <Collider>();
 	col->SetSize({ 500.f, 800.f });
 	col->SetName(L"Explosion");
+    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 100.f);
 }
 
 Explosion::~Explosion()

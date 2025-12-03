@@ -11,6 +11,7 @@
 #include "Animation.h"
 #include "Rigidbody.h"
 #include "SceneManager.h"
+#include "EventBus.h"
 
 Player::Player()
 	: m_pNormalTexture(nullptr),
@@ -22,7 +23,7 @@ Player::Player()
 	dashTime(0.f),
 	shieldTime(0.f),
 	InvincibleTime(0.f),
-	InvincibleHoldTime(0.5f),
+	InvincibleHoldTime(0.15f),
 	playerIsInvincibility(false),
 	JumpDelayTime(0.02f),
 	JumpTime(0.f),
@@ -32,31 +33,38 @@ Player::Player()
 {
 	m_pNormalTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerMove");
 	m_pShootingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"Player_Back");
-	AddComponent<Collider>();
+	auto* col = AddComponent<Collider>();
+	col->SetName(L"Player");
 	AddComponent<Animator>();
 	m_animator = GetComponent<Animator>();
 	m_animator->CreateAnimation
 	(L"playerMove"
 	,m_pNormalTexture
 	,{0.f,0.f}
-	,{32.f,32.f}
-	,{32.f,0.f}
+	,{64.f,64.f}
+	,{64.f,0.f}
 	,10,0.1f);
 
 	m_animator->CreateAnimation
 	(L"playerShoot"
 		, m_pShootingTexture
 		, { 0.f,0.f }
-		, { 160.f,160.f }
-		, { 160.f,0.f }
+		, { 64.f,64.f }
+		, { 64.f,0.f }
 	, 1, 0.1f);
 
 	m_animator->Play(L"playerMove");
 	AddComponent<Rigidbody>();
+
+	m_playerJumpListener = EventBus::AddListener(L"PlayerBounce", [this]()
+		{
+			PlayerBounce();
+		});
 }
 
 Player::~Player()
 {
+	EventBus::RemoveListener(L"PlayerBounce", m_playerJumpListener);
 }
 
 void Player::Render(HDC _hdc)
@@ -67,7 +75,7 @@ void Player::Render(HDC _hdc)
 	int height = m_pNormalTexture->GetHeight();
 
 	if (!playerCanDamaged)
-		ELLIPSE_RENDER(_hdc, pos.x, pos.y, width / 3, height / 3);
+		ELLIPSE_RENDER(_hdc, pos.x, pos.y, width / 10, height);
 
 	ComponentRender(_hdc);
 }
@@ -92,7 +100,8 @@ void Player::EnterCollision(Collider* _other)
 		|| _other->GetName() == L"BossProjectile")
 		&& !playerCanDamaged || playerIsInvincibility)
 	{
-		playerCanDamaged = true;
+		if(playerIsInvincibility == false)
+			playerCanDamaged = true;
 	}
 	else if (_other->GetName() == L"DeadFloor")
 	{
@@ -122,7 +131,8 @@ void Player::Update()
 	if (GET_KEY(KEY_TYPE::SPACE)) PlayerJump();
 	if (GET_KEY(KEY_TYPE::L) &&
 		playerCanDamaged && shieldTime >= shieldCooltime) PlayerShield();
-	if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime) PlayerDash();
+	if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime
+		&& m_dashCount < m_dashMaxCount) PlayerDash();
 
 	Rigidbody* rigid = GetComponent<Rigidbody>();
 
@@ -147,6 +157,21 @@ void Player::Update()
 	}
 
 #pragma region 쿨타임 처리 부분
+	if (m_dashCount > 0)
+	{
+		m_dashRecoverTimer += fDT;
+		if (m_dashCount <= 2)
+		{
+			if (m_dashRecoverTimer > 4.f)
+				m_dashCount--;
+		}
+		else
+		{
+			if (m_dashRecoverTimer > 6.5f)
+				m_dashCount--;
+		}
+	}
+
 	if (playerCanDamaged && shieldTime < shieldCooltime)
 	{
 		shieldTime += fDT;
@@ -217,7 +242,7 @@ void Player::CreateProjectile()
 void Player::PlayerJump()
 {
 	Rigidbody* rigid = GetComponent<Rigidbody>();
-	Vec2 jump = {0, -30};
+	Vec2 jump = {0, -40};
 	if (rigid->IsGrounded() && JumpTime > JumpDelayTime)
 	{
 		rigid->AddImpulse(jump * jumpPower);
@@ -237,6 +262,8 @@ void Player::PlayerDash()
 	playerIsInvincibility = true;
 	dashTime = 0.f;
 	InvincibleTime = 0.f;
+	m_dashCount++;
+	m_dashRecoverTimer = 0.f;
 }
 
 void Player::PlayerBounce()
@@ -244,13 +271,13 @@ void Player::PlayerBounce()
 	Rigidbody* rigid = GetComponent<Rigidbody>();
 	if (rigid->IsGrounded() && JumpTime > JumpDelayTime)
 	{
-		Vec2 jump = { 0, -55 };
+		Vec2 jump = { 0, -95 };
 		rigid->AddImpulse(jump * jumpPower);
 		rigid->SetGrounded(false);
 	}
-	else if (!rigid->IsGrounded() && JumpTime > JumpDelayTime)
+	else if (!rigid->IsGrounded())
 	{
-		Vec2 jump = { 0, -25 };
+		Vec2 jump = { 0, -55 };
 		rigid->AddImpulse(jump * jumpPower);
 	}
 

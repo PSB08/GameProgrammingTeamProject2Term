@@ -65,6 +65,12 @@
     <Filter Include="Engine\04. Scene\Boss">
       <UniqueIdentifier>{d4df8eb6-84be-4426-bcdc-e316066b3e12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Object\Gimcik">
+      <UniqueIdentifier>{663e9199-c041-44d3-a8bf-f264263946b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Projectile">
+      <UniqueIdentifier>{bc8139b9-dd3d-4c13-95af-5c319381f344}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2025_winapi_framework_21.h">
@@ -187,9 +193,6 @@
     <ClInclude Include="UISlider.h">
       <Filter>Engine\07. UI</Filter>
     </ClInclude>
-    <ClInclude Include="ExploseProjectile.h">
-      <Filter>Engine\03. Object</Filter>
-    </ClInclude>
     <ClInclude Include="Boss3Scene.h">
       <Filter>Engine\04. Scene\Boss</Filter>
     </ClInclude>
@@ -207,9 +210,6 @@
     </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>Engine\04. Scene\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="UpDownPlatform.h">
-      <Filter>Engine\03. Object</Filter>
     </ClInclude>
     <ClInclude Include="EventBus.h">
       <Filter>Engine\08. Module</Filter>
@@ -232,13 +232,25 @@
     <ClInclude Include="Boss2Laser.h">
       <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClInclude>
-    <ClInclude Include="DeadFloor.h" />
-    <ClInclude Include="FollowProjectile.h" />
-    <ClInclude Include="Explosion.h" />
-    <ClInclude Include="Effect.h" />
-    <ClInclude Include="Boss2Scene.h">
-      <Filter>Engine\04. Scene\Boss</Filter>
+    <ClInclude Include="UpDownPlatform.h">
+      <Filter>Engine\03. Object\Gimcik</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Engine\03. Object\Gimcik</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Engine\03. Object\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowProjectile.h">
+      <Filter>Engine\03. Object\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="ExploseProjectile.h">
+      <Filter>Engine\03. Object\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadFloor.h">
+      <Filter>Engine\03. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BIgBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -347,9 +359,6 @@
     <ClCompile Include="UISlider.cpp">
       <Filter>Engine\07. UI</Filter>
     </ClCompile>
-    <ClCompile Include="ExploseProjectile.cpp">
-      <Filter>Engine\03. Object</Filter>
-    </ClCompile>
     <ClCompile Include="Boss3Scene.cpp">
       <Filter>Engine\04. Scene\Boss</Filter>
     </ClCompile>
@@ -367,9 +376,6 @@
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>Engine\04. Scene\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="UpDownPlatform.cpp">
-      <Filter>Engine\03. Object</Filter>
     </ClCompile>
     <ClCompile Include="EventBus.cpp">
       <Filter>Engine\08. Module</Filter>
@@ -389,12 +395,24 @@
     <ClCompile Include="Boss2Laser.cpp">
       <Filter>Engine\03. Object\Boss\Boss2</Filter>
     </ClCompile>
-    <ClCompile Include="DeadFloor.cpp" />
-    <ClCompile Include="FollowProjectile.cpp" />
-    <ClCompile Include="Explosion.cpp" />
-    <ClCompile Include="Effect.cpp" />
-    <ClCompile Include="Boss2Scene.cpp">
-      <Filter>Engine\04. Scene\Boss</Filter>
+    <ClCompile Include="UpDownPlatform.cpp">
+      <Filter>Engine\03. Object\Gimcik</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Engine\03. Object\Gimcik</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Engine\03. Object\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowProjectile.cpp">
+      <Filter>Engine\03. Object\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ExploseProjectile.cpp">
+      <Filter>Engine\03. Object\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadFloor.cpp">
+      <Filter>Engine\03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BIgBullet.cpp" />
   </ItemGroup>
 </Project>

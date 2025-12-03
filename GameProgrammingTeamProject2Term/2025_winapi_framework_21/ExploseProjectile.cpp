@@ -14,11 +14,12 @@ ExploseProjectile::ExploseProjectile()
 	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");  //¹Ù²ã¾ßÇÔ
 
 	auto* com = AddComponent<Collider>();
-	AddComponent<Rigidbody>();
 	Vec2 size = GetSize();
 	com->SetSize(size);
 	com->SetName(L"ExploseProjectile");
 	com->SetTrigger(true);
+
+	AddComponent<Rigidbody>();
 
 }
 
@@ -28,7 +29,12 @@ ExploseProjectile::~ExploseProjectile()
 
 void ExploseProjectile::Update()
 {
-
+	if (m_useRigid == false)
+	{
+		auto* rigid = GetComponent<Rigidbody>();
+		rigid->SetUseGravity(false);
+		Translate({ m_dir * fDT * 400.f});
+	}
 	m_lifeTime += fDT;
 	m_delayTime += fDT;
 	if (m_lifeTime >= m_maxLifeTime)
@@ -58,24 +64,9 @@ void ExploseProjectile::Explose(int _value)
 {
 	Vec2 center = GetPos();
 
-	if (m_endDivision == false)
+	if (m_gravityExplosion == true)
 	{
-		if (m_gravityExplosion == false)
-		{
-			for (int i = 0; i < _value; i++)
-			{
-				float ang = (m_angle * PI / 180.f) + (PI * 2.f) * ((float)i / _value);
-				Vec2 dir = { cosf(ang), sinf(ang) };
-
-				auto* proj = new BossProjectile;
-				proj->SetPos(center);
-				proj->SetSize({ 20.f, 20.f });
-				proj->SetDir(dir);
-
-				GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
-			}
-		}
-		else
+		if (m_endDivision == true)
 		{
 			Rigidbody* _rb = GetComponent<Rigidbody>();
 			float dx = rand() + 50.f;
@@ -85,16 +76,30 @@ void ExploseProjectile::Explose(int _value)
 				Vec2 dir = { dx, -350.f };
 
 				auto* proj = new ExploseProjectile;
-				proj->SetPos({center.x, center.y});
+				proj->SetPos({ center.x, center.y });
 				proj->SetSize({ 10.f, 10.f });
-				proj->SetDivision(true);
+				proj->SetDivision(false);
+				proj->SetGravity(true);
 				proj->SetForce(dir);
 				GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
 			}
 		}
 	}
+	else
+	{
+		for (int i = 0; i < _value; i++)
+		{
+			float ang = (m_angle * PI / 180.f) + (PI * 2.f) * ((float)i / _value);
+			Vec2 dir = { cosf(ang), sinf(ang) };
 
+			auto* proj = new BossProjectile;
+			proj->SetPos(center);
+			proj->SetSize({ 20.f, 20.f });
+			proj->SetDir(dir);
 
+			GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
+		}
+	}
 }
 
 void ExploseProjectile::SetGravity(bool _value)
@@ -107,6 +112,16 @@ void ExploseProjectile::SetDivision(bool _value)
 	m_endDivision = _value;
 }
 
+void ExploseProjectile::SetRigid(bool _value)
+{
+	m_useRigid = _value;
+}
+
+void ExploseProjectile::SetValue(int _value)
+{
+	m_ExploseValue = _value;
+}
+
 void ExploseProjectile::SetForce(Vec2 _force)
 {
 	auto* rigid = GetComponent<Rigidbody>();
@@ -116,9 +131,9 @@ void ExploseProjectile::SetForce(Vec2 _force)
 
 void ExploseProjectile::EnterCollision(Collider* _other)
 {
-	if((_other->GetName() == L"Floor" || _other->GetName() == L"Player") && m_delayTime > 0.1f)
+	if((_other->GetName() == L"Floor" || _other->GetName() == L"Player" || _other->GetName() == L"Platform") && m_delayTime > 0.1f)
 	{
-		Explose(12);
+		Explose(m_ExploseValue);
 		SetDead();
 		return;
 	}
