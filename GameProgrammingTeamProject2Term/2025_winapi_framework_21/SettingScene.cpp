@@ -16,6 +16,7 @@ void SettingScene::Init()
 
     //슬라이더 - 브금
     m_lblBGM.SetFontType(FontType::TITLE);
+    m_lblBGM.SetFontColor(RGB(255, 255, 255));
     m_lblBGM.SetText(L"BGM Volume");
     m_lblBGM.SetPos({ centerX - 220.f, 200.f });
     m_lblBGM.SetSize({ 200.f, 40.f });
@@ -29,6 +30,7 @@ void SettingScene::Init()
 
     //슬라이더 - 이펙트
     m_lblEffect.SetFontType(FontType::TITLE);
+    m_lblEffect.SetFontColor(RGB(255, 255, 255));
     m_lblEffect.SetText(L"Effect Volume");
     m_lblEffect.SetPos({ centerX - 220.f, 300.f });
     m_lblEffect.SetSize({ 200.f, 40.f });
@@ -61,6 +63,11 @@ void SettingScene::Init()
 
     m_btnBack.SetSize({ 300.f, 60.f });
     m_btnBack.SetPos({ centerX, 500.f });
+
+    Texture* backNormal = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Normal");
+    Texture* backHover = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Hover");
+
+    m_btnBack.SetBackgroundTexture(backNormal, backHover);
 }
 
 void SettingScene::Update()

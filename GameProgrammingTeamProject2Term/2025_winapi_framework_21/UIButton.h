@@ -11,6 +11,9 @@ private:
     function<void()> m_onClick = nullptr; //버튼이 클릭되면 실행할 함수를 저장해 두는 콜백 역할
     //람다랑 함수 포인터를 쓸 수 있음
 
+    Texture* m_bgTexNormal = nullptr;
+    Texture* m_bgTexHover = nullptr;
+
     bool m_interactable = true;
     bool m_prevDown = false;
     bool m_hover = false;
@@ -28,6 +31,12 @@ public:
         : m_onClick(cb)
     {
         m_texture = texture;
+    }
+
+    void SetBackgroundTexture(Texture* normal, Texture* backHover = nullptr)
+    {
+        m_bgTexNormal = normal;
+        m_bgTexHover = backHover;
     }
 
     virtual void Update() override;

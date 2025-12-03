@@ -15,7 +15,11 @@ TitleScene::TitleScene()
 
 void TitleScene::Init()
 {
+    Texture* backNormal = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Normal");
+    Texture* backHover = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Hover");
+
     m_titleLabel.SetFontType(FontType::TITLE_BIG);
+    m_titleLabel.SetFontColor(RGB(255, 255, 255));
     m_titleLabel.SetText(L"게임 제목입니다");
     m_titleLabel.SetSize({ 800.f, 140.f });
     m_titleLabel.SetPos({ WINDOW_WIDTH / 2.f, 120.f });
@@ -46,6 +50,10 @@ void TitleScene::Init()
         });
     m_btnExit.SetSize({ btnW, btnH });
     m_btnExit.SetPos({ WINDOW_WIDTH / 2.f, startY + 2 * (btnH + gap) });
+
+    m_btnStart.SetBackgroundTexture(backNormal, backHover);
+    m_btnSettings.SetBackgroundTexture(backNormal, backHover);
+    m_btnExit.SetBackgroundTexture(backNormal, backHover);
 }
 
 void TitleScene::Update()

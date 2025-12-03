@@ -55,7 +55,7 @@ void Core::MainUpdate()
 void Core::MainRender()
 { 
 	//::Rectangle(m_hBackDC, -1, -1, WINDOW_WIDTH +1 , WINDOW_HEIGHT +1 );
-	::PatBlt(m_hBackDC, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, WHITENESS);
+	::PatBlt(m_hBackDC, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, BLACKNESS);
 	GET_SINGLE(SceneManager)->Render(m_hBackDC);
 	::BitBlt(m_hDC, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, m_hBackDC, 0, 0, SRCCOPY);
 }
@@ -64,20 +64,6 @@ void Core::MainRender()
 
 void Core::GameLoop()
 {
-	//time(NULL);
-	//clock();
-	//FrameSync();
-
-	/*static int cnt = 0;
-	++cnt;
-	static int prev = GetTickCount64();
-	int cur = GetTickCount64();
-	if (cur - prev >= 1000)
-	{
-	    prev = cur;
-	    cnt = 0;
-	}*/
-
 	MainUpdate();
 	MainRender();
 	GET_SINGLE(SceneManager)->GetCurScene()->FlushEvent();

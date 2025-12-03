@@ -13,7 +13,11 @@ DeadScene::DeadScene()
 
 void DeadScene::Init()
 {
+    Texture* backNormal = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Normal");
+    Texture* backHover = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Hover");
+
     m_titleLabel.SetFontType(FontType::TITLE_BIG);
+    m_titleLabel.SetFontColor(RGB(255, 255, 255));
     m_titleLabel.SetText(L"게임 오버");
     m_titleLabel.SetSize({ 800.f, 140.f });
     m_titleLabel.SetPos({ WINDOW_WIDTH / 2.f, 120.f });
@@ -43,6 +47,10 @@ void DeadScene::Init()
         });
     m_btnQuit.SetSize({ btnW, btnH });
     m_btnQuit.SetPos({ WINDOW_WIDTH / 2.f, startY + 2 * (btnH + gap) });
+
+    m_btnRetry.SetBackgroundTexture(backNormal, backHover);
+    m_btnTitle.SetBackgroundTexture(backNormal, backHover);
+    m_btnQuit.SetBackgroundTexture(backNormal, backHover);
 }
 
 void DeadScene::Update()

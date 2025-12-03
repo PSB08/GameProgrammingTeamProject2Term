@@ -39,19 +39,43 @@ void UIButton::Render(HDC hdc)
 {
     RECT r = GetRect();
 
-    HBRUSH brush = CreateSolidBrush(m_interactable ? RGB(255, 255, 255) : RGB(150, 150, 150));
-    HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, brush);
+    Texture* bgTex = m_bgTexNormal;
+    if (m_interactable && m_hover && m_bgTexHover)
+        bgTex = m_bgTexHover;
 
-    HPEN hPen = ::CreatePen(PS_SOLID, 2, m_hover ? RGB(255, 0, 0) : RGB(0, 0, 0));
-    HGDIOBJ oldPen = ::SelectObject(hdc, hPen);
+    if (bgTex)
+    {
+        int dstW = r.right - r.left;
+        int dstH = r.bottom - r.top;
 
-    ::Rectangle(hdc, r.left, r.top, r.right, r.bottom);
+        HDC memDC = bgTex->GetTextureDC();
+        int srcW = bgTex->GetWidth();
+        int srcH = bgTex->GetHeight();
 
-    ::SelectObject(hdc, oldBrush);
-    ::SelectObject(hdc, oldPen);
+        ::TransparentBlt(
+            hdc,
+            r.left, r.top, dstW, dstH,
+            memDC,
+            0, 0, srcW, srcH,
+            RGB(0, 0, 0)
+        );
+    }
+    else
+    {
+        HBRUSH brush = CreateSolidBrush(m_interactable ? RGB(255, 255, 255) : RGB(150, 150, 150));
+        HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, brush);
 
-    ::DeleteObject(brush);
-    ::DeleteObject(hPen);
+        HPEN hPen = ::CreatePen(PS_SOLID, 2, m_hover ? RGB(255, 0, 0) : RGB(0, 0, 0));
+        HGDIOBJ oldPen = ::SelectObject(hdc, hPen);
+
+        ::Rectangle(hdc, r.left, r.top, r.right, r.bottom);
+
+        ::SelectObject(hdc, oldBrush);
+        ::SelectObject(hdc, oldPen);
+
+        ::DeleteObject(brush);
+        ::DeleteObject(hPen);
+    }
 
     if (m_texture)
     {
@@ -73,6 +97,8 @@ void UIButton::Render(HDC hdc)
         return;
     }
 
-
+    Texture* savedTex = m_texture;
+    m_texture = nullptr;
     UIObject::Render(hdc);
+    m_texture = savedTex;
 }

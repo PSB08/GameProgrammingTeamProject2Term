@@ -10,6 +10,7 @@ public:
     wstring m_text;
     Texture* m_texture = nullptr;
     FontType m_fontType = FontType::TITLE;
+    COLORREF m_fontColor = RGB(0, 0, 0);
 
 public:
     virtual ~UIObject() {}
@@ -55,6 +56,8 @@ public:
             GDISelector selFont(hdc, m_fontType);
 
             int oldBk = SetBkMode(hdc, TRANSPARENT);
+            COLORREF oldColor = SetTextColor(hdc, m_fontColor);
+
             DrawTextW(
                 hdc,
                 m_text.c_str(),
@@ -62,6 +65,8 @@ public:
                 &r,
                 DT_CENTER | DT_VCENTER | DT_SINGLELINE
             );
+
+            SetTextColor(hdc, oldColor);
             SetBkMode(hdc, oldBk);
         }
     }
@@ -70,4 +75,5 @@ public:
     void SetPos(Vec2 v) { m_pos = v; }
     void SetSize(Vec2 v) { m_size = v; }
     void SetText(const wstring& t) { m_text = t; }
+    void SetFontColor(COLORREF color) { m_fontColor = color; }
 };

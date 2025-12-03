@@ -26,7 +26,11 @@ void BossSelectScene::Init()
 {
     EventListener();
 
+    Texture* backNormal = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Normal");
+    Texture* backHover = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Hover");
+
     m_titleLabel.SetFontType(FontType::TITLE_BIG);
+    m_titleLabel.SetFontColor(RGB(255, 255, 255));
     m_titleLabel.SetText(L"보스를 선택하세요");
     m_titleLabel.SetSize({ 800.f, 140.f });
     m_titleLabel.SetPos({ WINDOW_WIDTH / 2.f, 120.f });
@@ -75,6 +79,11 @@ void BossSelectScene::Init()
     m_btnBoss1.Interactable(!data->boss1Cleared);
     m_btnBoss2.Interactable(!data->boss2Cleared);
     m_btnBoss3.Interactable(!data->boss3Cleared);
+
+    //m_btnBoss1.SetBackgroundTexture(backNormal, backHover);
+    //m_btnBoss2.SetBackgroundTexture(backNormal, backHover);
+    //m_btnBoss3.SetBackgroundTexture(backNormal, backHover);
+    m_btnTitle.SetBackgroundTexture(backNormal, backHover);
 }
 
 void BossSelectScene::Update()
