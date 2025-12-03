@@ -204,6 +204,9 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"BackTest3", L"Texture\\backtest3.bmp");
 	LoadTexture(L"BackTest4", L"Texture\\backtest4.bmp");
 
+	LoadTexture(L"Speaker_On", L"Texture\\Speaker_N.bmp");
+	LoadTexture(L"Speaker_Off", L"Texture\\Speaker_S.bmp");
+
 	LoadTexture(L"PlayerMove", L"Texture\\PlayerMove.bmp");
 	LoadTexture(L"Player_Back", L"Texture\\Player_Back.bmp");
 	LoadTexture(L"PlayerBullet", L"Texture\\PlayerBullet.bmp");

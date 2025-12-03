@@ -92,8 +92,6 @@ void BossSelectScene::Render(HDC hdc)
     m_btnBoss2.Render(hdc);
     m_btnBoss3.Render(hdc);
     m_btnTitle.Render(hdc);
-
-    
 }
 
 void BossSelectScene::EventListener()

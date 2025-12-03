@@ -30,17 +30,40 @@ public:
     {
         RECT r = GetRect();
 
-        GDISelector selFont(hdc, m_fontType);
+        if (m_texture)
+        {
+            LONG texW = m_texture->GetWidth();
+            LONG texH = m_texture->GetHeight();
 
-        int oldBk = SetBkMode(hdc, TRANSPARENT);
-        DrawTextW(
-            hdc,
-            m_text.c_str(),
-            (int)m_text.size(),
-            &r,
-            DT_CENTER | DT_VCENTER | DT_SINGLELINE
-        );
-        SetBkMode(hdc, oldBk);
+            ::TransparentBlt(
+                hdc,
+                r.left, r.top,
+                r.right - r.left,
+                r.bottom - r.top,
+                m_texture->GetTextureDC(),
+                0, 0,
+                texW, texH,
+                RGB(0, 0, 0)
+            );
+
+            if (m_text.empty())
+                return;
+        }
+
+        if (!m_text.empty())
+        {
+            GDISelector selFont(hdc, m_fontType);
+
+            int oldBk = SetBkMode(hdc, TRANSPARENT);
+            DrawTextW(
+                hdc,
+                m_text.c_str(),
+                (int)m_text.size(),
+                &r,
+                DT_CENTER | DT_VCENTER | DT_SINGLELINE
+            );
+            SetBkMode(hdc, oldBk);
+        }
     }
 
     void SetFontType(FontType f) { m_fontType = f; }
