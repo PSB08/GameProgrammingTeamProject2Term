@@ -6,6 +6,9 @@ public:
     bool boss2Cleared = false;
     bool boss3Cleared = false;
 
+    float bgmVolume = 1.f;
+    float effectVolume = 1.f;
+
     static GameData* GetInstance()
     {
         static GameData instance;

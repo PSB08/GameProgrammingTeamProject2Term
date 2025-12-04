@@ -47,6 +47,7 @@ void BossSelectScene::Init()
     m_btnBoss1 = UIButton(m_btn1Texture, []()
         {
             //Boss1 ¾À
+            GET_SINGLE(ResourceManager)->Play(L"UIButton");
             GET_SINGLE(SceneManager)->LoadScene(L"BossScene");
         });
     m_btnBoss1.SetSize({ btnW, btnH });
@@ -55,6 +56,7 @@ void BossSelectScene::Init()
     m_btnBoss2 = UIButton(m_btn2Texture, []()
         {
             //Boss2 ¾À
+            GET_SINGLE(ResourceManager)->Play(L"UIButton");
             GET_SINGLE(SceneManager)->LoadScene(L"Boss2Scene");
         });
     m_btnBoss2.SetSize({ btnW, btnH });
@@ -63,6 +65,7 @@ void BossSelectScene::Init()
     m_btnBoss3 = UIButton(L"Boss3", []()
         {
             //Boss3 ¾À
+            GET_SINGLE(ResourceManager)->Play(L"UIButton");
             GET_SINGLE(SceneManager)->LoadScene(L"Boss3Scene");
         });
     m_btnBoss3.SetSize({ btnW, btnH });
@@ -70,6 +73,7 @@ void BossSelectScene::Init()
 
     m_btnTitle = UIButton(L"Å¸ÀÌÆ²·Î", []()
         {
+            GET_SINGLE(ResourceManager)->Play(L"UIButton");
             GET_SINGLE(SceneManager)->LoadScene(L"TitleScene");
         });
     m_btnTitle.SetSize({ 600.f, 70.f });

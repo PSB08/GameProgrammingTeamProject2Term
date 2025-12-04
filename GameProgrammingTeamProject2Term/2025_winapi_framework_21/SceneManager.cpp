@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "SceneManager.h"
-#include "DevScene.h"
 #include "BossScene.h"
 #include "Boss2Scene.h"
 #include "TitleScene.h"
@@ -42,7 +41,6 @@ void SceneManager::Init()
 	m_curSceneStop = false;
 	m_curScene = nullptr;
 	// ¾À µî·Ï
-	RegisterScene(L"DevScene",std::make_shared<DevScene>());
 	RegisterScene(L"BossScene",std::make_shared<BossScene>());
 	RegisterScene(L"Boss2Scene",std::make_shared<Boss2Scene>());
 	RegisterScene(L"TitleScene",std::make_shared<TitleScene>());

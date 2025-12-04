@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ResourceManager.h"
 #include "Texture.h"
+#include "GameData.h"
+
 bool ResourceManager::Init()
 {
 	//fs::path curPath  = fs::current_path();
@@ -21,6 +23,11 @@ bool ResourceManager::Init()
 	if (m_pSoundSystem != nullptr)
 		m_pSoundSystem->init(64, FMOD_INIT_NORMAL, nullptr);
 	RegisterSound();
+
+	auto data = GameData::GetInstance();
+	m_bgmVolume = data->bgmVolume;
+	m_effectVolume = data->effectVolume;
+
 	return true;
 }
 
@@ -154,7 +161,13 @@ void ResourceManager::Play(const wstring& _key)
 		m_curBGMKey = _key;
 	}
 
-	m_pSoundSystem->playSound(pSound->pSound, nullptr, false, &m_pChannel[idx]);
+	FMOD_RESULT r = m_pSoundSystem->playSound(pSound->pSound, nullptr, false, &m_pChannel[idx]);
+	if (r != FMOD_OK || !m_pChannel[idx])
+		return;
+
+	//새 채널에 저장된 볼륨 적용
+	float vol = GetSavedVolume(eChannel);
+	m_pChannel[idx]->setVolume(vol);
 }
 
 void ResourceManager::Stop(SOUND_CHANNEL _channel)
@@ -166,6 +179,27 @@ void ResourceManager::Stop(SOUND_CHANNEL _channel)
 
 void ResourceManager::Volume(SOUND_CHANNEL _channel, float _vol)
 {
+	_vol = std::clamp(_vol, 0.f, 1.f);
+
+	// 1) 내부 상태 저장
+	switch (_channel)
+	{
+	case SOUND_CHANNEL::BGM:
+		m_bgmVolume = _vol;
+		break;
+	case SOUND_CHANNEL::EFFECT:
+		m_effectVolume = _vol;
+		break;
+	default:
+		break;
+	}
+
+	// 2) GameData에도 반영 (세이브용)
+	auto data = GameData::GetInstance();
+	data->bgmVolume = m_bgmVolume;
+	data->effectVolume = m_effectVolume;
+
+	// 3) 현재 재생 중인 FMOD 채널에도 적용
 	FMOD::Channel* ch = m_pChannel[(UINT)_channel];
 	if (ch)
 		ch->setVolume(_vol);
@@ -189,14 +223,31 @@ SoundInfo* ResourceManager::FindSound(const wstring& _key)
 
 void ResourceManager::RegisterSound()
 {
-	LoadSound(L"BGM", L"Sound\\Retro_bgm.wav", true);
 	LoadSound(L"TITLEBGM", L"Sound\\TitleBgm.mp3", true);
 	LoadSound(L"BOSSSELECT", L"Sound\\BossSelect.mp3", true);
 	LoadSound(L"BOSS1BGM", L"Sound\\Boss1Bgm.mp3", true);
 	LoadSound(L"BOSS2BGM", L"Sound\\Boss2Bgm.mp3", true);
 	LoadSound(L"BOSS3BGM", L"Sound\\Boss3Bgm.mp3", true);
 
-	LoadSound(L"Shoot", L"Sound\\laserShoot.wav", false);
+	LoadSound(L"PlayerDie", L"Sound\\PlayerDie.mp3", false);
+	LoadSound(L"PlayerShoot", L"Sound\\PlayerGun.mp3", false);
+	LoadSound(L"EnemyShoot", L"Sound\\EnemyGun.mp3", false);
+	LoadSound(L"Laser", L"Sound\\Laser.mp3", false);
+	LoadSound(L"SubcoreDestroy", L"Sound\\SubcoreDestroy.mp3", false);
+	LoadSound(L"SubcoreReturn", L"Sound\\SubcoreReturn.mp3", false);
+	LoadSound(L"BossCoreDestroy", L"Sound\\BossCoreDestroy.mp3", false);
+	LoadSound(L"BossDie", L"Sound\\BossDie.mp3", false);
+	LoadSound(L"UIButton", L"Sound\\Button.mp3", false);
+}
+
+float ResourceManager::GetSavedVolume(SOUND_CHANNEL ch) const
+{
+	switch (ch)
+	{
+	case SOUND_CHANNEL::BGM:    return m_bgmVolume;
+	case SOUND_CHANNEL::EFFECT: return m_effectVolume;
+	default:                    return 1.f;
+	}
 }
 
 void ResourceManager::RegisterFont(FontType _type, const wstring& _name, int _height, int _weight, bool _italic, int _quality)

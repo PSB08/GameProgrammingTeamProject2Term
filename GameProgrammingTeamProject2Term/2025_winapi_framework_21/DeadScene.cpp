@@ -13,6 +13,8 @@ DeadScene::DeadScene()
 
 void DeadScene::Init()
 {
+    GET_SINGLE(ResourceManager)->Stop(SOUND_CHANNEL::BGM);
+    GET_SINGLE(ResourceManager)->Play(L"PlayerDie");
     Texture* backNormal = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Normal");
     Texture* backHover = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Hover");
 
@@ -29,6 +31,7 @@ void DeadScene::Init()
 
     m_btnRetry = UIButton(L"다시 시작", []()
         {
+            GET_SINGLE(ResourceManager)->Play(L"UIButton");
             GET_SINGLE(SceneManager)->LoadScene(L"BossSelectScene");
         });
     m_btnRetry.SetSize({ btnW, btnH });
@@ -36,6 +39,7 @@ void DeadScene::Init()
 
     m_btnTitle = UIButton(L"타이틀로", []()
         {
+            GET_SINGLE(ResourceManager)->Play(L"UIButton");
             GET_SINGLE(SceneManager)->LoadScene(L"TitleScene");
         });
     m_btnTitle.SetSize({ btnW, btnH });
@@ -43,6 +47,7 @@ void DeadScene::Init()
 
     m_btnQuit = UIButton(L"나가기", []()
         {
+            GET_SINGLE(ResourceManager)->Play(L"UIButton");
             PostQuitMessage(0);
         });
     m_btnQuit.SetSize({ btnW, btnH });
