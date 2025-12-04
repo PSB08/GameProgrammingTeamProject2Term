@@ -92,8 +92,8 @@ void Player::EnterCollision(Collider* _other)
 	}
 
 	if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" 
-		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"BigBullet" || _other->GetName() == L"ExploseProjectile")
-		|| _other->GetName() == L"Explosion"  && playerCanDamaged && !playerIsInvincibility)
+		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"BigBullet" || _other->GetName() == L"ExploseProjectile"
+		|| _other->GetName() == L"Explosion")  && playerCanDamaged && !playerIsInvincibility)
 	{
 		m_delay = 0.2f;
 		m_pendingSceneChange = true;
