@@ -14,6 +14,7 @@ public:
 	void Update() override;
 	void Render(HDC _hdc) override;
 	virtual void EnterCollision(Collider* _other)override;
+	virtual void StayCollision(Collider* _other)override;
 	virtual void ExitCollision(Collider* _other)override;
 private:
 	void CreateProjectile();
@@ -29,6 +30,7 @@ private:
 	Animator* m_animator;
 	Vec2 m_playerPos;
 	Rigidbody* m_rigid;
+	Player* m_owner;
 private: // bool º¯¼ö
 	bool playerCanDamaged;
 	bool playerIsInvincibility;
