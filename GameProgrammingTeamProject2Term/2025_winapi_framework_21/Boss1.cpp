@@ -170,7 +170,7 @@ void Boss1::Pattern1()
 
     m_angle1 += 25.f;
     if (m_angle1 >= 360.f) m_angle1 -= 360.f;
-    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 3.f);
+    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
 }
 
 void Boss1::Pattern2()
@@ -197,7 +197,7 @@ void Boss1::Pattern2()
 
     m_angle2 += 10.f;
     if (m_angle2 >= 360.f) m_angle2 -= 360.f;
-    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 3.f);
+    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
 }
 
 void Boss1::Pattern3()

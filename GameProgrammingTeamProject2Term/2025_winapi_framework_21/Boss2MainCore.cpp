@@ -38,7 +38,7 @@ void Boss2MainCore::SetupAnimations()
     int texW = m_pTexture->GetWidth();
     int texH = m_pTexture->GetHeight();
 
-    const int frameCount = 8;
+    const int frameCount = 7;
 
     Vec2 sliceSize = { 160.f, 160.f };
     Vec2 step = { 160.f, 0.f };
