@@ -15,7 +15,12 @@ Rigidbody::Rigidbody()
 	, m_accelation(0.f, 0.f)     // 가속도
 	, m_grounded(false)          // 접지 여부
 {
+	if (m_grounded == false)
+	{
+		cout << '.';
+	}
 }
+
 Rigidbody::~Rigidbody()
 {
 }
