@@ -38,6 +38,7 @@ Player::Player()
 	col->SetName(L"Player");
 	col->SetSize({32.f,40.f});
 	AddComponent<Animator>();
+	AddComponent<Rigidbody>();
 	m_animator = GetComponent<Animator>();
 	m_animator->CreateAnimation
 	(L"playerMove"
@@ -61,7 +62,9 @@ Player::Player()
 		{
 			PlayerBounce();
 		});
-	m_rigid = AddComponent<Rigidbody>();
+	m_rigid = GetComponent<Rigidbody>();
+	if(m_owner == nullptr)
+		m_owner = this;
 }
 
 Player::~Player()
@@ -92,15 +95,14 @@ void Player::EnterCollision(Collider* _other)
 	}
 
 	if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" 
-		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"BigBullet" || _other->GetName() == L"ExploseProjectile"
-		|| _other->GetName() == L"Explosion")  && playerCanDamaged && !playerIsInvincibility)
+		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"ExploseProjectile")
+		&& playerCanDamaged && !playerIsInvincibility)
 	{
 		m_delay = 0.2f;
 		m_pendingSceneChange = true;
 	}
 	else if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" 
-		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"BigBullet" || _other->GetName() == L"ExploseProjectile" ||
-		_other->GetName() == L"Explosion")
+		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"ExploseProjectile" )
 		&& !playerCanDamaged || playerIsInvincibility)
 	{
 		if(playerIsInvincibility == false)
@@ -110,6 +112,22 @@ void Player::EnterCollision(Collider* _other)
 	{
 		m_delay = 0.2f;
 		m_pendingSceneChange = true;
+	}
+}
+
+void Player::StayCollision(Collider* _other)
+{
+	if ((_other->GetName() == L"BigBullet" || _other->GetName() == L"Explosion")
+		&& playerCanDamaged && !playerIsInvincibility)
+	{
+		m_delay = 0.2f;
+		m_pendingSceneChange = true;
+	}
+	else if (( _other->GetName() == L"BigBullet" || _other->GetName() == L"Explosion")
+		&& !playerCanDamaged || playerIsInvincibility)
+	{
+		if (playerIsInvincibility == false)
+			playerCanDamaged = true;
 	}
 }
 
@@ -269,6 +287,7 @@ void Player::PlayerDash()
 void Player::PlayerBounce()
 {
 	auto* rid = GetComponent<Rigidbody>();
+	//rid->SetOwner(this);
 	if (rid == nullptr)
 	{
 		return;
