@@ -218,6 +218,8 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"PlayerMove", L"Texture\\PlayerMove.bmp");
 	LoadTexture(L"Player_Back", L"Texture\\Player_Back.bmp");
 	LoadTexture(L"PlayerBullet", L"Texture\\PlayerBullet.bmp");
+
+	LoadTexture(L"Button", L"Texture\\Button.bmp");
 }
 
 

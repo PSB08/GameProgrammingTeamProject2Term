@@ -2,6 +2,7 @@
 #include "Object.h"
 
 class Boss3;
+class Texture;
 
 class Button :
     public Object
@@ -15,5 +16,6 @@ public:
     virtual void EnterCollision(Collider* _other)override;
 private:
     Boss3* m_owner;
+    Texture* m_Texture;
 };
 

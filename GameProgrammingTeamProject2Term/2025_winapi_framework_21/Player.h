@@ -2,6 +2,8 @@
 #include "Object.h"
 #include "Animator.h"
 #include "EventBus.h"
+#include "Rigidbody.h"
+
 class Texture;
 class Player : public Object
 {
@@ -26,6 +28,7 @@ private:
 	Texture* m_pShootingTexture;
 	Animator* m_animator;
 	Vec2 m_playerPos;
+	Rigidbody* m_rigid;
 private: // bool º¯¼ö
 	bool playerCanDamaged;
 	bool playerIsInvincibility;

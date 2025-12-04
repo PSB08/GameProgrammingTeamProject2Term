@@ -33,6 +33,8 @@ Player::Player()
 {
 	m_pNormalTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerMove");
 	m_pShootingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"Player_Back");
+	m_rigid = AddComponent<Rigidbody>();
+	//m_rigid->SetOwner(this);
 	auto* col = AddComponent<Collider>();
 	col->SetName(L"Player");
 	AddComponent<Animator>();
@@ -54,7 +56,6 @@ Player::Player()
 	, 1, 0.1f);
 
 	m_animator->Play(L"playerMove");
-	AddComponent<Rigidbody>();
 
 	m_playerJumpListener = EventBus::AddListener(L"PlayerBounce", [this]()
 		{
@@ -84,8 +85,7 @@ void Player::EnterCollision(Collider* _other)
 {
 	if (_other->GetName() == L"Floor" || _other->GetName() == L"Platform")
 	{
-		Rigidbody* rb = GetComponent<Rigidbody>();
-		rb->SetGrounded(true);
+		m_rigid->SetGrounded(true);
 		JumpTime = 0.f;
 	}
 
@@ -114,14 +114,14 @@ void Player::ExitCollision(Collider* _other)
 {
 	if (_other->GetName() == L"Floor" || _other->GetName() == L"Platform")
 	{
-		Rigidbody* rb = GetComponent<Rigidbody>();
-		rb->SetGrounded(false);
+		m_rigid->SetGrounded(false);
 		JumpTime = 0.f;
 	}
 }
 
 void Player::Update()
 {
+	m_rigid->SetOwner(this);
 	Vec2 dir = {};
 	Animation* cur = m_animator->GetCurrent();
 	if (GET_KEY(KEY_TYPE::A)) dir.x -= (1.f * dashPower);
@@ -133,9 +133,6 @@ void Player::Update()
 		playerCanDamaged && shieldTime >= shieldCooltime) PlayerShield();
 	if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime
 		&& m_dashCount < m_dashMaxCount) PlayerDash();
-
-	Rigidbody* rigid = GetComponent<Rigidbody>();
-
 	if (!isShooting)
 	{
 		if (!isMoving)
@@ -180,7 +177,7 @@ void Player::Update()
 	{
 		dashTime += fDT;
 	}
-	if (JumpTime < JumpDelayTime && rigid->IsGrounded())
+	if (JumpTime < JumpDelayTime && m_rigid->IsGrounded())
 	{
 		JumpTime += fDT;
 	}
@@ -268,18 +265,21 @@ void Player::PlayerDash()
 
 void Player::PlayerBounce()
 {
-	Rigidbody* rigid = GetComponent<Rigidbody>();
-	if (rigid->IsGrounded() && JumpTime > JumpDelayTime)
-	{
-		Vec2 jump = { 0, -95 };
-		rigid->AddImpulse(jump * jumpPower);
-		rigid->SetGrounded(false);
-	}
-	else if (!rigid->IsGrounded())
-	{
-		Vec2 jump = { 0, -55 };
-		rigid->AddImpulse(jump * jumpPower);
-	}
+	//m_rigid = AddComponent<Rigidbody>();
+
+
+		if (m_rigid->IsGrounded() && JumpTime > JumpDelayTime)
+		{
+			Vec2 jump = { 0, -95 };
+			m_rigid->AddImpulse(jump * jumpPower);
+			m_rigid->SetGrounded(false);
+		}
+		else if (!m_rigid->IsGrounded())
+		{
+			Vec2 jump = { 0, -55 };
+			m_rigid->AddImpulse(jump * jumpPower);
+		}
+
 
 }
 
