@@ -47,7 +47,7 @@ private:
 
     float m_angle2;
     float m_fireTimer2;
-
-    int debug = 0;
+    
+    float m_position = 0.f;
 };
 

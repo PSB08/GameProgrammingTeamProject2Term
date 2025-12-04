@@ -17,7 +17,6 @@ Boss3::Boss3()
     m_fireTimer2(0.f),
     m_angle2(0.f)
 {     
-    debug = 0;
 
     std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
 
@@ -117,7 +116,6 @@ void Boss3::EndPattern()
 {
     m_isShotFollow = false;
     m_isCooldown = true;
-    debug = 0;
     m_shotDealy = 0.f;
     m_patternTimer = 0.f;
     m_doShake = false;
@@ -150,7 +148,6 @@ void Boss3::StartPattern()
 void Boss3::Pattern1()
 {
     Vec2 pos = GetPos();
-    float position = 0.f;
     float nowPosition = pos.x;
 
     while (!m_setPos)
@@ -159,20 +156,20 @@ void Boss3::Pattern1()
         switch (randPos)
         {
         case 0:
-            position = 320.f;
+            m_position = 320.f;
             break;
         case 1:
-            position = 640.f;
+            m_position = 640.f;
             break;
         case 2:
-            position = 960.f;
+            m_position = 960.f;
             break;
         }
 
-        if (nowPosition != position)
+        if (nowPosition != m_position)
         {
             m_setPos = true;
-            SetPos({ position, pos.y });
+            SetPos({ m_position, pos.y });
             break;
         }
 
@@ -241,10 +238,12 @@ void Boss3::Pattern3()
 
 void Boss3::Pattern4()
 {
+    SetPos({ m_position, 180.f });
+
     m_shotDealy += fDT;
     if (m_shotDealy < 0.15f) return;
 
-    float dx = rand() % 600 - 180;
+    float dx = rand() % 1000 - 500;
     int ran = rand() % 10 + 3;
     Vec2 center = GetPos();
     auto* proj = new ExploseProjectile;
