@@ -207,6 +207,7 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"BackTest3", L"Texture\\backtest3.bmp");
 	LoadTexture(L"BackTest4", L"Texture\\backtest4.bmp");
 	LoadTexture(L"backtest5", L"Texture\\backtest5.bmp");
+	LoadTexture(L"backtest6", L"Texture\\backtest6.bmp");
 
 	LoadTexture(L"Ground", L"Texture\\Ground.bmp");
 
