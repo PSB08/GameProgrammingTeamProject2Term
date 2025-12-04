@@ -10,11 +10,12 @@ TitleScene::TitleScene()
     , m_btnSettings(L"", nullptr)
     , m_btnExit(L"", nullptr)
 {
-    //GET_SINGLE(ResourceManager)->Play(L"BGM");
+    
 }
 
 void TitleScene::Init()
 {
+    GET_SINGLE(ResourceManager)->Play(L"TITLEBGM");
     Texture* backNormal = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Normal");
     Texture* backHover = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Hover");
 

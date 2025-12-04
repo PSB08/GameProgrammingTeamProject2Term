@@ -67,6 +67,6 @@ private:
 	vector<wstring> m_vecFontFiles;
 	std::unordered_map<wstring, SoundInfo*> m_mapSounds;
 	FMOD::System* m_pSoundSystem; // 사운드 시스템
-	
+	wstring m_curBGMKey;
 };
 

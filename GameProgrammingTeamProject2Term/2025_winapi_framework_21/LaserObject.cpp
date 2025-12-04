@@ -54,5 +54,4 @@ void LaserObject::Render(HDC _hdc)
 
 void LaserObject::EnterCollision(Collider* _other)
 {
-    cout << "EnterCollision" << endl;
 }

@@ -12,6 +12,7 @@
 
 void Boss2Scene::Init()
 {
+	GET_SINGLE(ResourceManager)->Play(L"BOSS2BGM");
 	m_pBackground = GET_SINGLE(ResourceManager)->GetTexture(L"Backtest5");
 
 	Object* obj = new Boss2;

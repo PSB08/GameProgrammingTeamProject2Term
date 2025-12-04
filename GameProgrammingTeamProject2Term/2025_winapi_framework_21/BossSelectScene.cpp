@@ -25,7 +25,7 @@ BossSelectScene::~BossSelectScene()
 void BossSelectScene::Init()
 {
     EventListener();
-
+    GET_SINGLE(ResourceManager)->Play(L"BOSSSELECT");
     Texture* backNormal = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Normal");
     Texture* backHover = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Hover");
 

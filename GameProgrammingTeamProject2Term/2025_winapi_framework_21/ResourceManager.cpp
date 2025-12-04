@@ -131,33 +131,53 @@ void ResourceManager::LoadSound(const wstring& _key, const wstring& _path, bool 
 void ResourceManager::Play(const wstring& _key)
 {
 	SoundInfo* pSound = FindSound(_key);
-	if (!pSound)
+	if (!pSound || !m_pSoundSystem)
 		return;
-	SOUND_CHANNEL eChannel = SOUND_CHANNEL::BGM;
-	if (!pSound->IsLoop)
-		eChannel = SOUND_CHANNEL::EFFECT;
-	// 사운드 재생 함수. &channel로 어떤 채널을 통해 재생되는지 포인터 넘김
-	m_pSoundSystem->playSound(pSound->pSound, nullptr, false, &m_pChannel[(UINT)eChannel]);
 
+	SOUND_CHANNEL eChannel = pSound->IsLoop ? SOUND_CHANNEL::BGM : SOUND_CHANNEL::EFFECT;
+	UINT idx = (UINT)eChannel;
+
+	if (pSound->IsLoop)
+	{
+		// 같은 BGM이면 그냥 무시
+		if (m_curBGMKey == _key)
+			return;
+
+		if (m_pChannel[idx])
+		{
+			bool isPlaying = false;
+			m_pChannel[idx]->isPlaying(&isPlaying);
+			if (isPlaying)
+				m_pChannel[idx]->stop();
+		}
+
+		m_curBGMKey = _key;
+	}
+
+	m_pSoundSystem->playSound(pSound->pSound, nullptr, false, &m_pChannel[idx]);
 }
 
 void ResourceManager::Stop(SOUND_CHANNEL _channel)
 {
-	m_pChannel[(UINT)_channel]->stop();
-
+	FMOD::Channel* ch = m_pChannel[(UINT)_channel];
+	if (ch)
+		ch->stop();
 }
 
 void ResourceManager::Volume(SOUND_CHANNEL _channel, float _vol)
 {
-	// 0.0 ~ 1.0 볼륨 조절
-	m_pChannel[(UINT)_channel]->setVolume(_vol);
-
+	FMOD::Channel* ch = m_pChannel[(UINT)_channel];
+	if (ch)
+		ch->setVolume(_vol);
 }
 
 void ResourceManager::Pause(SOUND_CHANNEL _channel, bool _ispause)
 {
-	m_pChannel[(UINT)_channel]->setPaused(_ispause);
+	FMOD::Channel* ch = m_pChannel[(UINT)_channel];
+	if (ch)
+		ch->setPaused(_ispause);
 }
+
 SoundInfo* ResourceManager::FindSound(const wstring& _key)
 {
 	std::unordered_map<wstring, SoundInfo*>::iterator iter = m_mapSounds.find(_key);
@@ -170,6 +190,12 @@ SoundInfo* ResourceManager::FindSound(const wstring& _key)
 void ResourceManager::RegisterSound()
 {
 	LoadSound(L"BGM", L"Sound\\Retro_bgm.wav", true);
+	LoadSound(L"TITLEBGM", L"Sound\\TitleBgm.mp3", true);
+	LoadSound(L"BOSSSELECT", L"Sound\\BossSelect.mp3", true);
+	LoadSound(L"BOSS1BGM", L"Sound\\Boss1Bgm.mp3", true);
+	LoadSound(L"BOSS2BGM", L"Sound\\Boss2Bgm.mp3", true);
+	LoadSound(L"BOSS3BGM", L"Sound\\Boss3Bgm.mp3", true);
+
 	LoadSound(L"Shoot", L"Sound\\laserShoot.wav", false);
 }
 

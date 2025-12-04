@@ -14,6 +14,7 @@
 
 void Boss3Scene::Init()
 {
+	GET_SINGLE(ResourceManager)->Play(L"BOSS3BGM");
 	m_pBackground = GET_SINGLE(ResourceManager)->GetTexture(L"Backtest6");
 
 	Object* obj = new Boss3;
