@@ -269,7 +269,9 @@ void Boss3::Pattern5()
         m_doShake = true;
 
         auto* proj = new BIgBullet;
-        proj->SetDir({-150.f, 0.f});
+        proj->SetPos({1400.f, 500.f});
+        proj->SetSize({ 500.f, 500.f });
+        proj->SetDir({-150.f, 500.f});
         GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
     }
 

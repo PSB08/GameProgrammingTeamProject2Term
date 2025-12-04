@@ -8,7 +8,7 @@ BIgBullet::BIgBullet()
 {
 	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"bossBullet");
 	auto* com = AddComponent<Collider>();
-	com->SetSize({ 50.f,50.f });
+	com->SetSize({ 500.f,500.f });
 	com->SetName(L"BigBullet");
 	com->SetTrigger(true);
 }
@@ -31,7 +31,7 @@ void BIgBullet::Update()
 		return;
 	}
 
-	Translate({ m_dir.x * 400.f * fDT, m_dir.y * 0.f * fDT });
+	Translate({ m_dir.x * 1200.f * fDT, m_dir.y * 0.f * fDT });
 }
 
 void BIgBullet::Render(HDC _hdc)
