@@ -33,10 +33,10 @@ Player::Player()
 {
 	m_pNormalTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerMove");
 	m_pShootingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"Player_Back");
-	m_rigid = AddComponent<Rigidbody>();
 	//m_rigid->SetOwner(this);
 	auto* col = AddComponent<Collider>();
 	col->SetName(L"Player");
+	col->SetSize({32.f,40.f});
 	AddComponent<Animator>();
 	m_animator = GetComponent<Animator>();
 	m_animator->CreateAnimation
@@ -61,11 +61,13 @@ Player::Player()
 		{
 			PlayerBounce();
 		});
+	m_rigid = AddComponent<Rigidbody>();
 }
 
 Player::~Player()
 {
 	EventBus::RemoveListener(L"PlayerBounce", m_playerJumpListener);
+	m_rigid->SetOwner(nullptr);
 }
 
 void Player::Render(HDC _hdc)
@@ -90,14 +92,15 @@ void Player::EnterCollision(Collider* _other)
 	}
 
 	if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" 
-		|| _other->GetName() == L"BossProjectile")
-		&& playerCanDamaged && !playerIsInvincibility)
+		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"BigBullet" || _other->GetName() == L"ExploseProjectile")
+		|| _other->GetName() == L"Explosion"  && playerCanDamaged && !playerIsInvincibility)
 	{
 		m_delay = 0.2f;
 		m_pendingSceneChange = true;
 	}
 	else if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" 
-		|| _other->GetName() == L"BossProjectile")
+		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"BigBullet" || _other->GetName() == L"ExploseProjectile" ||
+		_other->GetName() == L"Explosion")
 		&& !playerCanDamaged || playerIsInvincibility)
 	{
 		if(playerIsInvincibility == false)
@@ -238,12 +241,12 @@ void Player::CreateProjectile()
 
 void Player::PlayerJump()
 {
-	Rigidbody* rigid = GetComponent<Rigidbody>();
+	m_rigid = GetComponent<Rigidbody>();
 	Vec2 jump = {0, -40};
-	if (rigid->IsGrounded() && JumpTime > JumpDelayTime)
+	if (m_rigid->IsGrounded() && JumpTime > JumpDelayTime)
 	{
-		rigid->AddImpulse(jump * jumpPower);
-		rigid->SetGrounded(false); 
+		m_rigid->AddImpulse(jump * jumpPower);
+		m_rigid->SetGrounded(false); 
 	}
 }
 
@@ -265,21 +268,21 @@ void Player::PlayerDash()
 
 void Player::PlayerBounce()
 {
-	//m_rigid = AddComponent<Rigidbody>();
-
-
-		if (m_rigid->IsGrounded() && JumpTime > JumpDelayTime)
-		{
-			Vec2 jump = { 0, -95 };
-			m_rigid->AddImpulse(jump * jumpPower);
-			m_rigid->SetGrounded(false);
-		}
-		else if (!m_rigid->IsGrounded())
-		{
-			Vec2 jump = { 0, -55 };
-			m_rigid->AddImpulse(jump * jumpPower);
-		}
-
-
+	auto* rid = GetComponent<Rigidbody>();
+	if (rid == nullptr)
+	{
+		return;
+	}
+	if (rid->IsGrounded() && JumpTime > JumpDelayTime)
+	{
+		Vec2 jump = { 0, -95 };
+		rid->AddImpulse(jump * jumpPower);
+		rid->SetGrounded(false);
+	}
+	else if (!m_rigid->IsGrounded())
+	{
+		Vec2 jump = { 0, -55 };
+		rid->AddImpulse(jump * jumpPower);
+	}
 }
 

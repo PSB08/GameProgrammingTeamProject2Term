@@ -266,13 +266,14 @@ void Boss3::Pattern5()
     {
         GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.3f, 70.f);
         EventBus::Invoke(L"PlayerBounce");
-        m_doShake = true;
 
         auto* proj = new BIgBullet;
         proj->SetPos({1400.f, 500.f});
         proj->SetSize({ 500.f, 500.f });
         proj->SetDir({-150.f, 500.f});
         GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
+
+        m_doShake = true;
     }
 
 }
