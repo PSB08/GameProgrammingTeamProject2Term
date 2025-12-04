@@ -195,6 +195,7 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"boss2", L"Texture\\boss2.bmp");
 	LoadTexture(L"boss2Icon", L"Texture\\boss2Icon.bmp");
 	LoadTexture(L"boss2Subcore", L"Texture\\Boss2_SubCore.bmp");
+	LoadTexture(L"boss2SubcoreDeath", L"Texture\\Boss2_SubCore_Death-sheet.bmp");
 	LoadTexture(L"boss2SubcoreBreak", L"Texture\\Boss2_SubCore_Break-sheet.bmp");
 	LoadTexture(L"boss2SubcoreBreaking", L"Texture\\Boss2_SubCore_Breaking-Sheet.bmp");
 	LoadTexture(L"boss2SubcoreReturn", L"Texture\\Boss2_SubCore_ReSpawn-sheet.bmp");
@@ -206,8 +207,8 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"BackTest2", L"Texture\\backtest2.bmp");
 	LoadTexture(L"BackTest3", L"Texture\\backtest3.bmp");
 	LoadTexture(L"BackTest4", L"Texture\\backtest4.bmp");
-	LoadTexture(L"backtest5", L"Texture\\backtest5.bmp");
-	LoadTexture(L"backtest6", L"Texture\\backtest6.bmp");
+	LoadTexture(L"Backtest5", L"Texture\\backtest5.bmp");
+	LoadTexture(L"Backtest6", L"Texture\\backtest6.bmp");
 
 	LoadTexture(L"Ground", L"Texture\\Ground.bmp");
 

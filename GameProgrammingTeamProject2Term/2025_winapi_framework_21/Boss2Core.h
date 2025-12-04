@@ -47,6 +47,7 @@ private:
     int m_maxHp;
 
     Texture* m_pTexture = nullptr;        // 일반 상태
+    Texture* m_pDeathTexture = nullptr;        // 죽을 때
     Texture* m_pBrokenTexture = nullptr;  // 열려 있을 때 
     Texture* m_pBrokingTexture = nullptr;  // 부서 질 때
     Texture* m_pReturnTexture = nullptr;  // 돌아갈 때 

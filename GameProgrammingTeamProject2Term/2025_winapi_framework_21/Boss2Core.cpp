@@ -24,6 +24,7 @@ Boss2Core::Boss2Core(Boss2* owner, int index)
     SetSize({ 60.f, 60.f });
 
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Subcore");
+    m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreDeath");
     m_pBrokenTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreak");
     m_pBrokingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreBreaking");
     m_pReturnTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2SubcoreReturn");
@@ -110,6 +111,24 @@ void Boss2Core::SetupAnimations()
             step,
             frameCount + 1,
             0.05f
+        );
+    }
+
+    if (m_pDeathTexture)
+    {
+        int texH = m_pDeathTexture->GetHeight();
+
+        Vec2 slice = { frameW, (float)texH };
+        Vec2 step = { frameW, 0.f };
+
+        m_animator->CreateAnimation(
+            L"Death",
+            m_pDeathTexture,
+            { 0.f, 0.f },
+            slice,
+            step,
+            10,
+            0.08f
         );
     }
 
@@ -267,5 +286,5 @@ void Boss2Core::HandleDeath()
         m_owner->NotifyCoreDestroyed(this); // Boss 패턴 로직용
 
     if (m_animator)
-        m_animator->Play(L"CoreBreaking", PlayMode::Once, 1, 1.f);
+        m_animator->Play(L"Death", PlayMode::Once, 1, 1.f);
 }
