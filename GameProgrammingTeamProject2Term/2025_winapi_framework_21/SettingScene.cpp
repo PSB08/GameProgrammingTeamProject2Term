@@ -14,18 +14,14 @@ void SettingScene::Init()
 {
     float centerX = WINDOW_WIDTH / 2.f;
 
-    // =========================
     // BGM 라벨
-    // =========================
     m_lblBGM.SetFontType(FontType::TITLE);
     m_lblBGM.SetFontColor(RGB(255, 255, 255));
     m_lblBGM.SetText(L"BGM Volume");
     m_lblBGM.SetPos({ centerX - 220.f, 200.f });
     m_lblBGM.SetSize({ 200.f, 40.f });
 
-    // =========================
     // BGM 슬라이더
-    // =========================
     m_sliderBGM.SetPos({ centerX + 100.f, 200.f });
     m_sliderBGM.SetSize({ 300.f, 30.f });
 
@@ -33,27 +29,21 @@ void SettingScene::Init()
     float bgmVol = GET_SINGLE(ResourceManager)->GetSavedVolume(SOUND_CHANNEL::BGM);
     m_sliderBGM.SetValue(bgmVol);
 
-    // =========================
     // EFFECT 라벨
-    // =========================
     m_lblEffect.SetFontType(FontType::TITLE);
     m_lblEffect.SetFontColor(RGB(255, 255, 255));
     m_lblEffect.SetText(L"Effect Volume");
     m_lblEffect.SetPos({ centerX - 220.f, 300.f });
     m_lblEffect.SetSize({ 200.f, 40.f });
 
-    // =========================
     // EFFECT 슬라이더
-    // =========================
     m_sliderEffect.SetPos({ centerX + 100.f, 300.f });
     m_sliderEffect.SetSize({ 300.f, 30.f });
 
     float effVol = GET_SINGLE(ResourceManager)->GetSavedVolume(SOUND_CHANNEL::EFFECT);
     m_sliderEffect.SetValue(effVol);
 
-    // =========================
     // 사운드 아이콘 위치/사이즈
-    // =========================
     m_imgBGMIcon.SetPos({ centerX - 100.f, 200.f });
     m_imgBGMIcon.SetSize({ 40.f, 40.f });
 
@@ -68,9 +58,7 @@ void SettingScene::Init()
     m_imgBGMIcon.m_texture = (bgmVol > 0.f) ? m_texVolumeOn : m_texVolumeOff;
     m_imgEffectIcon.m_texture = (effVol > 0.f) ? m_texVolumeOn : m_texVolumeOff;
 
-    // =========================
     // 뒤로가기 버튼
-    // =========================
     m_btnBack = UIButton(L"뒤로가기", []()
         {
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
