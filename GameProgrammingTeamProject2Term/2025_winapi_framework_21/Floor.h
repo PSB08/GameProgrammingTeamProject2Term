@@ -12,5 +12,6 @@ public:
     void Render(HDC _hdc) override;
 private:
     Texture* m_texFloor = nullptr;
+    Vec2 m_renderSize = { 1000.f, 50.f };
 };
 

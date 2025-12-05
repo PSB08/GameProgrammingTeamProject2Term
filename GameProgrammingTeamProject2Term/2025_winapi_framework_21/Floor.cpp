@@ -5,9 +5,11 @@
 
 Floor::Floor()
 {
-	auto* col = AddComponent <Collider>();
-	col->SetSize({ 1000.f, 50.f });
-	col->SetName(L"Floor");
+    auto* col = AddComponent<Collider>();
+
+    col->SetSize({ m_renderSize.x, 20.f });
+    col->SetOffSetPos(Vec2(0.f, (m_renderSize.y - 85.f) / 2.f));
+    col->SetName(L"Floor");
 
     m_texFloor = GET_SINGLE(ResourceManager)->GetTexture(L"Ground");
 }
@@ -23,8 +25,8 @@ void Floor::Update()
 void Floor::Render(HDC _hdc)
 {
     Vec2 pos = GetPos();
-    Collider* col = GetComponent<Collider>();
-    Vec2 size = col ? col->GetSize() : Vec2{ 1000.f, 50.f };
+
+    Vec2 size = m_renderSize;
 
     int left = (int)(pos.x - size.x / 2);
     int top = (int)(pos.y - size.y / 2);
