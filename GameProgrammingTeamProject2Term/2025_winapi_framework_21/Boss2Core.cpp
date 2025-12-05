@@ -135,21 +135,6 @@ void Boss2Core::SetupAnimations()
     ResetToIdle();
 }
 
-void Boss2Core::ResetToIdle()
-{
-    m_state = CoreState::Idle;
-    m_isOpened = false;
-    m_collidable = false;
-    m_hp = m_maxHp;
-    m_openTimer = 0.f;
-
-    if (m_collider)
-        m_collider->SetEnabled(false);
-
-    if (m_animator)
-        m_animator->Play(L"CoreIdle", PlayMode::Loop, 1, 1.f);
-}
-
 void Boss2Core::Update()
 {
     float dt = GET_SINGLE(TimeManager)->GetDT();
@@ -267,6 +252,23 @@ void Boss2Core::OpenCore()
     // 열리는 애니메이션 1회 재생
     if (m_animator)
         m_animator->Play(L"CoreBreaking", PlayMode::Once, 1, 1.f);
+    GET_SINGLE(ResourceManager)->Play(L"SubcoreDestroy");
+}
+
+void Boss2Core::ResetToIdle()
+{
+    m_state = CoreState::Idle;
+    m_isOpened = false;
+    m_collidable = false;
+    m_hp = m_maxHp;
+    m_openTimer = 0.f;
+
+    if (m_collider)
+        m_collider->SetEnabled(false);
+
+    if (m_animator)
+        m_animator->Play(L"CoreIdle", PlayMode::Loop, 1, 1.f);
+    GET_SINGLE(ResourceManager)->Play(L"SubcoreReturn");
 }
 
 void Boss2Core::HandleDeath()
@@ -287,4 +289,5 @@ void Boss2Core::HandleDeath()
 
     if (m_animator)
         m_animator->Play(L"Death", PlayMode::Once, 1, 1.f);
+    GET_SINGLE(ResourceManager)->Play(L"BossCoreDestroy");
 }

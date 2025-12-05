@@ -228,6 +228,7 @@ void Boss2::Pattern1()
         {
             if (!proj) continue;
             GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.5f, 7.5f);
+            GET_SINGLE(ResourceManager)->Play(L"EnemyShoot");
             Vec2 pos = proj->GetPos();
             Vec2 dir;
             dir.x = pos.x - center.x;
@@ -265,6 +266,7 @@ void Boss2::Pattern2()
 
         if (canSpawn)
         {
+            GET_SINGLE(ResourceManager)->Play(L"Laser");
             auto* leftLaser = new LaserObject(true);
             leftLaser->SetPos({ 0.f, WINDOW_HEIGHT / 2.f });
             leftLaser->SetDir(1);
@@ -289,6 +291,7 @@ void Boss2::Pattern2()
         if (m_patternElapsed >= baseStart)
         {
             {
+                GET_SINGLE(ResourceManager)->Play(L"Laser");
                 Boss2Laser* laser = new Boss2Laser();
                 laser->SetPos({ WINDOW_WIDTH / 2.f, -50.f });
                 laser->SetArmLength(WINDOW_WIDTH / 2.f);
@@ -417,6 +420,7 @@ void Boss2::Pattern3()
             proj->Launch(dir);
         }
         GET_SINGLE(SceneManager)->GetCurScene()->StartShake(2.5f, 12.5f);
+        GET_SINGLE(ResourceManager)->Play(L"EnemyShoot");
     }
 }
 
@@ -492,6 +496,7 @@ void Boss2::Pattern4()
             dir.x = pos.x - center.x;  //보스 중심에서 바깥으로 향하는 벡터
             dir.y = pos.y - center.y;
             rb.proj->Launch(dir);  //회전 끝나면 방향으로 발사
+            GET_SINGLE(ResourceManager)->Play(L"EnemyShoot");
         }
     }
 }
@@ -556,6 +561,7 @@ void Boss2::Pattern5()
 
             ++m_pattern5SpawnedCount;  //발사하고 총알 수++
             GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 2.f);
+            GET_SINGLE(ResourceManager)->Play(L"EnemyShoot");
         }
     }
 }
@@ -771,6 +777,7 @@ void Boss2::StartDeathSequence()
     );
 
     m_animator->Play(m_deathAnimName, PlayMode::Once, 1, 1.f);
+    GET_SINGLE(ResourceManager)->Play(L"BossCoreDestroy");
 }
 
     #pragma endregion

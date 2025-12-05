@@ -57,6 +57,7 @@ void Boss1Core::EnterCollision(Collider* _other)
         m_delay = 0.2f;
         m_pendingSceneChange = true;
         GET_SINGLE(SceneManager)->RequestDestroy(_other->GetOwner());
+        GET_SINGLE(ResourceManager)->Play(L"BossDie");
     }
 }
 
