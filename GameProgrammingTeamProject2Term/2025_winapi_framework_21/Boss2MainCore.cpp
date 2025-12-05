@@ -65,7 +65,7 @@ void Boss2MainCore::Update()
 
     if (m_delay <= 0.f)
     {
-        GET_SINGLE(SceneManager)->LoadScene(L"BossSelectScene");
+        GET_SINGLE(SceneManager)->RequestLoadScene(L"BossSelectScene");
 
         m_pendingSceneChange = false;
     }
@@ -80,11 +80,10 @@ void Boss2MainCore::EnterCollision(Collider* _other)
 {
     if (_other->IsTrigger() && _other->GetName() == L"PlayerBullet")
     {
-        GET_SINGLE(SceneManager)->RequestDestroy(_other->GetOwner());
-
         EventBus::Invoke(L"Boss2Killed");
 
         m_delay = 0.2f;
         m_pendingSceneChange = true;
+        GET_SINGLE(SceneManager)->RequestDestroy(_other->GetOwner());
     }
 }

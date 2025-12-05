@@ -33,8 +33,9 @@ void TitleScene::Init()
     m_btnStart = UIButton(L"시작", []()
         {
             GameData::GetInstance()->Clear();
+            GET_SINGLE(ResourceManager)->StopAllSounds();
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"BossSelectScene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"BossSelectScene");
         });
     m_btnStart.SetSize({ btnW, btnH });
     m_btnStart.SetPos({ WINDOW_WIDTH / 2.f, startY });
@@ -42,7 +43,7 @@ void TitleScene::Init()
     m_btnSettings = UIButton(L"설정", []()
         {
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"SettingScene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"SettingScene");
         });
     m_btnSettings.SetSize({ btnW, btnH });
     m_btnSettings.SetPos({ WINDOW_WIDTH / 2.f, startY + (btnH + gap) });

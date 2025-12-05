@@ -14,6 +14,7 @@ DeadScene::DeadScene()
 void DeadScene::Init()
 {
     GET_SINGLE(ResourceManager)->Stop(SOUND_CHANNEL::BGM);
+    GET_SINGLE(ResourceManager)->Stop(SOUND_CHANNEL::EFFECT);
     GET_SINGLE(ResourceManager)->Play(L"PlayerDie");
     Texture* backNormal = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Normal");
     Texture* backHover = GET_SINGLE(ResourceManager)->GetTexture(L"BackBtn_Hover");
@@ -31,16 +32,18 @@ void DeadScene::Init()
 
     m_btnRetry = UIButton(L"다시 시작", []()
         {
+            GET_SINGLE(ResourceManager)->StopAllSounds();
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"BossSelectScene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"BossSelectScene");
         });
     m_btnRetry.SetSize({ btnW, btnH });
     m_btnRetry.SetPos({ WINDOW_WIDTH / 2.f, startY });
 
     m_btnTitle = UIButton(L"타이틀로", []()
         {
+            GET_SINGLE(ResourceManager)->StopAllSounds();
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"TitleScene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"TitleScene");
         });
     m_btnTitle.SetSize({ btnW, btnH });
     m_btnTitle.SetPos({ WINDOW_WIDTH / 2.f, startY + (btnH + gap) });

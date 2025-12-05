@@ -27,7 +27,7 @@ Boss1::Boss1()
     , m_pDeathTexture(nullptr)
 {
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1");
-    m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1Core");  //파괴 되는 애니메이션으로
+    m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1CoreBreaking");  //파괴 되는 애니메이션으로
     m_animator = AddComponent<Animator>();
 
     m_deathAnimName = L"boss1_death";
@@ -171,6 +171,7 @@ void Boss1::Pattern1()
     m_angle1 += 25.f;
     if (m_angle1 >= 360.f) m_angle1 -= 360.f;
     GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
+    GET_SINGLE(ResourceManager)->Play(L"PlayerShoot");
 }
 
 void Boss1::Pattern2()
@@ -198,6 +199,7 @@ void Boss1::Pattern2()
     m_angle2 += 10.f;
     if (m_angle2 >= 360.f) m_angle2 -= 360.f;
     GET_SINGLE(SceneManager)->GetCurScene()->StartShake(1.f, 5.f);
+    GET_SINGLE(ResourceManager)->Play(L"PlayerShoot");
 }
 
 void Boss1::Pattern3()
@@ -205,7 +207,7 @@ void Boss1::Pattern3()
     if (!m_laserActive)
     {
         m_laserActive = true;
-
+        GET_SINGLE(ResourceManager)->Play(L"Laser");
         auto* leftLaser = new LaserObject(true);
         leftLaser->SetPos({ 0.f, WINDOW_HEIGHT / 2.f });
         leftLaser->SetDir(1);
@@ -253,12 +255,13 @@ void Boss1::StartDeathSequence()
                 { 0.f, 0.f },
                 slice,
                 step,
-                1,
+                10,
                 0.1f
             );
         }
 
         m_animator->Play(m_deathAnimName, PlayMode::Once, 1, 1.f);
+        GET_SINGLE(ResourceManager)->Play(L"BossCoreDestroy");
     }
 }
 

@@ -47,8 +47,9 @@ void BossSelectScene::Init()
     m_btnBoss1 = UIButton(m_btn1Texture, []()
         {
             //Boss1 ¾À
+            GET_SINGLE(ResourceManager)->StopAllSounds();
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"BossScene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"BossScene");
         });
     m_btnBoss1.SetSize({ btnW, btnH });
     m_btnBoss1.SetPos({ startX, WINDOW_HEIGHT / 2.f });
@@ -56,8 +57,9 @@ void BossSelectScene::Init()
     m_btnBoss2 = UIButton(m_btn2Texture, []()
         {
             //Boss2 ¾À
+            GET_SINGLE(ResourceManager)->StopAllSounds();
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"Boss2Scene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"Boss2Scene");
         });
     m_btnBoss2.SetSize({ btnW, btnH });
     m_btnBoss2.SetPos({ startX + (btnW + gap), WINDOW_HEIGHT / 2.f });
@@ -65,8 +67,9 @@ void BossSelectScene::Init()
     m_btnBoss3 = UIButton(L"Boss3", []()
         {
             //Boss3 ¾À
+            GET_SINGLE(ResourceManager)->StopAllSounds();
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"Boss3Scene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"Boss3Scene");
         });
     m_btnBoss3.SetSize({ btnW, btnH });
     m_btnBoss3.SetPos({ startX + 2 * (btnW + gap), WINDOW_HEIGHT / 2.f });
@@ -74,7 +77,7 @@ void BossSelectScene::Init()
     m_btnTitle = UIButton(L"Å¸ÀÌÆ²·Î", []()
         {
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"TitleScene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"TitleScene");
         });
     m_btnTitle.SetSize({ 600.f, 70.f });
     m_btnTitle.SetPos({ startX + (btnW + gap), startY });

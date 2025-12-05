@@ -74,7 +74,7 @@ void SettingScene::Init()
     m_btnBack = UIButton(L"뒤로가기", []()
         {
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
-            GET_SINGLE(SceneManager)->LoadScene(L"TitleScene");
+            GET_SINGLE(SceneManager)->RequestLoadScene(L"TitleScene");
         });
 
     m_btnBack.SetSize({ 300.f, 60.f });

@@ -35,6 +35,7 @@ void ResourceManager::FmodUpdate()
 {
 	if (m_pSoundSystem)
 		m_pSoundSystem->update();
+	m_elapsedTime += fDT;
 }
 
 void ResourceManager::Release()
@@ -144,6 +145,26 @@ void ResourceManager::Play(const wstring& _key)
 	SOUND_CHANNEL eChannel = pSound->IsLoop ? SOUND_CHANNEL::BGM : SOUND_CHANNEL::EFFECT;
 	UINT idx = (UINT)eChannel;
 
+	//EFFECT 사운드는 쿨타임 검사 (같은 키 기준)
+	if (!pSound->IsLoop)
+	{
+		const float COOLDOWN = 0.3f; // 1초에 한 번
+		float now = m_elapsedTime;
+
+		auto it = m_lastEffectPlayTime.find(_key);
+		if (it != m_lastEffectPlayTime.end())
+		{
+			if (now - it->second < COOLDOWN)
+			{
+				// 아직 쿨 안 돌았으면 재생 안 함
+				return;
+			}
+		}
+
+		m_lastEffectPlayTime[_key] = now;
+	}
+
+	//BGM 처리 (기존 로직)
 	if (pSound->IsLoop)
 	{
 		// 같은 BGM이면 그냥 무시
@@ -165,7 +186,7 @@ void ResourceManager::Play(const wstring& _key)
 	if (r != FMOD_OK || !m_pChannel[idx])
 		return;
 
-	//새 채널에 저장된 볼륨 적용
+	// 새 채널에 저장된 볼륨 적용
 	float vol = GetSavedVolume(eChannel);
 	m_pChannel[idx]->setVolume(vol);
 }
@@ -248,6 +269,19 @@ float ResourceManager::GetSavedVolume(SOUND_CHANNEL ch) const
 	case SOUND_CHANNEL::EFFECT: return m_effectVolume;
 	default:                    return 1.f;
 	}
+}
+
+void ResourceManager::StopAllSounds()
+{
+	for (int i = 0; i < (int)SOUND_CHANNEL::END; ++i)
+	{
+		if (m_pChannel[i])
+			m_pChannel[i]->stop();
+	}
+
+	m_lastEffectPlayTime.clear();
+
+	m_curBGMKey.clear();
 }
 
 void ResourceManager::RegisterFont(FontType _type, const wstring& _name, int _height, int _weight, bool _italic, int _quality)

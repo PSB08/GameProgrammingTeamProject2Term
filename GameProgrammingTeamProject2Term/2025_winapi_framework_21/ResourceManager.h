@@ -59,6 +59,8 @@ public:
 	FMOD::Channel* m_pChannel[(UINT)SOUND_CHANNEL::END]; // 오디오 채널
 public:
 	float GetSavedVolume(SOUND_CHANNEL ch) const;
+	void StopAllSounds();
+
 private:
 	//std::filesystem::path m_resourcePath;
 	fs::path m_resourcePath;
@@ -73,5 +75,7 @@ private:
 
 	float m_bgmVolume = 1.f;
 	float m_effectVolume = 1.f;
+	float m_elapsedTime = 0.f;
+	std::unordered_map<wstring, float> m_lastEffectPlayTime;
 };
 

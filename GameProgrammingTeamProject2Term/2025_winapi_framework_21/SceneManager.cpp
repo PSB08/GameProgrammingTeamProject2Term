@@ -57,8 +57,15 @@ void SceneManager::Update()
 {
 	if (m_curScene == nullptr || m_curSceneStop)
 		return;
+
 	m_curScene->Update();
 	m_curScene->LateUpdate();
+
+	if (!m_nextSceneName.empty())
+	{
+		LoadScene(m_nextSceneName);
+		m_nextSceneName.clear();
+	}
 }
 
 
