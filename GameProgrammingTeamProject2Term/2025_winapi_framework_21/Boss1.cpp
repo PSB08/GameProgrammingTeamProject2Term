@@ -27,7 +27,7 @@ Boss1::Boss1()
     , m_pDeathTexture(nullptr)
 {
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1");
-    m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1CoreBreaking");  //파괴 되는 애니메이션으로
+    m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1CoreBreaking");
     m_animator = AddComponent<Animator>();
 
     m_deathAnimName = L"boss1_death";
