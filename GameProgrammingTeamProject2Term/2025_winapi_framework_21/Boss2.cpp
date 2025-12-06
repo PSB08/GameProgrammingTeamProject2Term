@@ -590,7 +590,7 @@ void Boss2::EndPattern()
         return;  //초기화 작업
     }
 
-    if (m_patternsSinceLastCore >= 1 && m_nextCoreToOpen < (int)m_cores.size())  //만약 3번 했으면
+    if (m_patternsSinceLastCore >= 2 && m_nextCoreToOpen < (int)m_cores.size())  //만약 2번 했으면
     {
         m_patternsSinceLastCore = 0;  //초기화
 

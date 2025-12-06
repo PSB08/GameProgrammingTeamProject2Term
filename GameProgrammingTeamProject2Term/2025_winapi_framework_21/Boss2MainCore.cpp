@@ -65,7 +65,7 @@ void Boss2MainCore::Update()
 
     if (m_delay <= 0.f)
     {
-        GET_SINGLE(SceneManager)->RequestLoadScene(L"BossSelectScene");
+        GET_SINGLE(SceneManager)->RequestLoadScene(L"ClearScene");
 
         m_pendingSceneChange = false;
     }

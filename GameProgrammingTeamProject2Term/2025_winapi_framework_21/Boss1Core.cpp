@@ -16,6 +16,7 @@ Boss1Core::Boss1Core(Boss1* owner)
     Collider* col = AddComponent<Collider>();
     col->SetTrigger(true);
     col->SetName(L"BossCore");
+    col->SetSize({ 150.f, 150.f });
 
     SetSize({ 1.f, 1.f });
 
@@ -37,7 +38,7 @@ void Boss1Core::Update()
 
     if (m_delay <= 0.f)
     {
-        GET_SINGLE(SceneManager)->RequestLoadScene(L"BossSelectScene");
+        GET_SINGLE(SceneManager)->RequestLoadScene(L"ClearScene");
 
         m_pendingSceneChange = false;
     }

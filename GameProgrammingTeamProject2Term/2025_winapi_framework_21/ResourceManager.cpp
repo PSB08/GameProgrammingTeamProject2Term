@@ -251,6 +251,7 @@ void ResourceManager::RegisterSound()
 	LoadSound(L"BOSS3BGM", L"Sound\\Boss3Bgm.mp3", true);
 
 	LoadSound(L"PlayerDie", L"Sound\\PlayerDie.mp3", false);
+	LoadSound(L"GameClear", L"Sound\\GameClear.mp3", false);
 	LoadSound(L"EnemyShoot", L"Sound\\EnemyGun.mp3", false);
 	LoadSound(L"Laser", L"Sound\\Laser.mp3", false);
 	LoadSound(L"SubcoreDestroy", L"Sound\\SubcoreDestroy.mp3", false);

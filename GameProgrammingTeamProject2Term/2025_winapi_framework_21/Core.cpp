@@ -48,7 +48,7 @@ void Core::MainUpdate()
 	GET_SINGLE(InputManager)->Update();
 	GET_SINGLE(ResourceManager)->FmodUpdate();
 	GET_SINGLE(SceneManager)->Update();
-	//::SetWindowText(GetHwnd(), L"게임 제목입니다");
+	//::SetWindowText(GetHwnd(), L"Deadlock");
 	//GET_SINGLE(CollisionManager)->Update();	
 }
 

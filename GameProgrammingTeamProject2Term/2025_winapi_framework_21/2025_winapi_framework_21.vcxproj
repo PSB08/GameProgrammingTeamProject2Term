@@ -177,6 +177,7 @@
     <ClInclude Include="BossProjectile.h" />
     <ClInclude Include="BossSelectScene.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Component.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="BossProjectile.cpp" />
     <ClCompile Include="BossSelectScene.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Component.cpp" />

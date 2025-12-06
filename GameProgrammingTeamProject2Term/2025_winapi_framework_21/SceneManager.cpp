@@ -3,13 +3,13 @@
 #include "BossScene.h"
 #include "Boss2Scene.h"
 #include "TitleScene.h"
+#include "ClearScene.h"
 #include "SettingScene.h"
 #include "DeadScene.h"
 #include "BossSelectScene.h"
 #include "Boss3Scene.h"
 #include "Object.h"
 #include "Collider.h"
-
 
 void SceneManager::PhysicsSyncColliders()
 {
@@ -44,6 +44,7 @@ void SceneManager::Init()
 	RegisterScene(L"BossScene",std::make_shared<BossScene>());
 	RegisterScene(L"Boss2Scene",std::make_shared<Boss2Scene>());
 	RegisterScene(L"TitleScene",std::make_shared<TitleScene>());
+	RegisterScene(L"ClearScene",std::make_shared<ClearScene>());
 	RegisterScene(L"SettingScene",std::make_shared<SettingScene>());
 	RegisterScene(L"DeadScene",std::make_shared<DeadScene>());
 	RegisterScene(L"BossSelectScene",std::make_shared<BossSelectScene>());
