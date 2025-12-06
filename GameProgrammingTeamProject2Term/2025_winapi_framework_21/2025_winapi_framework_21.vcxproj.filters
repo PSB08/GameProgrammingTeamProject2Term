@@ -267,6 +267,9 @@
     <Image Include="2025_winapi_framework_21.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="..\..\..\..\Users\uesr\Downloads\Gamep.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
