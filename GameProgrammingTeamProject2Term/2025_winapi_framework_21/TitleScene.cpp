@@ -21,7 +21,7 @@ void TitleScene::Init()
 
     m_titleLabel.SetFontType(FontType::TITLE_BIG);
     m_titleLabel.SetFontColor(RGB(255, 255, 255));
-    m_titleLabel.SetText(L"게임 제목입니다");
+    m_titleLabel.SetText(L"Deadlock");
     m_titleLabel.SetSize({ 800.f, 140.f });
     m_titleLabel.SetPos({ WINDOW_WIDTH / 2.f, 120.f });
 

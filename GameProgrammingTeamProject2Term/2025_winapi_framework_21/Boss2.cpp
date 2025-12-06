@@ -759,7 +759,7 @@ void Boss2::StartDeathSequence()
     if (!m_animator)
         return;
 
-    Texture* tex = m_pDeathTexture ? m_pDeathTexture : m_pTexture;
+    Texture* tex = m_pDeathTexture;
 
     Vec2 sliceSize = { 160.f, 160.f };
     Vec2 step = { 160.f, 0.f };

@@ -69,7 +69,7 @@ void ResourceManager::RegisterGDI()
 
 	// 폰트 등록
 	RegisterFont(FontType::TITLE, L"나눔손글씨 암스테르담", 30);
-	RegisterFont(FontType::TITLE_BIG, L"나눔손글씨 암스테르담", 50);
+	RegisterFont(FontType::TITLE_BIG, L"나눔손글씨 암스테르담", 75);
 }
 
 void ResourceManager::ReleaseGDI()
@@ -164,7 +164,7 @@ void ResourceManager::Play(const wstring& _key)
 		m_lastEffectPlayTime[_key] = now;
 	}
 
-	//BGM 처리 (기존 로직)
+	//BGM 처리
 	if (pSound->IsLoop)
 	{
 		// 같은 BGM이면 그냥 무시
