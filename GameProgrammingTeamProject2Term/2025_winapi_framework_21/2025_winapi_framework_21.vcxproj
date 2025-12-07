@@ -278,6 +278,8 @@
     <ResourceCompile Include="2025_winapi_framework_21.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Users\uesr\Downloads\Gamep.ico" />
+    <Image Include="..\Output\build\Resource\Texture\Gamep.ico" />
     <Image Include="2025_winapi_framework_21.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
