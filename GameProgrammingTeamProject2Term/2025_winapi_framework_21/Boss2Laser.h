@@ -1,5 +1,7 @@
 #pragma once
 #include "Object.h"
+#include "Texture.h"
+#include "Animator.h"
 
 class Collider;
 
@@ -22,9 +24,12 @@ public:
 
 private:
     void UpdateColliderSize();
+    void SetupAnimations();
 
 private:
     Collider* m_collider = nullptr;
+    Texture* m_pTexture = nullptr;
+    Animator* m_animator = nullptr;
 
     float m_halfLength = 400.f; // 가로 반 길이
     float m_thickness = 40.f;  // 세로 두께

@@ -35,9 +35,6 @@ public:
     void SetSpeed(float s) { m_speed = s; }
     bool IsLaunched() const { return m_launched; }
 
-    // 레이저 경고 / 실제 공격 구분용
-    void SetColliderName(const std::wstring& name);
-
 private:
     Texture* m_pTexture;
     Collider* m_collider;

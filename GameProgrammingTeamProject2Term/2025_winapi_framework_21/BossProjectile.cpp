@@ -55,9 +55,3 @@ void BossProjectile::Render(HDC _hdc)
 		0, 0, width, height, RGB(0, 0, 0));
 	ComponentRender(_hdc);
 }
-
-void BossProjectile::SetColliderName(const std::wstring& name)
-{
-	if (m_collider)
-		m_collider->SetName(name);
-}

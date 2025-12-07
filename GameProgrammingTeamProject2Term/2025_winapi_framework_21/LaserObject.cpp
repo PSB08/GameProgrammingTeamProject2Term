@@ -2,6 +2,7 @@
 #include "LaserObject.h"
 #include "Collider.h"
 #include "SceneManager.h"
+#include "ResourceManager.h"
 #include "Scene.h"
 
 LaserObject::LaserObject(bool isLeftLaser)
@@ -17,6 +18,12 @@ LaserObject::LaserObject(bool isLeftLaser)
         col->SetName(L"LaserLeft");
     else
         col->SetName(L"LaserRight");
+
+    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"Laser");
+
+    m_animator = AddComponent<Animator>();
+    if (m_pTexture && m_animator)
+        SetupAnimations();
 }
 
 LaserObject::~LaserObject()
@@ -39,19 +46,52 @@ void LaserObject::Update()
 
 void LaserObject::Render(HDC _hdc)
 {
-    RECT rc =
+    if (m_animator && m_pTexture)
     {
-        (LONG)GetPos().x,
-        0,
-        (LONG)(GetPos().x + GetSize().x),
-        (LONG)GetSize().y
-    };
+        ComponentRender(_hdc);
+        return;
+    }
+    else
+    {
+        RECT rc =
+        {
+            (LONG)GetPos().x,
+            0,
+            (LONG)(GetPos().x + GetSize().x),
+            (LONG)GetSize().y
+        };
 
-    HBRUSH b = CreateSolidBrush(RGB(255, 255, 0));
-    FillRect(_hdc, &rc, b);
-    DeleteObject(b);
+        HBRUSH b = CreateSolidBrush(RGB(255, 255, 0));
+        FillRect(_hdc, &rc, b);
+        DeleteObject(b);
+
+        ComponentRender(_hdc);
+    }
 }
 
 void LaserObject::EnterCollision(Collider* _other)
 {
+}
+
+void LaserObject::SetupAnimations()
+{
+    int texW = m_pTexture->GetWidth();
+    int texH = m_pTexture->GetHeight();
+
+    const int frameCount = 4;
+
+    Vec2 sliceSize = { texW / (float)frameCount, (float)texH };
+    Vec2 step = { sliceSize.x, 0.f };
+
+    m_animator->CreateAnimation(
+        L"laserLoop",
+        m_pTexture,
+        { 0.f, 0.f },
+        sliceSize,
+        step,
+        frameCount,
+        0.05f
+    );
+
+    m_animator->Play(L"laserLoop", PlayMode::Loop, 1, 1.f);
 }
