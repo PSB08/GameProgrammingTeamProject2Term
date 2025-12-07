@@ -8,12 +8,14 @@ Boss2Laser::Boss2Laser()
     , m_halfLength(400.f)
     , m_thickness(40.f)
 {
+    SetSize({ (float)WINDOW_WIDTH, 50.f });
+
     m_collider = AddComponent<Collider>();
     m_collider->SetTrigger(true);
     m_collider->SetName(L"LaserLeft");
 
     UpdateColliderSize();
-    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Laser");
+    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"LaserHorizontal");
 
     m_animator = AddComponent<Animator>();
     if (m_pTexture && m_animator)
@@ -82,7 +84,7 @@ void Boss2Laser::SetupAnimations()
     int texW = m_pTexture->GetWidth();
     int texH = m_pTexture->GetHeight();
 
-    const int frameCount = 6;
+    const int frameCount = 16;
 
     Vec2 sliceSize = { texW / (float)frameCount, (float)texH };
     Vec2 step = { sliceSize.x, 0.f };

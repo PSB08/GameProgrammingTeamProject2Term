@@ -43,6 +43,7 @@ void BossSelectScene::Init()
 
     m_btn1Texture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1Icon");
     m_btn2Texture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Icon");
+    m_btn3Texture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3Icon");
 
     m_btnBoss1 = UIButton(m_btn1Texture, []()
         {
@@ -64,7 +65,7 @@ void BossSelectScene::Init()
     m_btnBoss2.SetSize({ btnW, btnH });
     m_btnBoss2.SetPos({ startX + (btnW + gap), WINDOW_HEIGHT / 2.f });
 
-    m_btnBoss3 = UIButton(L"Boss3", []()
+    m_btnBoss3 = UIButton(m_btn3Texture, []()
         {
             //Boss3 ¾À
             GET_SINGLE(ResourceManager)->StopAllSounds();

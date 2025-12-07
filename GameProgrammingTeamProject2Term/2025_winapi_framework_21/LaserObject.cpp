@@ -19,7 +19,7 @@ LaserObject::LaserObject(bool isLeftLaser)
     else
         col->SetName(L"LaserRight");
 
-    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"Laser");
+    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"LaserVertical");
 
     m_animator = AddComponent<Animator>();
     if (m_pTexture && m_animator)
@@ -78,7 +78,7 @@ void LaserObject::SetupAnimations()
     int texW = m_pTexture->GetWidth();
     int texH = m_pTexture->GetHeight();
 
-    const int frameCount = 4;
+    const int frameCount = 16;
 
     Vec2 sliceSize = { texW / (float)frameCount, (float)texH };
     Vec2 step = { sliceSize.x, 0.f };
