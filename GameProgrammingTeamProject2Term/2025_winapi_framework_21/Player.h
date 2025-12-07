@@ -26,6 +26,7 @@ public:
 	Vec2 GetPlayerPos() { return m_playerPos; }
 private:
 	Texture* m_pNormalTexture;
+	Texture* m_pNormalLeftTexture;
 	Texture* m_pShootingTexture;
 	Animator* m_animator;
 	Vec2 m_playerPos;

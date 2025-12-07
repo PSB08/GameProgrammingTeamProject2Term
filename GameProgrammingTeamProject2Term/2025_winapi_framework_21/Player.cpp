@@ -32,6 +32,7 @@ Player::Player()
 	m_shootDelayTime(0.f)
 {
 	m_pNormalTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerMove");
+	m_pNormalLeftTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerMove_L");
 	m_pShootingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"Player_Back");
 	//m_rigid->SetOwner(this);
 	auto* col = AddComponent<Collider>();
@@ -47,6 +48,14 @@ Player::Player()
 	,{64.f,64.f}
 	,{64.f,0.f}
 	,10,0.1f);
+
+	m_animator->CreateAnimation
+	(L"playerMoveL"
+		, m_pNormalLeftTexture
+		, { 0.f,0.f }
+		, { 64.f,64.f }
+		, { 64.f,0.f }
+	, 9, 0.1f);
 
 	m_animator->CreateAnimation
 	(L"playerShoot"
@@ -145,9 +154,17 @@ void Player::Update()
 	m_rigid->SetOwner(this);
 	Vec2 dir = {};
 	Animation* cur = m_animator->GetCurrent();
-	if (GET_KEY(KEY_TYPE::A)) dir.x -= (1.f * dashPower);
+	if (GET_KEY(KEY_TYPE::A))
+	{
+		m_animator->Play(L"playerMoveL");
+		dir.x -= (1.f * dashPower);
+	}
 	
-	if (GET_KEY(KEY_TYPE::D)) dir.x += (1.f * dashPower);
+	if (GET_KEY(KEY_TYPE::D)) 
+	{
+		m_animator->Play(L"playerMove");
+		dir.x += (1.f * dashPower);
+	}
 
 	if (GET_KEY(KEY_TYPE::SPACE)) PlayerJump();
 	if (GET_KEY(KEY_TYPE::L) &&
@@ -228,18 +245,19 @@ void Player::Update()
 
 		if (m_delay <= 0.f)
 		{
-			GET_SINGLE(SceneManager)->LoadScene(L"DeadScene");
 			m_pendingSceneChange = false;
+			GET_SINGLE(SceneManager)->LoadScene(L"DeadScene");
 			SetDead();
 		}
 		return;
 	}
 }
 
-
+ 
 
 void Player::CreateProjectile()
 {
+	GET_SINGLE(ResourceManager)->Play(L"PlayerShoot");
 	isShooting = true;
 	m_shootDelayTime = 0.f;
 	Projectile* proj = new Projectile;
@@ -263,6 +281,7 @@ void Player::PlayerJump()
 	Vec2 jump = {0, -40};
 	if (m_rigid->IsGrounded() && JumpTime > JumpDelayTime)
 	{
+		GET_SINGLE(ResourceManager)->Play(L"PlayerJump");
 		m_rigid->AddImpulse(jump * jumpPower);
 		m_rigid->SetGrounded(false); 
 	}
@@ -270,12 +289,14 @@ void Player::PlayerJump()
 
 void Player::PlayerShield()
 {
+	GET_SINGLE(ResourceManager)->Play(L"PlayerShield");
 	playerCanDamaged = false;
 	shieldTime = 0.f;
 }
 
 void Player::PlayerDash()
 {
+	GET_SINGLE(ResourceManager)->Play(L"PlayerDash");
 	dashPower = 5.f;
 	playerIsInvincibility = true;
 	dashTime = 0.f;
@@ -286,6 +307,7 @@ void Player::PlayerDash()
 
 void Player::PlayerBounce()
 {
+	GET_SINGLE(ResourceManager)->Play(L"PlayerJump");
 	auto* rid = GetComponent<Rigidbody>();
 	//rid->SetOwner(this);
 	if (rid == nullptr)

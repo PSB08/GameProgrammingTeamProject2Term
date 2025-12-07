@@ -18,8 +18,8 @@ void Boss3Scene::Init()
 	m_pBackground = GET_SINGLE(ResourceManager)->GetTexture(L"Backtest6");
 
 	Object* obj = new Boss3;
-	obj->SetPos({ WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 });
-	obj->SetSize({ 150,150 });
+	obj->SetPos({ WINDOW_WIDTH / 2, WINDOW_HEIGHT / 5 });
+	obj->SetSize({ 150,300 });
 
 	AddObject(obj, Layer::BOSS);
 

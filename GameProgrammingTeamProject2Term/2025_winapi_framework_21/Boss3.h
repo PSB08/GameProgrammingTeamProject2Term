@@ -3,6 +3,9 @@
 #include "Enums.h"
 #include "Player.h"
 #include "Button.h"
+#include "Animator.h"
+
+class Texture;
 
 class Boss3 : public BossBase<Boss3Pattern>
 {
@@ -17,6 +20,7 @@ private:
     void UpdatePattern() override;
 
     void EndPattern();
+    void Render(HDC _hdc) override;
 
 private:
     // ===== 개별 패턴 =====
@@ -27,10 +31,15 @@ private:
     void Pattern4();   // 
     void Pattern5();   // 
     void SpawnCore();  // 기믹 클리어 후 코어 오픈
+    void CheckAnimationEnd(std::wstring _animationName, bool repeat = false);
 public:
     void PressedButton();
 private:
     std::vector<Button*> m_Buttons;
+    Texture* m_BATexture;
+    Texture* m_BFTexture;
+    Texture* m_BUFTexture;
+    Animator* m_animator;
 private:
     // 패턴용 변수들
     bool m_isCorePhase;
@@ -41,6 +50,7 @@ private:
     bool m_setPos = false;
     bool m_isShotFollow = false;
     bool m_doShake = false;
+    bool m_doFire = false;
 
     float m_angle1;
     float m_fireTimer1;

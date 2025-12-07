@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Texture.h"
 class UpDownPlatform : public Object
 {
 public:
@@ -9,6 +10,8 @@ public:
     void Update() override;
     void Render(HDC _hdc) override;
     virtual void EnterCollision(Collider* _other)override;
+private:
+    Texture* m_Texture;
 private:
     float m_timer = 0.f;
     float m_DownCheckTimer;

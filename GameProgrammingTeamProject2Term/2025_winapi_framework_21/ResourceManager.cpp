@@ -259,6 +259,13 @@ void ResourceManager::RegisterSound()
 	LoadSound(L"BossCoreDestroy", L"Sound\\BossCoreDestroy.mp3", false);
 	LoadSound(L"BossDie", L"Sound\\BossDie.mp3", false);
 	LoadSound(L"UIButton", L"Sound\\Button.mp3", false);
+
+	LoadSound(L"PlayerDash", L"Sound\\PlayerDash.mp3", false);
+	LoadSound(L"PlayerJump", L"Sound\\PlayerJump.mp3", false);
+	LoadSound(L"PlayerShoot", L"Sound\\PlayerShoot.mp3", false);
+	LoadSound(L"PlayerShield", L"Sound\\PlayerShield.mp3", false);
+
+
 }
 
 float ResourceManager::GetSavedVolume(SOUND_CHANNEL ch) const
@@ -314,6 +321,11 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"boss2Death", L"Texture\\Boss2_Breaking-sheet.bmp");
 	LoadTexture(L"bossBullet", L"Texture\\bossBullet.bmp");
 
+	LoadTexture(L"boss3", L"Texture\\Boss3_Idle.bmp");
+	LoadTexture(L"boss3Attack", L"Texture\\Boss3_IdleAttack.bmp");
+	LoadTexture(L"boss3Fold", L"Texture\\Boss3_Fold.bmp");
+	LoadTexture(L"boss3UnFold", L"Texture\\Boss3_UnFold.bmp");
+
 	LoadTexture(L"BackTest1", L"Texture\\backtest1.bmp");
 	LoadTexture(L"BackTest2", L"Texture\\backtest2.bmp");
 	LoadTexture(L"BackTest3", L"Texture\\backtest3.bmp");
@@ -329,10 +341,12 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"BackBtn_Hover", L"Texture\\Pannel2.bmp");
 
 	LoadTexture(L"PlayerMove", L"Texture\\PlayerMove.bmp");
+	LoadTexture(L"PlayerMove_L", L"Texture\\PlayerMove_Left.bmp");
 	LoadTexture(L"Player_Back", L"Texture\\Player_Back.bmp");
 	LoadTexture(L"PlayerBullet", L"Texture\\PlayerBullet.bmp");
 
 	LoadTexture(L"Button", L"Texture\\Button.bmp");
+	LoadTexture(L"Platform", L"Texture\\Platform.bmp");
 }
 
 

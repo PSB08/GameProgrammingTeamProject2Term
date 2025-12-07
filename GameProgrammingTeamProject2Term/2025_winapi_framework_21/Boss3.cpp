@@ -8,6 +8,9 @@
 #include "Scene.h"
 #include "FollowProjectile.h"
 #include "EventBus.h"
+#include "ResourceManager.h"
+#include "Animator.h"
+#include "Animation.h"
 
 Boss3::Boss3()
     : m_isCorePhase(false),
@@ -18,9 +21,50 @@ Boss3::Boss3()
     m_angle2(0.f)
 {     
 
+    AddComponent<Animator>();
+    m_animator = GetComponent<Animator>();
+
+
+    m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3");
+    m_BATexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3Attack");
+    m_BFTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3Fold");
+    m_BUFTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3UnFold");
+
+    m_animator->CreateAnimation
+    (L"Idle"
+        , m_pTexture
+        , { 0.f,0.f }
+        , { 128.f,256.f }
+        , { 128.f,0.f }
+    , 5, 0.1f);
+    m_animator->CreateAnimation
+    (L"bossAttack"
+        , m_BATexture
+        , { 0.f,0.f }
+        , { 128.f,256.f }
+        , { 128.f,0.f }
+    , 5, 0.1f);
+    m_animator->CreateAnimation
+    (L"Fold"
+        , m_BFTexture
+        , { 0.f,0.f }
+        , { 128.f,256.f }
+        , { 128.f,0.f }
+    , 6, 0.1f);
+    m_animator->CreateAnimation
+    (L"UnFold"
+        , m_BUFTexture
+        , { 0.f,0.f }
+        , { 128.f,256.f }
+        , { 128.f,0.f }
+    , 6, 0.1f);
+
+
+
+    m_animator->Play(L"UnFold", PlayMode::Once, 1, 1.f);
+
     std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
 
-    StartPattern();
     for (int i = 0; i < 3; ++i)
     {
         Button* button = new Button(this);  //위치에 따라 생성
@@ -32,11 +76,18 @@ Boss3::Boss3()
         button->SetSize({ 60.f, 60.f });
 
         scene->AddObject(button, Layer::BUTTON);
-
-        //m_cores.push_back(core);
-        //m_coreOffsets.push_back(offsets[i]);  //코어랑 위치 넣기
     }
     m_Buttons.clear();
+
+    if (m_animator)
+    {
+        Animation* cur = m_animator->GetCurrent();
+        if (cur && cur->IsFinished())
+        {
+            StartPattern();
+        }
+    }
+
 } 
 
 Boss3::~Boss3()
@@ -68,7 +119,7 @@ void Boss3::UpdatePattern()
     {
     case Boss3Pattern::PATTERN1:
         Pattern1();
-        if (m_patternTimer > 1.f)
+        if (m_patternTimer > 2.f)
         {
             EndPattern();
             m_curPattern = Boss3Pattern::PATTERN2;
@@ -77,7 +128,7 @@ void Boss3::UpdatePattern()
 
     case Boss3Pattern::PATTERN2:
         Pattern2();
-        if (m_patternTimer > 1.f)
+        if (m_patternTimer > 3.f)
         {
             EndPattern();
             m_curPattern = Boss3Pattern::PATTERN3;
@@ -86,7 +137,8 @@ void Boss3::UpdatePattern()
 
     case Boss3Pattern::PATTERN3:
         Pattern3();
-        if (m_patternTimer > 0.1f)
+        cout << "P3";
+        if (m_patternTimer > 1.5f)
         {
             EndPattern();
             m_curPattern = Boss3Pattern::PATTERN4;
@@ -103,7 +155,7 @@ void Boss3::UpdatePattern()
 
     case Boss3Pattern::PATTERN5:
         Pattern5();
-        if (m_patternTimer > 1.f)
+        if (m_patternTimer > 3.f)
         {
             EndPattern();
             m_curPattern = Boss3Pattern::PATTERN1;
@@ -114,21 +166,28 @@ void Boss3::UpdatePattern()
 
 void Boss3::EndPattern()
 {
+    m_animator->Play(L"UnFold", PlayMode::Once, 1, 1.f);
     m_isShotFollow = false;
     m_isCooldown = true;
     m_shotDealy = 0.f;
     m_patternTimer = 0.f;
     m_doShake = false;
+    m_doFire = false;
     if (m_patternCount >= m_maxPatternCount)
     {
         SpawnCore();
     }
 }
 
+void Boss3::Render(HDC _hdc)
+{
+    ComponentRender(_hdc);
+}
+
 void Boss3::StartPattern()
 {
     m_fireTimer1 += fDT;
-    if (m_fireTimer1 < 0.02f) return;
+    if (m_fireTimer1 < 1.f) return;
     m_fireTimer1 = 0.f;
     
     Vec2 center = GetPos();
@@ -172,12 +231,16 @@ void Boss3::Pattern1()
             SetPos({ m_position, pos.y });
             break;
         }
-
     }
 }
 
 void Boss3::Pattern2()
 {
+    if (m_doFire == false)
+    {
+        m_animator->Play(L"bossAttack");
+        m_doFire = true;
+    }
     Vec2 center = GetPos();
 
     Vec2 dir = {  };
@@ -196,6 +259,7 @@ void Boss3::Pattern2()
 void Boss3::Pattern3()
 {
     Vec2 playerPos;
+
     for (UINT i = 0; i < (UINT)Layer::END; ++i)
     {
         const auto& objects = GET_SINGLE(SceneManager)->GetCurScene()->GetLayerObjects((Layer)i);
@@ -207,10 +271,18 @@ void Boss3::Pattern3()
                 playerPos = obj->GetPos();
         }
     }
-    Vec2 pos = GetPos();
-    SetPos({ playerPos.x, pos.y});
+
+    if (m_doFire == false)
+    {
+        Vec2 pos = GetPos();
+        SetPos({ playerPos.x, pos.y });
+        m_animator->Play(L"UnFold", PlayMode::Once, 1, 1.f);
+        m_doFire = true;
+    }
+
+
     m_fireTimer1 += fDT;
-    if (m_fireTimer1 < 0.1f) return;
+    if (m_fireTimer1 < 1.f) return;
     m_fireTimer1 = 0.f;
 
     Vec2 center = GetPos();
@@ -233,16 +305,25 @@ void Boss3::Pattern3()
         proj->SetDivision(true);
         GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
     }
-    m_curPattern = Boss3Pattern::PATTERN5;
 }
 
 void Boss3::Pattern4()
 {
-    SetPos({ m_position, 180.f });
+    SetPos({ m_position, 140.f });
+    if (m_doFire == false)
+    {
+        m_animator->Play(L"UnFold", PlayMode::Once, 1, 1.f);
+        m_doFire = true;
+    }
+    else
+    {
+        CheckAnimationEnd(L"bossAttack", true);
+    }
+
 
     m_shotDealy += fDT;
-    if (m_shotDealy < 0.15f) return;
-
+    if (m_shotDealy < 0.2f) return;
+   
     float dx = rand() % 1000 - 500;
     int ran = rand() % 10 + 3;
     Vec2 center = GetPos();
@@ -255,14 +336,16 @@ void Boss3::Pattern4()
     proj->SetRigid(false);
     proj->SetValue(ran);
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
-
     m_shotDealy = 0.f;
+   
+   
 }
 
 void Boss3::Pattern5()
 {
     if (m_doShake == false)
     {
+        m_animator->Play(L"bossAttack");
         GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.3f, 70.f);
         EventBus::Invoke(L"PlayerBounce");
 
@@ -287,9 +370,22 @@ void Boss3::SpawnCore()
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
 }
 
+void Boss3::CheckAnimationEnd(std::wstring _animationName, bool repeat)
+{
+    if (m_animator)
+    {
+        Animation* cur = m_animator->GetCurrent();
+        if (cur && cur->IsFinished())
+        {
+            if(repeat)
+                m_animator->Play(_animationName, PlayMode::Loop);
+            else
+                m_animator->Play(_animationName, PlayMode::Once, 1, 1.f);
+        }
+    }
+}
+
 void Boss3::PressedButton()
 {
-    EndPattern();
-    cout << "P";
     m_patternCount++;
 }

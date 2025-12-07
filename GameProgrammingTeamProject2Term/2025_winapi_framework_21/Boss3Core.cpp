@@ -27,7 +27,7 @@ void Boss3Core::Update()
 
     if (m_delay <= 0.f)
     {
-        GET_SINGLE(SceneManager)->LoadScene(L"TitleScene");
+        GET_SINGLE(SceneManager)->LoadScene(L"ClearScene");
 
         m_pendingSceneChange = false;
     }
