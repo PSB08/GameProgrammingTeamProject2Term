@@ -334,12 +334,17 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"boss2Maincore", L"Texture\\Boss2_Break-sheet.bmp");
 	LoadTexture(L"boss2Death", L"Texture\\Boss2_Breaking-sheet.bmp");
 	LoadTexture(L"bossBullet", L"Texture\\bossBullet.bmp");
+	LoadTexture(L"BulletG", L"Texture\\Bullet_Green.bmp");
+	LoadTexture(L"BulletP", L"Texture\\Bullet_Purple.bmp");
+	LoadTexture(L"BulletB", L"Texture\\Bullet_Blue.bmp");
 
 	LoadTexture(L"boss3", L"Texture\\Boss3_Idle.bmp");
 	LoadTexture(L"boss3Icon", L"Texture\\Boss3Icon.bmp");
 	LoadTexture(L"boss3Attack", L"Texture\\Boss3_IdleAttack.bmp");
 	LoadTexture(L"boss3Fold", L"Texture\\Boss3_Fold.bmp");
 	LoadTexture(L"boss3UnFold", L"Texture\\Boss3_UnFold.bmp");
+	LoadTexture(L"boss3Death", L"Texture\\Boss3_Death.bmp");
+	LoadTexture(L"boss3Core", L"Texture\\Boss3_Core.bmp");
 
 	LoadTexture(L"BackTest1", L"Texture\\backtest1.bmp");
 	LoadTexture(L"BackTest2", L"Texture\\backtest2.bmp");

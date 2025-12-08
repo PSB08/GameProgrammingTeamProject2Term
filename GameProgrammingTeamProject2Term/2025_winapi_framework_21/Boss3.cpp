@@ -29,6 +29,8 @@ Boss3::Boss3()
     m_BATexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3Attack");
     m_BFTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3Fold");
     m_BUFTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3UnFold");
+    m_BDTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss3Death");
+
 
     m_animator->CreateAnimation
     (L"Idle"
@@ -58,8 +60,6 @@ Boss3::Boss3()
         , { 128.f,256.f }
         , { 128.f,0.f }
     , 6, 0.1f);
-
-
 
     m_animator->Play(L"UnFold", PlayMode::Once, 1, 1.f);
 
@@ -137,7 +137,6 @@ void Boss3::UpdatePattern()
 
     case Boss3Pattern::PATTERN3:
         Pattern3();
-        cout << "P3";
         if (m_patternTimer > 1.5f)
         {
             EndPattern();
@@ -173,8 +172,9 @@ void Boss3::EndPattern()
     m_patternTimer = 0.f;
     m_doShake = false;
     m_doFire = false;
-    if (m_patternCount >= m_maxPatternCount)
+    if (m_patternCount > m_maxPatternCount && !m_isDying)
     {
+        StartDeathSequence();
         SpawnCore();
     }
 }
@@ -201,7 +201,9 @@ void Boss3::StartPattern()
     proj->SetGravity(false);
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
     m_isStartPhase = false;
+    m_patternCount = 3;
     m_curPattern = Boss3Pattern::PATTERN1;
+
 }
 
 void Boss3::Pattern1()
@@ -309,7 +311,7 @@ void Boss3::Pattern3()
 
 void Boss3::Pattern4()
 {
-    SetPos({ m_position, 140.f });
+    SetPos({ m_position, 120.f });
     if (m_doFire == false)
     {
         m_animator->Play(L"UnFold", PlayMode::Once, 1, 1.f);
@@ -364,8 +366,10 @@ void Boss3::SpawnCore()
 {
     m_isCorePhase = true;
 
+    Vec2 vec = GetPos();
+
     auto* core = new Boss3Core(this);
-    core->SetPos(GetPos());
+    core->SetPos({vec.x, vec.y + 32.f});
     core->SetSize({ 100.f, 100.f });
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
 }
@@ -388,4 +392,31 @@ void Boss3::CheckAnimationEnd(std::wstring _animationName, bool repeat)
 void Boss3::PressedButton()
 {
     m_patternCount++;
+}
+
+void Boss3::StartDeathSequence()
+{
+    m_isDying = true;
+    m_isCooldown = false;
+    m_curPattern = Boss3Pattern::NONE;
+    m_patternTimer = 0.f;
+
+    if (m_animator)
+    {
+        if (m_BDTexture)
+        {
+            m_animator->CreateAnimation(
+                L"Death",
+                m_BDTexture,
+                { 0.f, 0.f },
+                {128.f, 256.f},
+                {128.f, 0.f},
+                12,
+                0.1f
+            );
+        }
+
+        m_animator->Play(L"Death", PlayMode::Once, 1, 1.f);
+        GET_SINGLE(ResourceManager)->Play(L"BossCoreDestroy");
+    }
 }

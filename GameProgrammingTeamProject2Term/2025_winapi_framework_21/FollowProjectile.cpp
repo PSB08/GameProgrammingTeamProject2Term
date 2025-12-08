@@ -14,7 +14,7 @@ FollowProjectile::FollowProjectile()
 	m_exploseTimerValue(1.f),
 	m_doExploseTimerValue(0.5f)
 {
-	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");  //바꿔야함
+	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"BulletB");  //바꿔야함
 	auto* com = AddComponent<Collider>();
 	com->SetSize({ 30.f,30.f });
 	com->SetName(L"ExploseProjectile");
@@ -37,7 +37,8 @@ void FollowProjectile::Update()
 		}
 		else
 		{
-			Translate({-(m_myPos.x - m_playerPos.x) * 8.f * fDT, -(m_myPos.y - m_playerPos.y) * 8.f * fDT }); // 위치벡터 구하기
+			if(!m_stopMove)
+				Translate({-(m_myPos.x - m_playerPos.x) * 3.5f * fDT, -(m_myPos.y - m_playerPos.y) * 3.5f * fDT }); // 위치벡터 구하기
 		}
 	}
 	else
@@ -73,6 +74,7 @@ void FollowProjectile::Render(HDC _hdc)
 		, size.x, size.y,
 		m_pTexture->GetTextureDC(),
 		0, 0, width, height, RGB(255, 0, 255));
+
 	ComponentRender(_hdc);
 }
 
@@ -120,6 +122,7 @@ void FollowProjectile::EnterCollision(Collider* _other)
 {
 	if (_other->GetName() == L"Floor")
 	{
+		m_stopMove = true;
 		m_exploseState = true;
 		m_exploseTimer = true;
 		m_playerPos = {};

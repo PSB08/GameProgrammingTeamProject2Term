@@ -34,11 +34,13 @@ private:
     void CheckAnimationEnd(std::wstring _animationName, bool repeat = false);
 public:
     void PressedButton();
+    void StartDeathSequence();
 private:
     std::vector<Button*> m_Buttons;
     Texture* m_BATexture;
     Texture* m_BFTexture;
     Texture* m_BUFTexture;
+    Texture* m_BDTexture;
     Animator* m_animator;
 private:
     // 패턴용 변수들
@@ -51,6 +53,7 @@ private:
     bool m_isShotFollow = false;
     bool m_doShake = false;
     bool m_doFire = false;
+    bool m_isDying = false;
 
     float m_angle1;
     float m_fireTimer1;
@@ -59,5 +62,7 @@ private:
     float m_fireTimer2;
     
     float m_position = 0.f;
+
+
 };
 

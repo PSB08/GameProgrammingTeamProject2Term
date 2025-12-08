@@ -38,7 +38,6 @@ void Button::Render(HDC _hdc)
 		, size.x, size.y,
 		m_Texture->GetTextureDC(),
 		0, 0, width, height, RGB(0, 0, 0));
-	ComponentRender(_hdc);
 }
 
 void Button::EnterCollision(Collider* _other)
