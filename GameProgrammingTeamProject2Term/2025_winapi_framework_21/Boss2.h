@@ -8,6 +8,7 @@
 class Boss2Core;
 class Boss2Laser;
 class LaserObject;
+class Boss2MainCore;
 
 class Boss2 : public BossBase<Boss2Pattern>
 {
@@ -203,4 +204,8 @@ private:
         void SetupAnimations();  //애니메이션 세팅
         void PlayIdle();  //기본 애니메이션 시작
 
+private:
+    Boss2MainCore* m_mainCore = nullptr;
+
+    int m_totalPatternFinished = 0;
 };

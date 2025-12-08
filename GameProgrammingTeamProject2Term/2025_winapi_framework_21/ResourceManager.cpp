@@ -315,12 +315,14 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"SmallExplosion", L"Texture\\small-explosion.bmp");
 	LoadTexture(L"BigExplosion", L"Texture\\big-explosion.bmp");
 
+	LoadTexture(L"ShieldIdle150", L"Texture\\ShieldIdle150.bmp");
+	LoadTexture(L"ShieldIdle250", L"Texture\\ShieldIdle250.bmp");
 	LoadTexture(L"ShieldIdle300", L"Texture\\ShieldIdle300.bmp");
 	LoadTexture(L"ShieldIdle350", L"Texture\\ShieldIdle350.bmp");
-	LoadTexture(L"ShieldIdle250", L"Texture\\ShieldIdle250.bmp");
+	LoadTexture(L"Shield150", L"Texture\\Shield150.bmp");
+	LoadTexture(L"Shield250", L"Texture\\Shield250.bmp");
 	LoadTexture(L"Shield300", L"Texture\\Shield300.bmp");
 	LoadTexture(L"Shield350", L"Texture\\Shield350.bmp");
-	LoadTexture(L"Shield250", L"Texture\\Shield250.bmp");
 
 	LoadTexture(L"boss2", L"Texture\\boss2.bmp");
 	LoadTexture(L"boss2Icon", L"Texture\\boss2Icon.bmp");

@@ -582,6 +582,15 @@ void Boss2::EndPattern()
     m_isCooldown = true;
     m_curPattern = Boss2Pattern::NONE;  //패턴 없애기
 
+    if (m_isCorePhase && m_mainCore && m_mainCore->HasShield())
+    {
+        if (m_patternsSinceLastCore >= 2)
+        {
+            m_patternsSinceLastCore = 0;
+            m_mainCore->BreakNextShield();
+        }
+    }
+
     if (finished == Boss2Pattern::PATTERN3)  //근데 3이 끝난거면
     {
         m_isCoreExplosionPhase = false;
@@ -639,7 +648,7 @@ void Boss2::SpawnMainCore()
     core->SetPos(GetPos());
     core->SetSize({ 100.f, 100.f });
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
-
+    m_mainCore = core;
     StartDeathSequence();
 }
 
