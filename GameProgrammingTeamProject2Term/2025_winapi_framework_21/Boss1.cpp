@@ -9,6 +9,7 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "Texture.h"
+#include "Effect.h"
 
 Boss1::Boss1()
     : m_isCorePhase(false)
@@ -37,6 +38,8 @@ Boss1::Boss1()
         SetupAnimations();
         PlayNextLine();
     }
+
+    InitShields();
     StartRandomPattern();
 }
 
@@ -225,6 +228,14 @@ void Boss1::EndPattern()
 {
     m_patternCount++;
 
+    if (!m_isDying)
+    {
+        if (m_patternCount == 3 || m_patternCount == 6 || m_patternCount == 9)
+        {
+            BreakNextShield();
+        }
+    }
+
     if (m_patternCount >= m_maxPatternCount && !m_isDying)
     {
         StartDeathSequence();
@@ -247,6 +258,24 @@ void Boss1::StartDeathSequence()
     {
         if (m_pDeathTexture)
         {
+            auto* effect = new Effect;
+
+            effect->SetPos(GetPos());
+            effect->SetSize({ 120.f, 120.f });
+
+            Texture* tex = GET_SINGLE(ResourceManager)->GetTexture(L"SmallExplosion");
+            effect->Init(
+                tex,
+                L"explosionOnce",
+                { 0.f, 0.f },
+                { 120.f, 120.f },
+                { 120.f, 0.f },
+                11,
+                0.06f
+            );
+
+            GET_SINGLE(SceneManager)->GetCurScene()->AddObject(effect, Layer::BUTTON);
+
             Vec2 slice = { 160.f, 160.f };
             Vec2 step = { 160.f, 0.f };
             m_animator->CreateAnimation(
@@ -262,6 +291,52 @@ void Boss1::StartDeathSequence()
 
         m_animator->Play(m_deathAnimName, PlayMode::Once, 1, 1.f);
         GET_SINGLE(ResourceManager)->Play(L"BossCoreDestroy");
+    }
+}
+
+void Boss1::InitShields()
+{
+    Vec2 bossPos = GetPos();
+
+    m_shields[0] = new Boss1Shield(this,
+        L"ShieldIdle250",
+        L"Shield250",
+        { 150.f, 150.f });
+
+    m_shields[1] = new Boss1Shield(this,
+        L"ShieldIdle300",
+        L"Shield300",
+        { 200.f, 200.f });
+
+    m_shields[2] = new Boss1Shield(this,
+        L"ShieldIdle350",
+        L"Shield350",
+        { 250.f, 250.f });
+
+    for (int i = 0; i < 3; ++i)
+    {
+        if (m_shields[i] != nullptr)
+        {
+            m_shields[i]->SetPos(bossPos);
+            GET_SINGLE(SceneManager)->GetCurScene()->AddObject(m_shields[i], Layer::BOSSCORE);
+        }
+    }
+
+    m_shieldCount = 3;
+}
+
+void Boss1::BreakNextShield()
+{
+    for (int i = 2; i >= 0; --i)
+    {
+        if (m_shields[i] &&
+            !m_shields[i]->IsBreaking() &&
+            !m_shields[i]->GetIsDead())
+        {
+            m_shields[i]->StartBreak();
+            m_shieldCount--;
+            break;
+        }
     }
 }
 

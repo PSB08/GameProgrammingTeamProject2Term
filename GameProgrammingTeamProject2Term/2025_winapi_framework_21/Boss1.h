@@ -2,6 +2,7 @@
 #include "BossBase.h"
 #include "Animator.h"
 #include "Enums.h" // Boss1Pattern Æ÷ÇÔ
+#include "Boss1Shield.h"
 
 class Boss1 : public BossBase<Boss1Pattern>
 {
@@ -60,4 +61,11 @@ private:
     std::wstring m_deathAnimName;
 
     void StartDeathSequence();
+
+private:
+    Boss1Shield* m_shields[3] = { nullptr, nullptr, nullptr };
+    int m_shieldCount = 0;
+
+    void InitShields();
+    void BreakNextShield();
 };

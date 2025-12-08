@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Animation.h"
+#include "Effect.h"
 #include <cmath>
 
 Boss2::Boss2()
@@ -758,6 +759,24 @@ void Boss2::StartDeathSequence()
 
     if (!m_animator)
         return;
+
+    auto* effect = new Effect;
+
+    effect->SetPos(GetPos());
+    effect->SetSize({ 120.f, 120.f });
+
+    Texture* effTex = GET_SINGLE(ResourceManager)->GetTexture(L"SmallExplosion");
+    effect->Init(
+        effTex,
+        L"explosionOnce",
+        { 0.f, 0.f },
+        { 120.f, 120.f },
+        { 120.f, 0.f },
+        11,
+        0.06f
+    );
+
+    GET_SINGLE(SceneManager)->GetCurScene()->AddObject(effect, Layer::BUTTON);
 
     Texture* tex = m_pDeathTexture;
 

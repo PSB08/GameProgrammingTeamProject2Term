@@ -78,9 +78,9 @@ void LaserObject::SetupAnimations()
     int texW = m_pTexture->GetWidth();
     int texH = m_pTexture->GetHeight();
 
-    const int frameCount = 16;
+    const int frameCount = 1;
 
-    Vec2 sliceSize = { texW / (float)frameCount, (float)texH };
+    Vec2 sliceSize = { 50.f, 720.f };
     Vec2 step = { sliceSize.x, 0.f };
 
     m_animator->CreateAnimation(

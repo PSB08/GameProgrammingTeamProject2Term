@@ -7,6 +7,8 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "TimeManager.h"
+#include "SceneManager.h"
+#include "Effect.h"
 
 Boss2Core::Boss2Core(Boss2* owner, int index)
     : m_owner(owner)
@@ -239,6 +241,24 @@ void Boss2Core::OpenCore()
     if (m_state == CoreState::Breaking)
         return;
 
+    auto* effect = new Effect;
+
+    effect->SetPos(GetPos());
+    effect->SetSize({ 120.f, 120.f });
+
+    Texture* tex = GET_SINGLE(ResourceManager)->GetTexture(L"SmallExplosion");
+    effect->Init(
+        tex,
+        L"explosionOnce",
+        { 0.f, 0.f },
+        { 120.f, 120.f },
+        { 120.f, 0.f },
+        11,
+        0.06f
+    );
+
+    GET_SINGLE(SceneManager)->GetCurScene()->AddObject(effect, Layer::BUTTON);
+
     // 보스가 코어를 열었을 때 호출됨
     m_state = CoreState::Opening;
     m_isOpened = true;
@@ -283,6 +303,24 @@ void Boss2Core::HandleDeath()
     m_collidable = false;
     if (m_collider)
         m_collider->SetEnabled(false);
+
+    auto* effect = new Effect;
+
+    effect->SetPos(GetPos());
+    effect->SetSize({ 160.f, 160.f });
+
+    Texture* tex = GET_SINGLE(ResourceManager)->GetTexture(L"BigExplosion");
+    effect->Init(
+        tex,
+        L"explosionOnce",
+        { 0.f, 0.f },
+        { 160.f, 160.f },
+        { 160.f, 0.f },
+        11,
+        0.06f
+    );
+
+    GET_SINGLE(SceneManager)->GetCurScene()->AddObject(effect, Layer::BUTTON);
 
     if (m_owner)
         m_owner->NotifyCoreDestroyed(this); // Boss 패턴 로직용

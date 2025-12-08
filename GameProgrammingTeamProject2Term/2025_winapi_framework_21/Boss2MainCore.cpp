@@ -5,6 +5,7 @@
 #include "ResourceManager.h"
 #include "Boss1.h"
 #include "EventBus.h"
+#include "Effect.h"
 
 Boss2MainCore::Boss2MainCore(Boss2* boss)
     : m_owner(boss)
@@ -82,7 +83,25 @@ void Boss2MainCore::EnterCollision(Collider* _other)
     {
         EventBus::Invoke(L"Boss2Killed");
 
-        m_delay = 0.2f;
+        auto* effect = new Effect;
+
+        effect->SetPos(GetPos());
+        effect->SetSize({ 160.f, 160.f });
+
+        Texture* tex = GET_SINGLE(ResourceManager)->GetTexture(L"BigExplosion");
+        effect->Init(
+            tex,
+            L"explosionOnce",
+            { 0.f, 0.f },
+            { 160.f, 160.f },
+            { 160.f, 0.f },
+            11,
+            0.06f
+        );
+
+        GET_SINGLE(SceneManager)->GetCurScene()->AddObject(effect, Layer::BUTTON);
+
+        m_delay = 1.f;
         m_pendingSceneChange = true;
         GET_SINGLE(SceneManager)->RequestDestroy(_other->GetOwner());
         GET_SINGLE(ResourceManager)->Play(L"BossDie");

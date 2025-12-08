@@ -310,8 +310,17 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"boss1Core", L"Texture\\Boss1_Break-Sheet.bmp");
 	LoadTexture(L"boss1CoreBreaking", L"Texture\\Boss1_Breaking-Sheet.bmp");
 
-	LoadTexture(L"LaserVertical", L"Texture\\Laser_Vectical-sheet.bmp");
-	LoadTexture(L"LaserHorizontal", L"Texture\\Laser_Horizontal-sheet.bmp");
+	LoadTexture(L"LaserVertical", L"Texture\\Laser_Vectical.bmp");
+	LoadTexture(L"LaserHorizontal", L"Texture\\Laser_Horizontal.bmp");
+	LoadTexture(L"SmallExplosion", L"Texture\\small-explosion.bmp");
+	LoadTexture(L"BigExplosion", L"Texture\\big-explosion.bmp");
+
+	LoadTexture(L"ShieldIdle300", L"Texture\\ShieldIdle300.bmp");
+	LoadTexture(L"ShieldIdle350", L"Texture\\ShieldIdle350.bmp");
+	LoadTexture(L"ShieldIdle250", L"Texture\\ShieldIdle250.bmp");
+	LoadTexture(L"Shield300", L"Texture\\Shield300.bmp");
+	LoadTexture(L"Shield350", L"Texture\\Shield350.bmp");
+	LoadTexture(L"Shield250", L"Texture\\Shield250.bmp");
 
 	LoadTexture(L"boss2", L"Texture\\boss2.bmp");
 	LoadTexture(L"boss2Icon", L"Texture\\boss2Icon.bmp");

@@ -5,7 +5,7 @@
 DeadFloor::DeadFloor()
 {
 	auto* col = AddComponent<Collider>();
-	col->SetSize({ 10000.f, 50.f });
+	col->SetSize({ 10000.f, 100.f });
 	col->SetName(L"DeadFloor");
 }
 

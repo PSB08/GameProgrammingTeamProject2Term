@@ -166,6 +166,7 @@
     <ClInclude Include="BIgBullet.h" />
     <ClInclude Include="Boss1.h" />
     <ClInclude Include="Boss1Core.h" />
+    <ClInclude Include="Boss1Shield.h" />
     <ClInclude Include="Boss2.h" />
     <ClInclude Include="Boss2Core.h" />
     <ClInclude Include="Boss2Laser.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="BIgBullet.cpp" />
     <ClCompile Include="Boss1.cpp" />
     <ClCompile Include="Boss1Core.cpp" />
+    <ClCompile Include="Boss1Shield.cpp" />
     <ClCompile Include="Boss2.cpp" />
     <ClCompile Include="Boss2Core.cpp" />
     <ClCompile Include="Boss2Laser.cpp" />
