@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Animation.h"
 #include "Effect.h"
+#include "Boss2Shield.h"
 #include <cmath>
 
 Boss2::Boss2()
@@ -34,6 +35,7 @@ Boss2::Boss2()
     PlayIdle();
 
     InitSpawnCore();
+    InitShields();
 }
 
 Boss2::~Boss2()
@@ -582,15 +584,6 @@ void Boss2::EndPattern()
     m_isCooldown = true;
     m_curPattern = Boss2Pattern::NONE;  //패턴 없애기
 
-    if (m_isCorePhase && m_mainCore && m_mainCore->HasShield())
-    {
-        if (m_patternsSinceLastCore >= 2)
-        {
-            m_patternsSinceLastCore = 0;
-            m_mainCore->BreakNextShield();
-        }
-    }
-
     if (finished == Boss2Pattern::PATTERN3)  //근데 3이 끝난거면
     {
         m_isCoreExplosionPhase = false;
@@ -603,6 +596,10 @@ void Boss2::EndPattern()
     if (m_patternsSinceLastCore >= 2 && m_nextCoreToOpen < (int)m_cores.size())  //만약 2번 했으면
     {
         m_patternsSinceLastCore = 0;  //초기화
+        if (HasShield())
+        {
+            BreakNextShield();
+        }
 
         Boss2Core* core = m_cores[m_nextCoreToOpen];
         if (core)
@@ -809,3 +806,75 @@ void Boss2::StartDeathSequence()
 }
 
     #pragma endregion
+
+void Boss2::InitShields()
+{
+    float sizes[4] = { 150.f, 250.f, 300.f, 350.f };
+
+    std::wstring idleNames[4] =
+    {
+        L"ShieldIdle150",
+        L"ShieldIdle250",
+        L"ShieldIdle300",
+        L"ShieldIdle350"
+    };
+
+    std::wstring breakNames[4] =
+    {
+        L"Shield150",
+        L"Shield250",
+        L"Shield300",
+        L"Shield350"
+    };
+
+    Vec2 corePos = GetPos();
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+
+    //따로따로 할 예정
+    for (int i = 0; i < 4; ++i)
+    {
+        float s = sizes[i];
+        Boss2Shield* shield = new Boss2Shield(
+            this,
+            idleNames[i],
+            breakNames[i],
+            { s - 100.f, s - 100.f }
+        );
+
+        shield->SetPos(corePos);
+        scene->AddObject(shield, Layer::BOSSCORE);
+
+        m_shields[i] = shield;
+    }
+
+    m_shieldCount = 4;
+}
+
+void Boss2::BreakNextShield()
+{
+    for (int i = 3; i >= 0; --i)
+    {
+        if (m_shields[i] &&
+            !m_shields[i]->IsBreaking() &&
+            !m_shields[i]->GetIsDead())
+        {
+            m_shields[i]->StartBreak();
+            --m_shieldCount;
+            break;
+        }
+    }
+}
+
+void Boss2::ResetShields()
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (m_shields[i])
+        {
+            m_shields[i]->SetDead();
+            m_shields[i] = nullptr;
+        }
+    }
+
+    InitShields();
+}

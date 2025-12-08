@@ -9,6 +9,7 @@ class Boss2Core;
 class Boss2Laser;
 class LaserObject;
 class Boss2MainCore;
+class Boss2Shield;
 
 class Boss2 : public BossBase<Boss2Pattern>
 {
@@ -147,7 +148,7 @@ private:
     int m_pattern5SpawnedCount = 0;
 
     //PATTERN5에서 한 패턴 동안 생성 가능한 최대 탄 수
-    int m_pattern5MaxBullets = 90;
+    int m_pattern5MaxBullets = 60;
 
 
 private:
@@ -208,4 +209,14 @@ private:
     Boss2MainCore* m_mainCore = nullptr;
 
     int m_totalPatternFinished = 0;
+
+private:
+        Boss2Shield* m_shields[4] = { nullptr, nullptr, nullptr, nullptr };
+        int          m_shieldCount = 0;
+
+        void InitShields();
+        void ResetShields();
+public:
+    void BreakNextShield();
+    bool HasShield() const { return m_shieldCount > 0; }
 };
