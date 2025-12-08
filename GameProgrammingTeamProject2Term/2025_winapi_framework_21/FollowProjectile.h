@@ -41,5 +41,6 @@ private:
     float m_doExploseTimerValue;
     bool m_exploseState = false;
     bool m_isfired = false;
+    bool m_stopMove = false;
 };
 

@@ -11,7 +11,7 @@ ExploseProjectile::ExploseProjectile()
 	: m_angle(0.f),
 	  m_maxLifeTime(3.f)
 {
-	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"plane");  //¹Ù²ã¾ßÇÔ
+	m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"BulletG");
 
 	auto* com = AddComponent<Collider>();
 	Vec2 size = GetSize();
@@ -57,7 +57,6 @@ void ExploseProjectile::Render(HDC _hdc)
 		, size.x, size.y,
 		m_pTexture->GetTextureDC(),
 		0, 0, width, height, RGB(255, 0, 255));
-	ComponentRender(_hdc);
 }
 
 void ExploseProjectile::Explose(int _value)
@@ -110,6 +109,9 @@ void ExploseProjectile::SetGravity(bool _value)
 void ExploseProjectile::SetDivision(bool _value)
 {
 	m_endDivision = _value;
+
+	if (!_value)
+		m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"BulletP");
 }
 
 void ExploseProjectile::SetRigid(bool _value)
@@ -131,7 +133,8 @@ void ExploseProjectile::SetForce(Vec2 _force)
 
 void ExploseProjectile::EnterCollision(Collider* _other)
 {
-	if((_other->GetName() == L"Floor" || _other->GetName() == L"Player" || _other->GetName() == L"Platform") && m_delayTime > 0.1f)
+	if((_other->GetName() == L"Floor" || _other->GetName() == L"Player" ||
+		_other->GetName() == L"Platform") && m_delayTime > 0.1f)
 	{
 		Explose(m_ExploseValue);
 		SetDead();

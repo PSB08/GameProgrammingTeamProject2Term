@@ -18,7 +18,7 @@ void Boss3Scene::Init()
 	m_pBackground = GET_SINGLE(ResourceManager)->GetTexture(L"Backtest6");
 
 	Object* obj = new Boss3;
-	obj->SetPos({ WINDOW_WIDTH / 2, WINDOW_HEIGHT / 5 });
+	obj->SetPos({ WINDOW_WIDTH / 2, WINDOW_HEIGHT / 6 });
 	obj->SetSize({ 150,300 });
 
 	AddObject(obj, Layer::BOSS);
@@ -33,19 +33,19 @@ void Boss3Scene::Init()
 		(
 			Layer::DEFAULT
 			, { WINDOW_WIDTH / 2, 450 }
-	, { 100,100 });
+	, { 180,100 });
 
 	Spawn<UpDownPlatform>
 		(
 			Layer::DEFAULT
 			, { 320, 450 }
-	, { 100,100 });
+	, { 180,100 });
 
 	Spawn<UpDownPlatform>
 		(
 			Layer::DEFAULT
 			, { 960, 450 }
-	, { 100,100 });
+	, { 180,100 });
 
 	Spawn<Floor>
 		(

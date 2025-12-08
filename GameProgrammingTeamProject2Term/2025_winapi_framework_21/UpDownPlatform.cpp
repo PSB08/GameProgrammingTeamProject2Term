@@ -5,12 +5,12 @@
 
 UpDownPlatform::UpDownPlatform()
 	: m_DownCheckTimer(5.f),
-	m_UpCheckValue(10),
+	m_UpCheckValue(2),
 	m_sizeDownValue(100.f)
 {
 	m_Texture = GET_SINGLE(ResourceManager)->GetTexture(L"Platform");
 	auto* col = AddComponent <Collider>();
-	col->SetSize({ 100.f, 50.f });
+	col->SetSize({ 105.f, 30.f });
 	col->SetName(L"Platform");
 }
 
@@ -33,6 +33,7 @@ void UpDownPlatform::Update()
 		m_timer = 0.f;	
 		m_nowSize--;
 
+		m_UpCheckValue -= m_nowSize * 3;
 		platformY += 100;
 
 		SetPos({ platformPosition.x, platformY});
@@ -42,7 +43,8 @@ void UpDownPlatform::Update()
 	{
 		m_hitValue = 0;
 		m_nowSize++;
-		
+
+		m_UpCheckValue += m_nowSize * 3;
 		platformY -= 100;
 
 		SetPos({platformPosition.x , platformY});
@@ -51,7 +53,6 @@ void UpDownPlatform::Update()
 
 void UpDownPlatform::Render(HDC _hdc)
 {
-
 	Vec2 pos = GetPos();
 	Vec2 size = GetSize();
 	int width = m_Texture->GetWidth();
@@ -59,11 +60,10 @@ void UpDownPlatform::Render(HDC _hdc)
 
 	::TransparentBlt(_hdc
 		, (int)(pos.x - size.x / 2)
-		, (int)(pos.y - size.y / 2)
-		, size.x, size.y,
+		, (int)(pos.y - size.y / 2) + 20.f
+		, size.x , size.y,
 		m_Texture->GetTextureDC(),
 		0, 0, width, height, RGB(0, 0, 0));
-	ComponentRender(_hdc);
 }
 
 void UpDownPlatform::EnterCollision(Collider* _other)
@@ -72,7 +72,6 @@ void UpDownPlatform::EnterCollision(Collider* _other)
 	{
 		_other->GetOwner()->SetDead();
 		m_timer = 0.f;
-		cout << m_hitValue;
 		m_hitValue++;
 	}
 }
