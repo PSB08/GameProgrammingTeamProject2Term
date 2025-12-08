@@ -6,6 +6,7 @@
 #include "Boss1.h"
 #include "EventBus.h"
 #include "Effect.h"
+#include "Boss2Shield.h"
 
 Boss2MainCore::Boss2MainCore(Boss2* boss)
     : m_owner(boss)
@@ -25,6 +26,7 @@ Boss2MainCore::Boss2MainCore(Boss2* boss)
     m_animator = AddComponent<Animator>();
     if (m_pTexture && m_animator)
         SetupAnimations();
+    InitShields();
 }
 
 Boss2MainCore::~Boss2MainCore()
@@ -81,6 +83,12 @@ void Boss2MainCore::EnterCollision(Collider* _other)
 {
     if (_other->IsTrigger() && _other->GetName() == L"PlayerBullet")
     {
+        if (HasShield())
+        {
+            _other->GetOwner()->SetDead();
+            return;
+        }
+
         EventBus::Invoke(L"Boss2Killed");
 
         auto* effect = new Effect;
@@ -106,4 +114,76 @@ void Boss2MainCore::EnterCollision(Collider* _other)
         GET_SINGLE(SceneManager)->RequestDestroy(_other->GetOwner());
         GET_SINGLE(ResourceManager)->Play(L"BossDie");
     }
+}
+
+void Boss2MainCore::InitShields()
+{
+    float sizes[4] = { 150.f, 250.f, 300.f, 350.f };
+
+    std::wstring idleNames[4] =
+    {
+        L"ShieldIdle150",
+        L"ShieldIdle250",
+        L"ShieldIdle300",
+        L"ShieldIdle350"
+    };
+
+    std::wstring breakNames[4] =
+    {
+        L"Shield150",
+        L"Shield250",
+        L"Shield300",
+        L"Shield350"
+    };
+
+    Vec2 corePos = GetPos();
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+
+    //따로따로 할 예정
+    for (int i = 0; i < 4; ++i)
+    {
+        float s = sizes[i];
+        Boss2Shield* shield = new Boss2Shield(
+            this,
+            idleNames[i],
+            breakNames[i],
+            { s - 100.f, s - 100.f }
+        );
+
+        shield->SetPos(corePos);
+        scene->AddObject(shield, Layer::BOSSCORE);
+
+        m_shields[i] = shield;
+    }
+
+    m_shieldCount = 4;
+}
+
+void Boss2MainCore::BreakNextShield()
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (m_shields[i] &&
+            !m_shields[i]->IsBreaking() &&
+            !m_shields[i]->GetIsDead())
+        {
+            m_shields[i]->StartBreak();
+            --m_shieldCount;
+            break;
+        }
+    }
+}
+
+void Boss2MainCore::ResetShields()
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (m_shields[i])
+        {
+            m_shields[i]->SetDead();
+            m_shields[i] = nullptr;
+        }
+    }
+
+    InitShields();
 }

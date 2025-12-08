@@ -171,6 +171,7 @@
     <ClInclude Include="Boss2Core.h" />
     <ClInclude Include="Boss2Laser.h" />
     <ClInclude Include="Boss2MainCore.h" />
+    <ClInclude Include="Boss2Shield.h" />
     <ClInclude Include="Boss3.h" />
     <ClInclude Include="Boss3Core.h" />
     <ClInclude Include="Boss3Scene.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="Boss2Core.cpp" />
     <ClCompile Include="Boss2Laser.cpp" />
     <ClCompile Include="Boss2MainCore.cpp" />
+    <ClCompile Include="Boss2Shield.cpp" />
     <ClCompile Include="Boss3.cpp" />
     <ClCompile Include="Boss3Core.cpp" />
     <ClCompile Include="Boss3Scene.cpp" />

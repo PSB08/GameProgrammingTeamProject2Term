@@ -4,6 +4,7 @@
 #include "Animator.h"
 
 class Boss2;
+class Boss2Shield;
 
 class Boss2MainCore : public Enemy
 {
@@ -26,5 +27,15 @@ private:
 
 	Texture* m_pTexture;
 	Animator* m_animator;
+
+private:
+	Boss2Shield* m_shields[4] = { nullptr, nullptr, nullptr, nullptr };
+	int          m_shieldCount = 0;
+
+	void InitShields();
+	void ResetShields();
+public:
+	void BreakNextShield();
+	bool HasShield() const { return m_shieldCount > 0; }
 };
 
