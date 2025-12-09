@@ -88,9 +88,6 @@ void BossSelectScene::Init()
     m_btnBoss2.Interactable(!data->boss2Cleared);
     m_btnBoss3.Interactable(!data->boss3Cleared);
 
-    //m_btnBoss1.SetBackgroundTexture(backNormal, backHover);
-    //m_btnBoss2.SetBackgroundTexture(backNormal, backHover);
-    //m_btnBoss3.SetBackgroundTexture(backNormal, backHover);
     m_btnTitle.SetBackgroundTexture(backNormal, backHover);
 }
 
