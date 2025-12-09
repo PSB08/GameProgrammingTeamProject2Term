@@ -396,6 +396,7 @@ void Boss3::PressedButton()
 {
     m_patternCount++;
     BreakNextShield();
+    GET_SINGLE(ResourceManager)->Play(L"ShieldBreak");
 }
 
 void Boss3::StartDeathSequence()

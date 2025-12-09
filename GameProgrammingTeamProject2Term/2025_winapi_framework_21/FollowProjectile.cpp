@@ -28,6 +28,8 @@ FollowProjectile::~FollowProjectile()
 
 void FollowProjectile::Update()
 {
+	Vec2 dir = { -(m_myPos.x - m_playerPos.x), -(m_myPos.y - m_playerPos.y) };
+	dir.Normalize();
 	if (!m_exploseState)
 	{
 		if (m_timer < m_waitTimerValue)
@@ -38,7 +40,7 @@ void FollowProjectile::Update()
 		else
 		{
 			if(!m_stopMove)
-				Translate({-(m_myPos.x - m_playerPos.x) * 3.5f * fDT, -(m_myPos.y - m_playerPos.y) * 3.5f * fDT }); // 위치벡터 구하기
+				Translate({dir.x * 2700.f * fDT, dir.y * 2700.f * fDT }); // 위치벡터 구하기
 		}
 	}
 	else

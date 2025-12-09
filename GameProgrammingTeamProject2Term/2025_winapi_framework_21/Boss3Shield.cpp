@@ -64,6 +64,7 @@ void Boss3Shield::EnterCollision(Collider* other)
 {
     if (other->IsTrigger() && other->GetName() == L"PlayerBullet")
     {
+        GET_SINGLE(ResourceManager)->Play(L"ShieldBlock");
         other->GetOwner()->SetDead();
     }
 }

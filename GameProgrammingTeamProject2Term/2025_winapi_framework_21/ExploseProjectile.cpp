@@ -85,6 +85,7 @@ void ExploseProjectile::Explose(int _value)
 			}
 		}
 		GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 10.f);
+		GET_SINGLE(ResourceManager)->Play(L"Explosion2Bullet");
 	}
 	else
 	{
@@ -101,6 +102,7 @@ void ExploseProjectile::Explose(int _value)
 			GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
 		}
 		GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 10.f);
+		GET_SINGLE(ResourceManager)->Play(L"ExplosionB");
 	}
 }
 
