@@ -43,26 +43,21 @@ void ResourceManager::Release()
 	std::unordered_map<wstring, Texture*>::iterator iter;
 	for (iter = m_mapTexture.begin(); iter != m_mapTexture.end(); ++iter)
 		SAFE_DELETE(iter->second);
-	m_mapTexture.clear();
+	std::unordered_map<wstring, Texture*>().swap(m_mapTexture);
 	ReleaseGDI();
 	ReleaseFonts();
 
 	std::unordered_map<wstring, SoundInfo*>::iterator iterSound;
 	for (iterSound = m_mapSounds.begin(); iterSound != m_mapSounds.end(); ++iterSound)
 		SAFE_DELETE(iterSound->second);
-	m_mapSounds.clear();
-
-	std::unordered_map<wstring, Texture*>().swap(m_mapTexture);
 	std::unordered_map<wstring, SoundInfo*>().swap(m_mapSounds);
+
 	std::unordered_map<wstring, float>().swap(m_lastEffectPlayTime);
 
-	m_curBGMKey.clear();
 	wstring().swap(m_curBGMKey);
 
-	m_resourcePath.clear();
 	std::filesystem::path().swap(m_resourcePath);
 
-	m_vecFontFiles.clear();
 	vector<wstring>().swap(m_vecFontFiles);
 }
 
