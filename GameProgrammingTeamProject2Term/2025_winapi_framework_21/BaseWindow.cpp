@@ -103,17 +103,6 @@ LRESULT BaseWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
     switch (message)
     {
-    //case WM_CHAR:
-    //    ::GetDC();
-    //    break;
-    //case WM_PAINT:
-    //{
-    //    PAINTSTRUCT ps;
-    //    HDC hdc = ::BeginPaint(hWnd, &ps);
-    //    ::Rectangle(hdc, 100, 100, 200, 200);
-    //    ::EndPaint(hWnd, &ps);
-    //}
-    //break;
     case WM_DESTROY:
         ::PostQuitMessage(0);
         break;

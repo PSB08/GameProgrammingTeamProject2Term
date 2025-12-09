@@ -49,12 +49,10 @@ void Core::MainUpdate()
 	GET_SINGLE(ResourceManager)->FmodUpdate();
 	GET_SINGLE(SceneManager)->Update();
 	//::SetWindowText(GetHwnd(), L"Deadlock");
-	//GET_SINGLE(CollisionManager)->Update();	
 }
 
 void Core::MainRender()
 { 
-	//::Rectangle(m_hBackDC, -1, -1, WINDOW_WIDTH +1 , WINDOW_HEIGHT +1 );
 	::PatBlt(m_hBackDC, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, BLACKNESS);
 	GET_SINGLE(SceneManager)->Render(m_hBackDC);
 	::BitBlt(m_hDC, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, m_hBackDC, 0, 0, SRCCOPY);
