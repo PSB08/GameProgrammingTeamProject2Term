@@ -41,7 +41,7 @@ ATOM BaseWindow::MyRegisterClass()
     wcex.hbrBackground = (HBRUSH)::GetStockObject(WHITE_BRUSH);
     wcex.lpszMenuName = nullptr;
     wcex.lpszClassName = L"GameP";
-    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON2));
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
 
     return ::RegisterClassExW(&wcex);
 }
