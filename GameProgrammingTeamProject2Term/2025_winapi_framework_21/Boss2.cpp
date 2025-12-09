@@ -645,7 +645,6 @@ void Boss2::SpawnMainCore()
     core->SetPos(GetPos());
     core->SetSize({ 100.f, 100.f });
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(core, Layer::BOSSCORE);
-    m_mainCore = core;
     StartDeathSequence();
 }
 
@@ -830,7 +829,6 @@ void Boss2::InitShields()
     Vec2 corePos = GetPos();
     std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
 
-    //따로따로 할 예정
     for (int i = 0; i < 4; ++i)
     {
         float s = sizes[i];
@@ -863,18 +861,4 @@ void Boss2::BreakNextShield()
             break;
         }
     }
-}
-
-void Boss2::ResetShields()
-{
-    for (int i = 0; i < 4; ++i)
-    {
-        if (m_shields[i])
-        {
-            m_shields[i]->SetDead();
-            m_shields[i] = nullptr;
-        }
-    }
-
-    InitShields();
 }
