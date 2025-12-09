@@ -52,8 +52,18 @@ void ResourceManager::Release()
 		SAFE_DELETE(iterSound->second);
 	m_mapSounds.clear();
 
-	m_pSoundSystem->close();
-	m_pSoundSystem->release();
+	std::unordered_map<wstring, Texture*>().swap(m_mapTexture);
+	std::unordered_map<wstring, SoundInfo*>().swap(m_mapSounds);
+	std::unordered_map<wstring, float>().swap(m_lastEffectPlayTime);
+
+	m_curBGMKey.clear();
+	wstring().swap(m_curBGMKey);
+
+	m_resourcePath.clear();
+	std::filesystem::path().swap(m_resourcePath);
+
+	m_vecFontFiles.clear();
+	vector<wstring>().swap(m_vecFontFiles);
 }
 
 void ResourceManager::RegisterGDI()
@@ -317,12 +327,17 @@ void ResourceManager::StopAllSounds()
 	for (int i = 0; i < (int)SOUND_CHANNEL::END; ++i)
 	{
 		if (m_pChannel[i])
+		{
 			m_pChannel[i]->stop();
+			m_pChannel[i] = nullptr;
+		}
 	}
 
 	m_lastEffectPlayTime.clear();
+	std::unordered_map<wstring, float>().swap(m_lastEffectPlayTime);
 
 	m_curBGMKey.clear();
+	wstring().swap(m_curBGMKey);
 }
 
 void ResourceManager::RegisterFont(FontType _type, const wstring& _name, int _height, int _weight, bool _italic, int _quality)
