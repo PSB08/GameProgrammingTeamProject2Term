@@ -321,7 +321,7 @@ void Player::PlayerBounce()
 	}
 	else if (!m_rigid->IsGrounded())
 	{
-		Vec2 jump = { 0, -55 };
+		Vec2 jump = { 0, -105 };
 		rid->AddImpulse(jump * jumpPower);
 	}
 }

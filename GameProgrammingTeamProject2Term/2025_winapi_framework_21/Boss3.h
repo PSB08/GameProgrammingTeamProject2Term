@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Button.h"
 #include "Animator.h"
+#include "Boss3Shield.h"
 
 class Texture;
 
@@ -21,7 +22,6 @@ private:
 
     void EndPattern();
     void Render(HDC _hdc) override;
-
 private:
     // ===== 개별 패턴 =====
     void StartPattern(); // 개막패턴 -
@@ -35,6 +35,12 @@ private:
 public:
     void PressedButton();
     void StartDeathSequence();
+private:
+    void InitShields();
+    void ResetShields();
+public:
+    void BreakNextShield();
+    bool HasShield() const { return m_shieldCount > 0; }
 private:
     std::vector<Button*> m_Buttons;
     Texture* m_BATexture;
@@ -62,7 +68,9 @@ private:
     float m_fireTimer2;
     
     float m_position = 0.f;
-
+private:
+    Boss3Shield* m_shields[4] = { nullptr, nullptr, nullptr, nullptr };
+    int          m_shieldCount = 0;
 
 };
 

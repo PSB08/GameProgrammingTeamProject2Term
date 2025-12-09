@@ -65,6 +65,4 @@ void Floor::Render(HDC _hdc)
         DeleteObject(brush);
         DeleteObject(pen);
     }
-
-    ComponentRender(_hdc);
 }

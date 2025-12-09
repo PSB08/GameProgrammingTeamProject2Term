@@ -9,7 +9,7 @@ Button::Button(Boss3* owner)
 {
 	m_Texture = GET_SINGLE(ResourceManager)->GetTexture(L"Button");
 	auto* col = AddComponent <Collider>();
-	col->SetSize({ 100.f, 50.f });
+	col->SetSize({ 50.f, 25.f });
 	col->SetName(L"Button");
 }
 
@@ -42,7 +42,6 @@ void Button::Render(HDC _hdc)
 
 void Button::EnterCollision(Collider* _other)
 {
-	cout << "DO";
 	if (_other->GetName() == L"Player")
 	{
 		m_owner->PressedButton();

@@ -71,6 +71,7 @@ Boss3::Boss3()
 
         Vec2 pos;
         pos.x = 320 * (i + 1);
+        pos.y = 15;
 
         button->SetPos(pos);
         button->SetSize({ 60.f, 60.f });
@@ -87,7 +88,9 @@ Boss3::Boss3()
             StartPattern();
         }
     }
+    InitShields();
 
+    m_patternCount = 8;
 } 
 
 Boss3::~Boss3()
@@ -172,6 +175,7 @@ void Boss3::EndPattern()
     m_patternTimer = 0.f;
     m_doShake = false;
     m_doFire = false;
+    m_fireTimer1 = 0.f;
     if (m_patternCount > m_maxPatternCount && !m_isDying)
     {
         StartDeathSequence();
@@ -201,7 +205,6 @@ void Boss3::StartPattern()
     proj->SetGravity(false);
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
     m_isStartPhase = false;
-    m_patternCount = 3;
     m_curPattern = Boss3Pattern::PATTERN1;
 
 }
@@ -392,6 +395,7 @@ void Boss3::CheckAnimationEnd(std::wstring _animationName, bool repeat)
 void Boss3::PressedButton()
 {
     m_patternCount++;
+    BreakNextShield();
 }
 
 void Boss3::StartDeathSequence()
@@ -418,5 +422,77 @@ void Boss3::StartDeathSequence()
 
         m_animator->Play(L"Death", PlayMode::Once, 1, 1.f);
         GET_SINGLE(ResourceManager)->Play(L"BossCoreDestroy");
+    }
+}
+
+void Boss3::InitShields()
+{
+    float sizes[4] = { 150.f, 250.f, 300.f, 350.f };
+
+    std::wstring idleNames[4] =
+    {
+        L"ShieldIdle150",
+        L"ShieldIdle250",
+        L"ShieldIdle300",
+        L"ShieldIdle350"
+    };
+
+    std::wstring breakNames[4] =
+    {
+        L"Shield150",
+        L"Shield250",
+        L"Shield300",
+        L"Shield350"
+    };
+
+    Vec2 corePos = GetPos();
+    std::shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetCurScene();
+
+    //따로따로 할 예정
+    for (int i = 0; i < 3; ++i)
+    {
+        float s = sizes[i];
+        Boss3Shield* shield = new Boss3Shield(
+            this,
+            idleNames[i],
+            breakNames[i],
+            { s - 100.f, s - 100.f }
+        );
+
+        shield->SetPos(corePos);
+        scene->AddObject(shield, Layer::BOSSCORE);
+
+        m_shields[i] = shield;
+    }
+
+    m_shieldCount = 3;
+}
+
+void Boss3::ResetShields()
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        if (m_shields[i])
+        {
+            m_shields[i]->SetDead();
+            m_shields[i] = nullptr;
+        }
+    }
+
+    InitShields();
+}
+
+void Boss3::BreakNextShield()
+{
+    for (int i = 3; i >= 0; --i)
+    {
+        if (m_shields[i] &&
+            !m_shields[i]->IsBreaking() &&
+            !m_shields[i]->GetIsDead())
+        {
+            m_shields[i]->StartBreak();
+            --m_shieldCount;
+            break;
+        }
     }
 }

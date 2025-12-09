@@ -247,16 +247,26 @@
     <ClInclude Include="DeadFloor.h">
       <Filter>Engine\03. Object</Filter>
     </ClInclude>
-    <ClInclude Include="BIgBullet.h" />
     <ClInclude Include="Boss2Scene.h">
       <Filter>Engine\04. Scene\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Engine\06. Component</Filter>
     </ClInclude>
-    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Boss1Shield.h">
       <Filter>Engine\03. Object\Boss\Boss1</Filter>
+    </ClInclude>
+    <ClInclude Include="BIgBullet.h">
+      <Filter>Engine\03. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss2Shield.h">
+      <Filter>Engine\03. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ClearScene.h">
+      <Filter>Engine\04. Scene\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss3Shield.h">
+      <Filter>Engine\03. Object\Boss\Boss3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -423,16 +433,26 @@
     <ClCompile Include="DeadFloor.cpp">
       <Filter>Engine\03. Object</Filter>
     </ClCompile>
-    <ClCompile Include="BIgBullet.cpp" />
     <ClCompile Include="Boss2Scene.cpp">
       <Filter>Engine\04. Scene\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Engine\06. Component</Filter>
     </ClCompile>
-    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Boss1Shield.cpp">
       <Filter>Engine\03. Object\Boss\Boss1</Filter>
+    </ClCompile>
+    <ClCompile Include="BIgBullet.cpp">
+      <Filter>Engine\03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss2Shield.cpp">
+      <Filter>Engine\03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearScene.cpp">
+      <Filter>Engine\04. Scene\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss3Shield.cpp">
+      <Filter>Engine\03. Object\Boss\Boss3</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

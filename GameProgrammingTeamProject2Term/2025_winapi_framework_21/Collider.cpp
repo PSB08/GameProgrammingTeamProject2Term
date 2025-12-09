@@ -41,17 +41,17 @@ void Collider::ExitCollision(Collider* _other)
 
 void Collider::Render(HDC _hdc)
 {
-	if (!m_enabled)
-		return;
+	//if (!m_enabled)
+	//	return;
 
-	PenType colorPen = PenType::GREEN;
-	if(m_showDebug)
-		colorPen = PenType::RED;
-	GDISelector pen(_hdc, colorPen);
-	GDISelector brush(_hdc, BrushType::HOLLOW);
+	//PenType colorPen = PenType::GREEN;
+	//if(m_showDebug)
+	//	colorPen = PenType::RED;
+	//GDISelector pen(_hdc, colorPen);
+	//GDISelector brush(_hdc, BrushType::HOLLOW);
 
-	RECT_RENDER(_hdc, m_updatedPos.x, m_updatedPos.y
-		, m_size.x, m_size.y);
+	//RECT_RENDER(_hdc, m_updatedPos.x, m_updatedPos.y
+	//	, m_size.x, m_size.y);
 }
 
 void Collider::Init()
