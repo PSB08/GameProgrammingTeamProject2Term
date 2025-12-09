@@ -314,6 +314,7 @@ void ResourceManager::RegisterTexture()
 	LoadTexture(L"LaserHorizontal", L"Texture\\Laser_Horizontal.bmp");
 	LoadTexture(L"SmallExplosion", L"Texture\\small-explosion.bmp");
 	LoadTexture(L"BigExplosion", L"Texture\\big-explosion.bmp");
+	LoadTexture(L"VerybigExplosion", L"Texture\\Verybig-explosion.bmp");
 
 	LoadTexture(L"ShieldIdle150", L"Texture\\ShieldIdle150.bmp");
 	LoadTexture(L"ShieldIdle250", L"Texture\\ShieldIdle250.bmp");

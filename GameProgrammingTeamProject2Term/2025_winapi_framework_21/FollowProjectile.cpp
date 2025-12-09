@@ -10,7 +10,7 @@
 
 FollowProjectile::FollowProjectile()
 	: m_angle(0.f),
-	m_waitTimerValue(1.f),
+	m_waitTimerValue(0.6f),
 	m_exploseTimerValue(1.f),
 	m_doExploseTimerValue(0.5f)
 {

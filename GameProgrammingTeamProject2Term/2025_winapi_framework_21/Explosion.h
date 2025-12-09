@@ -1,5 +1,9 @@
 #pragma once
 #include "Object.h"
+
+class Texture;
+
+
 class Explosion :
     public Object
 {
@@ -12,5 +16,6 @@ public:
 private:
     float m_timer = 0.f;
     float m_explosingTime;
+    Texture* m_ExpTexture;
 };
 

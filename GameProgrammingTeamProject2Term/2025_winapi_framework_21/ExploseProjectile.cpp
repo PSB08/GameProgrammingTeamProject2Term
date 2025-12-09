@@ -81,8 +81,10 @@ void ExploseProjectile::Explose(int _value)
 				proj->SetGravity(true);
 				proj->SetForce(dir);
 				GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
+				GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 20.f);
 			}
 		}
+		GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 10.f);
 	}
 	else
 	{
@@ -98,6 +100,7 @@ void ExploseProjectile::Explose(int _value)
 
 			GET_SINGLE(SceneManager)->GetCurScene()->AddObject(proj, Layer::BOSSPROJECTILE);
 		}
+		GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.2f, 10.f);
 	}
 }
 
