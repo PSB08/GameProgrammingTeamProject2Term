@@ -334,6 +334,7 @@ void Boss1::BreakNextShield()
             !m_shields[i]->GetIsDead())
         {
             m_shields[i]->StartBreak();
+            GET_SINGLE(ResourceManager)->Play(L"ShieldBreak");
             m_shieldCount--;
             break;
         }

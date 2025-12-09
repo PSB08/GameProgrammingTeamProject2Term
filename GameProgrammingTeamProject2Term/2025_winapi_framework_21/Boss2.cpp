@@ -596,10 +596,6 @@ void Boss2::EndPattern()
     if (m_patternsSinceLastCore >= 2 && m_nextCoreToOpen < (int)m_cores.size())  //만약 2번 했으면
     {
         m_patternsSinceLastCore = 0;  //초기화
-        if (HasShield())
-        {
-            BreakNextShield();
-        }
 
         Boss2Core* core = m_cores[m_nextCoreToOpen];
         if (core)
@@ -857,6 +853,7 @@ void Boss2::BreakNextShield()
             !m_shields[i]->GetIsDead())
         {
             m_shields[i]->StartBreak();
+            GET_SINGLE(ResourceManager)->Play(L"ShieldBreak");
             --m_shieldCount;
             break;
         }

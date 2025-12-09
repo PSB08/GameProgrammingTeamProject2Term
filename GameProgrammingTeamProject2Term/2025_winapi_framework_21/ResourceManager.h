@@ -25,6 +25,7 @@ public:
 	void ReleaseGDI();
 	bool RegisterFontFile(const wstring& _path);
 	void ReleaseFonts();
+	static std::string WStringToUTF8(const std::wstring& wstr);
 
 	// Sound
 	void LoadSound(const wstring& _key, const wstring& _path, bool _isLoop);

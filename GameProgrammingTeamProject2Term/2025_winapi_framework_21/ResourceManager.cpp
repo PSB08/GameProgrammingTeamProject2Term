@@ -101,39 +101,69 @@ void ResourceManager::ReleaseFonts()
 	m_vecFontFiles.clear();
 }
 
+std::string ResourceManager::WStringToUTF8(const std::wstring& wstr)
+{
+	//Windows의 wstring을 외부 호환용 UTF-8 string으로 바꾸는 함수
+	if (wstr.empty())
+		return std::string();  //비었다면 그냥 리턴
+
+	int sizeNeeded = WideCharToMultiByte
+	(  //얘는 wstring을 다른 멀티 바이트로 변환함
+		CP_UTF8,  //UTF8로
+		0,  //기본
+		wstr.c_str(),  //변환할 문자열
+		-1,  //널문자 포함
+		nullptr,  //실제 반환 x 
+		0,  //버퍼 크기만 알려주세요
+		nullptr,  //에러 처리 x
+		nullptr  //에러 처리 x
+	);
+
+	if (sizeNeeded == 0)
+		return std::string();
+
+	std::string result(sizeNeeded - 1, 0);
+	WideCharToMultiByte  //실제로 반환하기
+	(
+		CP_UTF8,  //UTF8로
+		0,  //기본
+		wstr.c_str(),  //변환할 문자열
+		-1,  //널문자 포함
+		&result[0],  //첫 번째
+		sizeNeeded,  //널까지 포함한 크기
+		nullptr,  //에러 처리 x
+		nullptr  //에러 처리 x
+	);
+
+	return result;  //반환하기 
+}
+
 void ResourceManager::LoadSound(const wstring& _key, const wstring& _path, bool _isLoop)
 {
 	if (FindSound(_key) || !m_pSoundSystem)
 		return;
+
 	wstring strFilePath = m_resourcePath;
 	strFilePath += _path;
 
-	// wstring to string
-	std::string str;
-	str.assign(strFilePath.begin(), strFilePath.end());
+	std::string utf8Path = WStringToUTF8(strFilePath);
 
-	// 루프할지 말지 결정
-	FMOD_MODE eMode = FMOD_LOOP_NORMAL; // 반복 출력
-	if (!_isLoop)
-		eMode = FMOD_DEFAULT; // 사운드 1번만 출력
+	FMOD_MODE eMode = _isLoop ? FMOD_LOOP_NORMAL : FMOD_DEFAULT;
 	FMOD::Sound* p = nullptr;
 
-	// BGM면 stream, 아니면 sound
-	// 팩토리함수
-	//// 사운드 객체를 만드는 것은 system임.
-	//						//파일경로,  FMOD_MODE, NULL, &sound
 	FMOD_RESULT r = _isLoop
-		? m_pSoundSystem->createStream(str.c_str(), eMode, nullptr, &p)
-		: m_pSoundSystem->createSound(str.c_str(), eMode, nullptr, &p);
+		? m_pSoundSystem->createStream(utf8Path.c_str(), eMode, nullptr, &p)
+		: m_pSoundSystem->createSound(utf8Path.c_str(), eMode, nullptr, &p);
 
 	if (r != FMOD_OK || !p)
+	{
 		return;
+	}
 
 	SoundInfo* pSound = new SoundInfo;
 	pSound->IsLoop = _isLoop;
 	pSound->pSound = p;
 	m_mapSounds.insert({ _key, pSound });
-
 }
 
 void ResourceManager::Play(const wstring& _key)
@@ -259,6 +289,8 @@ void ResourceManager::RegisterSound()
 	LoadSound(L"BossCoreDestroy", L"Sound\\BossCoreDestroy.mp3", false);
 	LoadSound(L"BossDie", L"Sound\\BossDie.mp3", false);
 	LoadSound(L"UIButton", L"Sound\\Button.mp3", false);
+	LoadSound(L"ShieldBlock", L"Sound\\ShieldBlock.mp3", false);
+	LoadSound(L"ShieldBreak", L"Sound\\ShieldBreak.mp3", false);
 
 	LoadSound(L"PlayerDash", L"Sound\\PlayerDash.mp3", false);
 	LoadSound(L"PlayerJump", L"Sound\\PlayerJump.mp3", false);

@@ -323,7 +323,13 @@ void Boss2Core::HandleDeath()
     GET_SINGLE(SceneManager)->GetCurScene()->AddObject(effect, Layer::BUTTON);
 
     if (m_owner)
+    {
+        if (m_owner->HasShield())
+        {
+            m_owner->BreakNextShield();
+        }
         m_owner->NotifyCoreDestroyed(this); // Boss 패턴 로직용
+    }
 
     if (m_animator)
         m_animator->Play(L"Death", PlayMode::Once, 1, 1.f);
