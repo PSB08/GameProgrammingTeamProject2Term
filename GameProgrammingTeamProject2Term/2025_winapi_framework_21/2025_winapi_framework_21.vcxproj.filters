@@ -258,6 +258,7 @@
     <ClInclude Include="Boss1Shield.h">
       <Filter>Engine\03. Object\Boss\Boss1</Filter>
     </ClInclude>
+    <ClInclude Include="Boss2Shield.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2025_winapi_framework_21.rc">
@@ -269,9 +270,6 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="2025_winapi_framework_21.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\..\..\..\Users\uesr\Downloads\Gamep.ico">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="..\Output\build\Resource\Texture\Gamep.ico">
@@ -434,5 +432,6 @@
     <ClCompile Include="Boss1Shield.cpp">
       <Filter>Engine\03. Object\Boss\Boss1</Filter>
     </ClCompile>
+    <ClCompile Include="Boss2Shield.cpp" />
   </ItemGroup>
 </Project>
