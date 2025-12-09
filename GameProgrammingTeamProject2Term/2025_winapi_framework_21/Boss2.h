@@ -197,25 +197,23 @@ private:
     float m_patternElapsed = 0.f;
 
 private:
-        Animator* m_animator;  //애니메이터
-        bool m_isDyingToCore;  //죽었는가
-        Texture* m_pDeathTexture;  //죽었을 때 나오는 텍스처
-        std::wstring m_deathAnimName;  //애니메이션 이름
+    Animator* m_animator;  //애니메이터
+    bool m_isDyingToCore;  //죽었는가
+    Texture* m_pDeathTexture;  //죽었을 때 나오는 텍스처
+    std::wstring m_deathAnimName;  //애니메이션 이름
 
-        void SetupAnimations();  //애니메이션 세팅
-        void PlayIdle();  //기본 애니메이션 시작
+    void SetupAnimations();  //애니메이션 세팅
+    void PlayIdle();  //기본 애니메이션 시작
 
 private:
-    Boss2MainCore* m_mainCore = nullptr;
-
     int m_totalPatternFinished = 0;
 
 private:
-        Boss2Shield* m_shields[4] = { nullptr, nullptr, nullptr, nullptr };
-        int          m_shieldCount = 0;
+    Boss2Shield* m_shields[4] = { nullptr, nullptr, nullptr, nullptr };
+    int m_shieldCount = 0;
 
-        void InitShields();
-        void ResetShields();
+    void InitShields();
+
 public:
     void BreakNextShield();
     bool HasShield() const { return m_shieldCount > 0; }
