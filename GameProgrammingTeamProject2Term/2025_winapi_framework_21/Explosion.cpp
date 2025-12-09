@@ -6,25 +6,25 @@
 #include "ResourceManager.h"
 
 Explosion::Explosion()
-	: m_explosingTime(1.1f)
+	: m_explosingTime(.64f)
 {
 	auto* col = AddComponent <Collider>();
-	col->SetSize({ 450.f, 450.f });
+	col->SetSize({ 485.f, 485.f });
 	col->SetName(L"Explosion");
     GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0.6f, 150.f);
     auto* ani = AddComponent<Animator>();
 
     m_ExpTexture = GET_SINGLE(ResourceManager)->GetTexture(L"VerybigExplosion");
-
+    GET_SINGLE(ResourceManager)->Play(L"Explosion");
     ani->CreateAnimation
     (L"Explose"
         , m_ExpTexture
         , { 0.f,0.f }
-        , { 480.f,480.f }
-        , { 480.f,0.f }
-    , 11, 0.1f);
+        , { 720.f,720.f }
+        , { 720.f,0.f }
+    , 11, 0.05f);
 
-    ani->Play(L"Explose", PlayMode::Once);
+    ani->Play(L"Explose", PlayMode::Once, 1);
 }
 
 Explosion::~Explosion()

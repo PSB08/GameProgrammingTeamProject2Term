@@ -297,7 +297,9 @@ void ResourceManager::RegisterSound()
 	LoadSound(L"PlayerShoot", L"Sound\\PlayerShoot.mp3", false);
 	LoadSound(L"PlayerShield", L"Sound\\PlayerShield.mp3", false);
 
-
+	LoadSound(L"Explosion", L"Sound\\Explosion.mp3", false);
+	LoadSound(L"Explosion2Bullet", L"Sound\\Explosion2B.mp3", false);
+	LoadSound(L"ExplosionB", L"Sound\\Explosion_Bullet.mp3", false);
 }
 
 float ResourceManager::GetSavedVolume(SOUND_CHANNEL ch) const
