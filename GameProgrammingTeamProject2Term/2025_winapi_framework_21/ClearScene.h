@@ -22,7 +22,7 @@ public:
 private:
 private:
     UIObject m_titleLabel;
-    UIButton m_btnRetry;
+    UIButton m_btnNextBoss;
     UIButton m_btnTitle;
     UIButton m_btnQuit;
 };

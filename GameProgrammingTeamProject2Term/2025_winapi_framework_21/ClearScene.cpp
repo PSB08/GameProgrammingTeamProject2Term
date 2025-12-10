@@ -5,7 +5,7 @@
 #include <iostream>
 
 ClearScene::ClearScene()
-    : m_btnRetry(L"", nullptr)
+    : m_btnNextBoss(L"", nullptr)
     , m_btnTitle(L"", nullptr)
     , m_btnQuit(L"", nullptr)
 {
@@ -30,14 +30,14 @@ void ClearScene::Init()
     float startY = 300.f;
     float gap = 50.f;
 
-    m_btnRetry = UIButton(L"다음 보스 잡기", []()
+    m_btnNextBoss = UIButton(L"다음 보스 잡기", []()
         {
             GET_SINGLE(ResourceManager)->StopAllSounds();
             GET_SINGLE(ResourceManager)->Play(L"UIButton");
             GET_SINGLE(SceneManager)->RequestLoadScene(L"BossSelectScene");
         });
-    m_btnRetry.SetSize({ btnW, btnH });
-    m_btnRetry.SetPos({ WINDOW_WIDTH / 2.f, startY });
+    m_btnNextBoss.SetSize({ btnW, btnH });
+    m_btnNextBoss.SetPos({ WINDOW_WIDTH / 2.f, startY });
 
     m_btnTitle = UIButton(L"타이틀로", []()
         {
@@ -56,14 +56,14 @@ void ClearScene::Init()
     m_btnQuit.SetSize({ btnW, btnH });
     m_btnQuit.SetPos({ WINDOW_WIDTH / 2.f, startY + 2 * (btnH + gap) });
 
-    m_btnRetry.SetBackgroundTexture(backNormal, backHover);
+    m_btnNextBoss.SetBackgroundTexture(backNormal, backHover);
     m_btnTitle.SetBackgroundTexture(backNormal, backHover);
     m_btnQuit.SetBackgroundTexture(backNormal, backHover);
 }
 
 void ClearScene::Update()
 {
-    m_btnRetry.Update();
+    m_btnNextBoss.Update();
     m_btnTitle.Update();
     m_btnQuit.Update();
 }
@@ -71,7 +71,7 @@ void ClearScene::Update()
 void ClearScene::Render(HDC hdc)
 {
     m_titleLabel.Render(hdc);
-    m_btnRetry.Render(hdc);
+    m_btnNextBoss.Render(hdc);
     m_btnTitle.Render(hdc);
     m_btnQuit.Render(hdc);
 }
