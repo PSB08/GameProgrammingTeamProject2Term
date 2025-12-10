@@ -25,5 +25,6 @@ private:
     Boss1* m_owner; // ÆÄ±«ÇÒ Boss
 
     bool m_pendingSceneChange = false;
+    bool m_isCheck = true;
     float m_delay = 0.f;
 };

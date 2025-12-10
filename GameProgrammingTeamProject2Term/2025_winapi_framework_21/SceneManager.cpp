@@ -123,4 +123,5 @@ void SceneManager::Release()
 		}
 	}
 	m_mapScenes.clear();
+	wstring().swap(m_nextSceneName);
 }

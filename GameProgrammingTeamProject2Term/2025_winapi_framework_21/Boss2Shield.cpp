@@ -40,8 +40,8 @@ void Boss2Shield::SetupAnimations()
 
     const int frameCount = 10;
 
-    m_idleAnimName = L"boss2Shield_idle_" + std::to_wstring((uintptr_t)this);
-    m_breakAnimName = L"boss2Shield_break_" + std::to_wstring((uintptr_t)this);
+    m_idleAnimName = L"boss2Shield_idle";
+    m_breakAnimName = L"boss2Shield_break";
 
     m_animator->CreateAnimation(
         m_idleAnimName,

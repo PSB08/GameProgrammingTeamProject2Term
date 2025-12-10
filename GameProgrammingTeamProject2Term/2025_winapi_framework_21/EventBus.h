@@ -10,6 +10,12 @@ public:
 	using EventCallback = std::function<void()>;
 	using ListenerID = size_t;
 
+	~EventBus()
+	{
+		std::unordered_map<std::wstring, std::map<ListenerID, EventCallback>>().swap(m_listeners);
+		m_nextID = 0;
+	}
+
 	static ListenerID AddListener(const std::wstring& _evtName, EventCallback callback);
 	static void RemoveListener(const std::wstring& _evtName, ListenerID id);
 	static void Invoke(const wstring& _evtName);

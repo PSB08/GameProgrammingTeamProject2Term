@@ -224,12 +224,14 @@ void Boss2Core::EnterCollision(Collider* _other)
     // 닫혀 있거나, 열려 있어도 충돌 비활성이면 무시
     if (m_state != CoreState::Opened)
         return;
+    if (!m_isCheck) return;
 
     if (!m_collidable)
         return;
 
     if (_other->GetName() == L"PlayerBullet")
     {
+        m_isCheck = false;
         m_hp -= 100;
         _other->GetOwner()->SetDead();
     }

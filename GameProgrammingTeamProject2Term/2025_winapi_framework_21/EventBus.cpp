@@ -20,6 +20,7 @@ void EventBus::RemoveListener(const std::wstring& _evtName, ListenerID id)
         if (it->second.empty())
             m_listeners.erase(it);  //만약 리스너가 없으면 이벤트 자체를 제거 
     }
+    m_listeners.clear();
 }
 
 void EventBus::Invoke(const wstring& _evtName)

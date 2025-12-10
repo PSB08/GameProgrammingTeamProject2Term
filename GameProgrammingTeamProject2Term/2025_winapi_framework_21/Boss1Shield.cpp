@@ -15,8 +15,8 @@ Boss1Shield::Boss1Shield(Boss1* owner,
     : m_owner(owner)
     , shieldSize(colliderSize.x)
 {
-    m_idleTexture = GET_SINGLE(ResourceManager)->GetTexture(idleTexName.c_str());
-    m_breakTexture = GET_SINGLE(ResourceManager)->GetTexture(breakTexName.c_str());
+    m_idleTexture = GET_SINGLE(ResourceManager)->GetTexture(idleTexName);
+    m_breakTexture = GET_SINGLE(ResourceManager)->GetTexture(breakTexName);
 
     m_collider = AddComponent<Collider>();
     m_collider->SetTrigger(true);
@@ -87,8 +87,8 @@ void Boss1Shield::SetupAnimations()
     Vec2 step = { shieldSize + 100.f, 0.f };
     const int frameCount = 10;
 
-    m_idleAnimName = L"boss1Shield_idle_" + std::to_wstring((uintptr_t)this);
-    m_breakAnimName = L"boss1Shield_break_" + std::to_wstring((uintptr_t)this);
+    m_idleAnimName = L"boss1Shield_idle";
+    m_breakAnimName = L"boss1Shield_break";
 
     m_animator->CreateAnimation(
         m_idleAnimName,

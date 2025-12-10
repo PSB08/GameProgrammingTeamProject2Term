@@ -52,8 +52,11 @@ void Boss1Core::Render(HDC _hdc)
 
 void Boss1Core::EnterCollision(Collider* _other)
 {
+    if (!m_isCheck) return;
+
     if (_other->IsTrigger() && _other->GetName() == L"PlayerBullet")
     {
+        m_isCheck = false;
         EventBus::Invoke(L"Boss1Killed");
 
         auto* effect = new Effect;

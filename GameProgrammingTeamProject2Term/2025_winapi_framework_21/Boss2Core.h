@@ -59,4 +59,5 @@ private:
     // 열려있는 상태 유지 타이머
     float m_openTimer;
     float m_openDuration; // 5.f
+    bool m_isCheck = true;
 };

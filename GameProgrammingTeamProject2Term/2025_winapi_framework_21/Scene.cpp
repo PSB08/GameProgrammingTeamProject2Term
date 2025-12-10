@@ -50,6 +50,7 @@ void Scene::LateUpdate()
 			if (!obj->GetIsDead())
 				obj->LateUpdate();
 	}
+	FlushEvent();
 }
 
 void Scene::Render(HDC _hdc)

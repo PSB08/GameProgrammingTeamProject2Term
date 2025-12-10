@@ -5,7 +5,7 @@ class Object
 {
 public:
 	Object();
-	~Object();
+	virtual ~Object();
 public:
 	virtual void Update();
 	virtual void LateUpdate();
