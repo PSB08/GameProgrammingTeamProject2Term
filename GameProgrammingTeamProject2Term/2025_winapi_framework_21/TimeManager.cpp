@@ -43,7 +43,7 @@ void TimeManager::Update()
 		m_frameTime = 0.f;
 		m_frameCnt = 0;
 
-		wstring str = std::format(L"FPS : {0}, DT : {1:.6f}", m_fps, m_deltaTime);
-		::SetWindowText(GET_SINGLE(Core)->GetHwnd(), str.c_str());
+		//wstring str = std::format(L"FPS : {0}, DT : {1:.6f}", m_fps, m_deltaTime);
+		//::SetWindowText(GET_SINGLE(Core)->GetHwnd(), str.c_str());
 	}
 }

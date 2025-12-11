@@ -40,7 +40,7 @@ ATOM BaseWindow::MyRegisterClass()
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)::GetStockObject(WHITE_BRUSH);
     wcex.lpszMenuName = nullptr;
-    wcex.lpszClassName = L"GameP";
+    wcex.lpszClassName = L"Deadlock";
     wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
 
     return ::RegisterClassExW(&wcex);
@@ -53,7 +53,7 @@ void BaseWindow::createWindow()
     int winposx = (screenX - WINDOW_WIDTH) / 2;
     int winposy = (screenY - WINDOW_HEIGHT) / 2;
 
-    m_hWnd = ::CreateWindowW(L"GameP", L"2025 GameP", 
+    m_hWnd = ::CreateWindowW(L"Deadlock", L"Deadlock", 
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
         winposx, winposy, 
         WINDOW_WIDTH, WINDOW_HEIGHT, 
@@ -118,5 +118,5 @@ LRESULT BaseWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
-    return 0;
+     return DefWindowProc(hWnd, message, wParam, lParam);
 }

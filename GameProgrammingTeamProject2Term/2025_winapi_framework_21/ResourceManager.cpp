@@ -5,10 +5,6 @@
 
 bool ResourceManager::Init()
 {
-	//fs::path curPath  = fs::current_path();
-	//// todo: release build path
-	//m_resourcePath = curPath.parent_path() / L"Output\\build\\Resource\\";
-
 	wchar_t buf[MAX_PATH] = {}; // windows 최대 경로 길이
 	::GetModuleFileNameW(nullptr, buf, MAX_PATH); // 현재 실행중인 exe 경로 buf에 저장   
 	fs::path exeDir = fs::path(buf).parent_path();                //  buf 전체 경로를 path 객체로 가서 디렉토리만 추출

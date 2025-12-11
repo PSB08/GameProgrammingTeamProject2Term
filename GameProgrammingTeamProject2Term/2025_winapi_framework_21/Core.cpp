@@ -48,7 +48,7 @@ void Core::MainUpdate()
 	GET_SINGLE(InputManager)->Update();
 	GET_SINGLE(ResourceManager)->FmodUpdate();
 	GET_SINGLE(SceneManager)->Update();
-	//::SetWindowText(GetHwnd(), L"Deadlock");
+	::SetWindowText(GetHwnd(), L"Deadlock");
 }
 
 void Core::MainRender()
