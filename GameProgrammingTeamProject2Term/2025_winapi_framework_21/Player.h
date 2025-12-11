@@ -28,6 +28,7 @@ private:
 	Texture* m_pNormalTexture;
 	Texture* m_pNormalLeftTexture;
 	Texture* m_pShootingTexture;
+	Texture* m_pDeadTexture;
 	Animator* m_animator;
 	Vec2 m_playerPos;
 	Rigidbody* m_rigid;
@@ -37,6 +38,7 @@ private: // bool 변수
 	bool playerIsInvincibility;
 	bool isShooting = false;
 	bool isMoving = false;
+	bool m_doAnimation = false;
 private: //float변수
 	float jumpPower;
 	float dashPower;

@@ -20,12 +20,6 @@ Button::~Button()
 
 void Button::Render(HDC _hdc)
 {
-	if (m_Texture == NULL)
-	{
-		cout << "Null";
-		return;
-	}
-
 	Vec2 pos = GetPos();
 	Vec2 size = GetSize();
 	int width = m_Texture->GetWidth();

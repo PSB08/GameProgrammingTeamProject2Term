@@ -34,6 +34,7 @@ Player::Player()
 	m_pNormalTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerMove");
 	m_pNormalLeftTexture = GET_SINGLE(ResourceManager)->GetTexture(L"PlayerMove_L");
 	m_pShootingTexture = GET_SINGLE(ResourceManager)->GetTexture(L"Player_Back");
+	m_pDeadTexture = GET_SINGLE(ResourceManager)->GetTexture(L"SmallExplosion");
 	//m_rigid->SetOwner(this);
 	auto* col = AddComponent<Collider>();
 	col->SetName(L"Player");
@@ -64,6 +65,14 @@ Player::Player()
 		, { 64.f,64.f }
 		, { 64.f,0.f }
 	, 1, 0.1f);
+
+	m_animator->CreateAnimation
+	(L"playerDead"
+		, m_pDeadTexture
+		, { 0.f,0.f }
+		, { 120.f,120.f }
+		, { 120.f,0.f }
+	, 10, 0.03f);
 
 	m_animator->Play(L"playerMove");
 
@@ -107,7 +116,7 @@ void Player::EnterCollision(Collider* _other)
 		|| _other->GetName() == L"BossProjectile" || _other->GetName() == L"ExploseProjectile")
 		&& playerCanDamaged && !playerIsInvincibility)
 	{
-		m_delay = 0.2f;
+		m_delay = 0.4f;
 		m_pendingSceneChange = true;
 	}
 	else if ((_other->GetName() == L"LaserLeft" || _other->GetName() == L"LaserRight" 
@@ -119,25 +128,13 @@ void Player::EnterCollision(Collider* _other)
 	}
 	else if (_other->GetName() == L"DeadFloor" || _other->GetName() == L"BigBullet" || _other->GetName() == L"Explosion")
 	{
-		m_delay = 0.2f;
+		m_delay = 0.4f;
 		m_pendingSceneChange = true;
 	}
 }
 
 void Player::StayCollision(Collider* _other)
 {
-	if ((_other->GetName() == L"BigBullet" || _other->GetName() == L"Explosion")
-		&& playerCanDamaged && !playerIsInvincibility)
-	{
-		m_delay = 0.2f;
-		m_pendingSceneChange = true;
-	}
-	else if (( _other->GetName() == L"BigBullet" || _other->GetName() == L"Explosion")
-		&& !playerCanDamaged || playerIsInvincibility)
-	{
-		if (playerIsInvincibility == false)
-			playerCanDamaged = true;
-	}
 }
 
 void Player::ExitCollision(Collider* _other)
@@ -154,23 +151,26 @@ void Player::Update()
 	m_rigid->SetOwner(this);
 	Vec2 dir = {};
 	Animation* cur = m_animator->GetCurrent();
-	if (GET_KEY(KEY_TYPE::A))
+	if (m_pendingSceneChange == false)
 	{
-		m_animator->Play(L"playerMoveL");
-		dir.x -= (1.f * dashPower);
-	}
-	
-	if (GET_KEY(KEY_TYPE::D)) 
-	{
-		m_animator->Play(L"playerMove");
-		dir.x += (1.f * dashPower);
+		if (GET_KEY(KEY_TYPE::A))
+		{
+			m_animator->Play(L"playerMoveL");
+			dir.x -= (1.f * dashPower);
+		}
+
+		if (GET_KEY(KEY_TYPE::D))
+		{
+			m_animator->Play(L"playerMove");
+			dir.x += (1.f * dashPower);
+		}
+		if (GET_KEY(KEY_TYPE::SPACE)) PlayerJump();
+		if (GET_KEY(KEY_TYPE::L) &&
+			playerCanDamaged && shieldTime >= shieldCooltime) PlayerShield();
+		if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime
+			&& m_dashCount < m_dashMaxCount) PlayerDash();
 	}
 
-	if (GET_KEY(KEY_TYPE::SPACE)) PlayerJump();
-	if (GET_KEY(KEY_TYPE::L) &&
-		playerCanDamaged && shieldTime >= shieldCooltime) PlayerShield();
-	if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime
-		&& m_dashCount < m_dashMaxCount) PlayerDash();
 	if (!isShooting)
 	{
 		if (!isMoving)
@@ -237,14 +237,21 @@ void Player::Update()
 	m_playerPos = GetPos();
 	if (GET_KEYDOWN(KEY_TYPE::J))
 		CreateProjectile();
-
 	if (m_pendingSceneChange)
 	{
 		m_delay -= fDT;
-
-		if (m_delay <= 0.f)
+		Vec2 pos = GetPos();
+		if (m_doAnimation == false)
+		{
+			m_animator->Play(L"playerDead", PlayMode::Once);
+			m_doAnimation = true;
+			m_rigid->SetVelocity({ 0,0 });
+			m_rigid->SetUseGravity(false);
+		}
+		if (m_delay <= 0.f && m_animator->GetCurrent()->IsFinished())
 		{
 			m_pendingSceneChange = false;
+			m_doAnimation = false;
 			GET_SINGLE(SceneManager)->LoadScene(L"DeadScene");
 			SetDead();
 		}
