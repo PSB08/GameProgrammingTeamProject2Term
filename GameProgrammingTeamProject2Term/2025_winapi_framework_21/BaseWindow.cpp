@@ -103,6 +103,15 @@ LRESULT BaseWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
     switch (message)
     {
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xFFF0) == SC_MOVE)
+            return 0;
+        break;
+    case WM_NCLBUTTONDOWN:
+        if (wParam == HTCAPTION)
+            return 0;
+        break;
+
     case WM_DESTROY:
         ::PostQuitMessage(0);
         break;
