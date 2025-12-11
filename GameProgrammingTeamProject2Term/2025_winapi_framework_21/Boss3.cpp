@@ -20,7 +20,7 @@ Boss3::Boss3()
     m_fireTimer2(0.f),
     m_angle2(0.f)
 {     
-
+    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0, 0);
     AddComponent<Animator>();
     m_animator = GetComponent<Animator>();
 

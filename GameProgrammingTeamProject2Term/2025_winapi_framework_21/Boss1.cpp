@@ -27,6 +27,7 @@ Boss1::Boss1()
     , m_isDying(false)
     , m_pDeathTexture(nullptr)
 {
+    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0, 0);
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1");
     m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss1CoreBreaking");
     m_animator = AddComponent<Animator>();

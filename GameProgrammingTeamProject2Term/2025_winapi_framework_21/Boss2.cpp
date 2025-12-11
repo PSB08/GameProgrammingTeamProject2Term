@@ -23,6 +23,7 @@ Boss2::Boss2()
     , m_animator(nullptr)
     , m_isDyingToCore(false)
 {
+    GET_SINGLE(SceneManager)->GetCurScene()->StartShake(0, 0);
     m_pTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2");
 
     m_pDeathTexture = GET_SINGLE(ResourceManager)->GetTexture(L"boss2Death");
