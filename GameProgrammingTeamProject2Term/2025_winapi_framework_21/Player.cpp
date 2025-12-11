@@ -126,7 +126,7 @@ void Player::EnterCollision(Collider* _other)
 		if(playerIsInvincibility == false)
 			playerCanDamaged = true;
 	}
-	else if (_other->GetName() == L"DeadFloor" || _other->GetName() == L"BigBullet" || _other->GetName() == L"Explosion")
+	if (_other->GetName() == L"DeadFloor" || _other->GetName() == L"BigBullet" || _other->GetName() == L"Explosion")
 	{
 		m_delay = 0.4f;
 		m_pendingSceneChange = true;
@@ -169,26 +169,30 @@ void Player::Update()
 			playerCanDamaged && shieldTime >= shieldCooltime) PlayerShield();
 		if (GET_KEY(KEY_TYPE::K) && dashTime >= dashCooltime
 			&& m_dashCount < m_dashMaxCount) PlayerDash();
+		if (GET_KEYDOWN(KEY_TYPE::J))
+			CreateProjectile();
+
+
+		if (!isShooting)
+		{
+			if (!isMoving)
+			{
+				m_animator->Play(L"playerMove");
+				isMoving = true;
+			}
+		}
+		else
+		{
+			m_animator->Play(L"playerShoot");
+			m_shootDelayTime += fDT;
+			if (m_shootDelayTime > 0.4f)
+			{
+				isShooting = false;
+				isMoving = false;
+			}
+		}
 	}
 
-	if (!isShooting)
-	{
-		if (!isMoving)
-		{
-			m_animator->Play(L"playerMove");
-			isMoving = true;
-		}
-	}
-	else
-	{
-		m_animator->Play(L"playerShoot");
-		m_shootDelayTime += fDT;
-		if (m_shootDelayTime > 0.4f)
-		{
-			isShooting = false;
-			isMoving = false;
-		}
-	}
 
 #pragma region 쿨타임 처리 부분
 	if (m_dashCount > 0)
@@ -235,8 +239,7 @@ void Player::Update()
 
 	Translate({ dir.x * 300.f * fDT, dir.y * 300.f * fDT });
 	m_playerPos = GetPos();
-	if (GET_KEYDOWN(KEY_TYPE::J))
-		CreateProjectile();
+
 	if (m_pendingSceneChange)
 	{
 		m_delay -= fDT;
